@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Interactivo</title>
+    <!-- Incluyendo Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Usando la fuente Inter para una mejor legibilidad -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilos para ocultar las flechas en los inputs de tipo número */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        /* Estilos para el modal y la notificación */
+        #notification-modal, #product-modal-container {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .active-category {
+            background-color: #10B981; /* green-500 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        /* Estilos para el scrollbar de categorías */
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a8a8a8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Ocultar scrollbar en la barra de categorías, body y modal */
+        .no-scrollbar::-webkit-scrollbar, 
+        html::-webkit-scrollbar,
+        #product-modal-content::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar, 
+        html,
+        #product-modal-content {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased">
+
+    <!-- Contenedor principal -->
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl pb-40">
+        
+        <!-- Encabezado con Logo -->
+        <header class="text-center md:text-left mb-8 flex items-center justify-center md:justify-start gap-4">
+            <!-- REEMPLAZA ESTE SRC CON LA URL DE TU LOGO -->
+            <img src="https://content.pancake.vn/2-2510/s800x800/2025/10/2/a3ad9eb732203de01316a3f6bdec7e7bf9b3dc57.jpg" alt="[Logo de la tienda]" class="h-16 w-16 md:h-20 md:w-20 rounded-full object-cover shadow-md">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800">Nuestro Catálogo</h1>
+                <p class="text-gray-600 mt-1">Explora, selecciona y envíanos tu pedido.</p>
+            </div>
+        </header>
+
+        <!-- Contenedor Sticky para la Barra de Filtros -->
+        <div class="sticky top-0 z-40 bg-gray-100/80 backdrop-blur-sm pt-4 pb-3 -mx-4 px-4">
+             <!-- Barra de Filtros por Categoría -->
+            <nav id="category-filters" class="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+                <!-- Los botones de categoría se insertarán aquí -->
+            </nav>
+        </div>
+
+        <!-- Contenedor de la cuadrícula de productos -->
+        <main id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-6">
+            <!-- Los productos se insertarán aquí dinámicamente -->
+        </main>
+
+    </div>
+
+    <!-- Barra inferior de Total y Envío -->
+    <footer class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm shadow-[0_-2px_10px_rgba(0,0,0,0.08)] transition-transform duration-300 transform translate-y-full">
+        <div class="container mx-auto max-w-7xl flex items-center justify-between p-4">
+            <div>
+                <span class="block text-sm text-gray-600 font-semibold">Total del Pedido</span>
+                <span id="total-price" class="text-2xl font-extrabold text-gray-800">$ 0</span>
+            </div>
+            <button id="send-whatsapp" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-5 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 flex items-center gap-2 whitespace-nowrap">
+                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16.75 13.96c.25.13.41.34.41.61v1.32c0 .4-.23.75-.58.93-.32.17-.71.19-1.05.08-1.5-.49-2.84-1.33-3.95-2.44-1.12-1.12-1.95-2.46-2.44-3.96-.11-.34-.09-.73.08-1.05.17-.35.53-.58.93-.58h1.32c.27 0 .48.16.61.41.13.25.13.59 0 .84l-.69 1.2c-.11.2-.11.45 0 .64l1.73 1.73c.19.19.44.19.64 0l1.2-.69c.25-.13.59-.13.84 0zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                <span>Enviar Pedido</span>
+            </button>
+        </div>
+    </footer>
+
+
+    <!-- Modal de Producto -->
+    <div id="product-modal-container" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center p-4">
+        <div id="product-modal-content" class="bg-white rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <!-- El contenido del modal se inyectará aquí -->
+        </div>
+    </div>
+
+    <!-- Modal de Notificación -->
+    <div id="notification-modal" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-red-500 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10 z-50">
+        <p id="notification-message"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURACIÓN DE PRODUCTOS ---
+            const products = [
+                { id: 1, name: "Camiseta Clásica Urbana", imageUrl: "https://content.pancake.vn/2-2509/s800x800/2025/9/29/267c7c5dcb8c2ea22ddf0e818974b81aac1234f8.jpg", price: 59900, description: "La camiseta perfecta para el día a día, con un corte moderno y algodón de alta calidad.", sizes: ["S", "M", "L", "XL"], colors: ["Negro", "Blanco", "Gris"], category: "Camisetas" },
+                { id: 2, name: "Camiseta Diseño Minimalista", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/2/06f76a5a2424a924bbe64c12ddb258603c1f462a.jpg", price: 64900, description: "Un diseño sutil para un look elegante y casual. Hecha con materiales reciclados.", sizes: ["S", "M", "L"], colors: ["Arena", "Azul Marino", "Verde Oliva"], category: "Camisetas" },
+                { id: 3, name: "Polo Premium de Piqué", imageUrl: "https://placehold.co/600x600/2A9D8F/FFFFFF?text=Polo+1", price: 89900, description: "Elegancia y comodidad se unen en este polo de tejido piqué transpirable.", sizes: ["M", "L", "XL"], colors: ["Turquesa", "Blanco", "Negro"], category: "Polos" },
+                { id: 4, name: "Buso con Capucha 'Hoodie'", imageUrl: "https://placehold.co/600x600/E76F51/FFFFFF?text=Buso+1", price: 129900, description: "Calidez y estilo urbano. Interior afelpado para máxima comodidad en días fríos.", sizes: ["S", "M", "L", "XL"], colors: ["Terracota", "Gris Jaspeado"], category: "Busos" },
+                { id: 5, name: "Buso Cuello Redondo Básico", imageUrl: "https://placehold.co/600x600/E9C46A/333333?text=Buso+2", price: 109900, description: "Un esencial en cualquier armario. Versátil, cómodo y fácil de combinar.", sizes: ["S", "M", "L"], colors: ["Mostaza", "Negro", "Azul Acero"], category: "Busos" },
+                { id: 6, name: "Polo Manga Larga", imageUrl: "https://placehold.co/600x600/264653/FFFFFF?text=Polo+2", price: 95900, description: "Perfecto para climas intermedios, manteniendo un estilo sofisticado y profesional.", sizes: ["S", "M", "L", "XL"], colors: ["Azul Oscuro", "Vino Tinto", "Gris"], category: "Polos" },
+                { id: 7, name: "Camiseta Gráfica 'Vintage'", imageUrl: "https://placehold.co/600x600/9b59b6/FFFFFF?text=Camiseta+3", price: 72900, description: "Un toque retro con estampados de alta durabilidad y un ajuste relajado.", sizes: ["M", "L"], colors: ["Morado", "Negro Lavado"], category: "Camisetas" },
+            ];
+            
+            const phoneNumber = "+573154870448";
+            const quantities = {}; 
+            const productSelections = {};
+
+            // --- ELEMENTOS DEL DOM ---
+            const productGrid = document.getElementById('product-grid');
+            const categoryFilters = document.getElementById('category-filters');
+            const sendButton = document.getElementById('send-whatsapp');
+            const notificationModal = document.getElementById('notification-modal');
+            const notificationMessage = document.getElementById('notification-message');
+            const modalContainer = document.getElementById('product-modal-container');
+            const modalContent = document.getElementById('product-modal-content');
+            const totalPriceEl = document.getElementById('total-price');
+            const footer = document.querySelector('footer');
+            let notificationTimeout;
+
+            // --- INICIALIZACIÓN DE ESTADOS ---
+            const initializeStates = () => {
+                products.forEach(p => {
+                    quantities[p.id] = quantities[p.id] || 0;
+                    productSelections[p.id] = productSelections[p.id] || { size: p.sizes[0], color: p.colors[0] };
+                });
+            };
+
+            // --- FUNCIONES AUXILIARES ---
+            const formatPrice = (price) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(price);
+            const showNotification = (message) => {
+                clearTimeout(notificationTimeout);
+                notificationMessage.textContent = message;
+                notificationModal.classList.replace('opacity-0', 'opacity-100');
+                notificationModal.classList.replace('translate-y-10', 'translate-y-0');
+                notificationTimeout = setTimeout(() => {
+                    notificationModal.classList.replace('opacity-100', 'opacity-0');
+                    notificationModal.classList.replace('translate-y-0', 'translate-y-10');
+                }, 3000);
+            };
+            
+            // --- LÓGICA DE TOTAL ---
+            const updateTotal = () => {
+                let total = 0;
+                products.forEach(product => {
+                    total += (quantities[product.id] || 0) * product.price;
+                });
+                totalPriceEl.textContent = formatPrice(total);
+
+                if (total > 0) {
+                    footer.classList.remove('translate-y-full');
+                } else {
+                    footer.classList.add('translate-y-full');
+                }
+            };
+
+            // --- LÓGICA DE RENDERIZADO Y FILTROS ---
+            const renderProducts = (filter = 'Todo') => {
+                productGrid.innerHTML = '';
+                const filteredProducts = products.filter(p => filter === 'Todo' || p.category === filter);
+                
+                filteredProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = "product-card bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col";
+                    productCard.dataset.productId = product.id;
+                    
+                    productCard.innerHTML = `
+                        <div class="relative">
+                            <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-full aspect-square object-cover cursor-pointer product-image">
+                        </div>
+                        <div class="p-4 flex flex-col flex-grow">
+                            <h3 class="text-base font-bold text-gray-800">${product.name}</h3>
+                            <p class="text-xl font-extrabold text-emerald-600 mt-2 flex-grow">${formatPrice(product.price)}</p>
+                            <div class="mt-4 flex items-center justify-center gap-1">
+                                <button class="quantity-btn decrease bg-gray-200 rounded-full p-2 w-8 h-8 flex items-center justify-center font-bold text-lg">-</button>
+                                <input type="number" value="${quantities[product.id]}" min="0" class="w-12 text-center rounded-md border-gray-300 py-1 product-quantity focus:ring-emerald-500 focus:border-emerald-500" readonly>
+                                <button class="quantity-btn increase bg-gray-200 rounded-full p-2 w-8 h-8 flex items-center justify-center font-bold text-lg">+</button>
+                            </div>
+                        </div>
+                    `;
+                    productGrid.appendChild(productCard);
+                });
+            };
+            
+            const setupCategories = () => {
+                const categories = ['Todo', ...new Set(products.map(p => p.category))];
+                categoryFilters.innerHTML = categories.map(cat => `
+                    <button class="category-btn px-4 py-2 rounded-full font-semibold transition-colors duration-200 ${cat === 'Todo' ? 'active-category' : 'bg-white hover:bg-gray-200'}" data-category="${cat}">
+                        ${cat}
+                    </button>
+                `).join('');
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const currentActive = document.querySelector('.active-category');
+                        if (currentActive) {
+                            currentActive.classList.remove('active-category');
+                            currentActive.classList.add('bg-white', 'hover:bg-gray-200');
+                        }
+                        btn.classList.add('active-category');
+                        btn.classList.remove('bg-white', 'hover:bg-gray-200');
+                        renderProducts(btn.dataset.category);
+                    });
+                });
+            };
+
+            // --- LÓGICA DE MODAL ---
+            const openModal = (productId) => {
+                const product = products.find(p => p.id == productId);
+                if (!product) return;
+                
+                const currentSelection = productSelections[productId];
+                
+                modalContent.dataset.productId = productId;
+                modalContent.innerHTML = `
+                    <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-full h-64 object-cover rounded-t-lg">
+                    <div class="p-5">
+                        <p class="text-sm font-semibold text-emerald-600">${product.category}</p>
+                        <h2 class="text-2xl font-bold text-gray-800 mt-1">${product.name}</h2>
+                        <p class="text-2xl font-extrabold text-gray-900 mt-2">${formatPrice(product.price)}</p>
+                        <p class="text-base text-gray-600 mt-4">${product.description}</p>
+                        <div class="mt-4 grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Talla:</label>
+                                <select class="mt-1 block w-full pl-3 pr-10 py-2 border-gray-300 rounded-md product-size">
+                                    ${product.sizes.map(s => `<option ${s === currentSelection.size ? 'selected' : ''}>${s}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Color:</label>
+                                <select class="mt-1 block w-full pl-3 pr-10 py-2 border-gray-300 rounded-md product-color">
+                                    ${product.colors.map(c => `<option ${c === currentSelection.color ? 'selected' : ''}>${c}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                         <div class="mt-6 flex items-center justify-center gap-1">
+                            <label class="block text-sm font-medium text-gray-700 mr-2">Cantidad:</label>
+                            <button class="quantity-btn decrease bg-gray-200 rounded-full p-2 w-8 h-8 flex items-center justify-center font-bold text-lg">-</button>
+                            <input type="number" value="${quantities[product.id]}" min="0" class="w-12 text-center rounded-md border-gray-300 py-1 product-quantity focus:ring-emerald-500 focus:border-emerald-500" readonly>
+                            <button class="quantity-btn increase bg-gray-200 rounded-full p-2 w-8 h-8 flex items-center justify-center font-bold text-lg">+</button>
+                        </div>
+                    </div>
+                `;
+                modalContainer.classList.replace('hidden', 'flex');
+            };
+
+            const updateQuantity = (productId, change) => {
+                const newValue = Math.max(0, (quantities[productId] || 0) + change);
+                quantities[productId] = newValue;
+                
+                const cardOnGrid = productGrid.querySelector(`.product-card[data-product-id='${productId}'] .product-quantity`);
+                if (cardOnGrid) cardOnGrid.value = newValue;
+
+                if (!modalContainer.classList.contains('hidden') && modalContent.dataset.productId == productId) {
+                    const inputInModal = modalContent.querySelector('.product-quantity');
+                    if (inputInModal) inputInModal.value = newValue;
+                }
+                updateTotal();
+            }
+
+            // --- MANEJO DE EVENTOS ---
+            productGrid.addEventListener('click', (e) => {
+                const card = e.target.closest('.product-card');
+                if (!card) return;
+                const productId = card.dataset.productId;
+                
+                if (e.target.closest('.quantity-btn')) {
+                    if (e.target.closest('.increase')) updateQuantity(productId, 1);
+                    if (e.target.closest('.decrease')) updateQuantity(productId, -1);
+                } else if (e.target.closest('.product-image')) {
+                    openModal(productId);
+                }
+            });
+            
+            modalContent.addEventListener('click', (e) => {
+                const btn = e.target.closest('.quantity-btn');
+                if (btn) {
+                    const productId = modalContent.dataset.productId;
+                    if (btn.classList.contains('increase')) updateQuantity(productId, 1);
+                    if (btn.classList.contains('decrease')) updateQuantity(productId, -1);
+                }
+            });
+
+            modalContent.addEventListener('change', (e) => {
+                const selector = e.target.closest('select');
+                 if(selector) {
+                    const productId = modalContent.dataset.productId;
+                    const selection = productSelections[productId];
+                    if (selector.classList.contains('product-size')) {
+                        selection.size = selector.value;
+                    } else if (selector.classList.contains('product-color')) {
+                        selection.color = selector.value;
+                    }
+                 }
+            });
+
+            modalContainer.addEventListener('click', (e) => {
+                if (e.target === modalContainer) modalContainer.classList.replace('flex', 'hidden');
+            });
+
+            sendButton.addEventListener('click', () => {
+                let message = "¡Hola! 👋 Quisiera hacer el siguiente pedido:\n\n";
+                let total = 0;
+                let hasProducts = false;
+
+                products.forEach(product => {
+                    const quantity = quantities[product.id] || 0;
+                    if (quantity > 0) {
+                        hasProducts = true;
+                        total += product.price * quantity;
+                        const selection = productSelections[product.id];
+                        
+                        message += `*${product.name}*\n`;
+                        message += `- Cantidad: ${quantity}\n`;
+                        message += `- Talla: ${selection.size}\n`;
+                        message += `- Color: ${selection.color}\n`;
+                        message += `- Precio Unit.: ${formatPrice(product.price)}\n\n`;
+                    }
+                });
+
+                if (!hasProducts) {
+                    showNotification("Por favor, añade al menos un producto.");
+                    return;
+                }
+                
+                message += `*Total Estimado: ${formatPrice(total)}*\n\n`;
+                message += "¡Quedo atento a la confirmación, muchas gracias!";
+                
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // --- INICIALIZACIÓN ---
+            initializeStates();
+            setupCategories();
+            renderProducts();
+            updateTotal();
+        });
+    </script>
+</body>
+</html>
+
