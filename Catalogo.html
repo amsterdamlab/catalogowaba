@@ -28,7 +28,7 @@
             transition: opacity 0.3s ease-in-out;
         }
         .active-category {
-            background-color: #10B981; /* green-500 */
+            background-color: #374151; /* gray-700 */
             color: white;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
@@ -37,10 +37,10 @@
             height: 4px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: #737272;
         }
         ::-webkit-scrollbar-thumb {
-            background: #a8a8a8;
+            background: #10B981;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
@@ -68,10 +68,10 @@
         <!-- Encabezado con Logo -->
         <header class="text-center md:text-left mb-8 flex items-center justify-center md:justify-start gap-4">
             <!-- REEMPLAZA ESTE SRC CON LA URL DE TU LOGO -->
-            <img src="https://content.pancake.vn/2-2510/s800x800/2025/10/2/a3ad9eb732203de01316a3f6bdec7e7bf9b3dc57.jpg" alt="[Logo de la tienda]" class="h-16 w-16 md:h-20 md:w-20 rounded-full object-cover shadow-md">
+            <img src="https://content.pancake.vn/2-2510/s800x800/2025/10/20/79d72014e41051da9630530130bd4c6eb25bf388.jpg" alt="[Logo de la tienda]" class="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover shadow-md">
             <div>
-                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800">Nuestro Catálogo</h1>
-                <p class="text-gray-600 mt-1">Explora, selecciona y envíanos tu pedido.</p>
+                <h1 class="text-2xl md:text-4xl font-extrabold text-gray-800">Nuestro Catálogo</h1>
+                <p class="text-gray-600 mt-1">Selecciona los productos y envíanos tu pedido.</p>
             </div>
         </header>
 
@@ -121,13 +121,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- CONFIGURACIÓN DE PRODUCTOS ---
             const products = [
-                { id: 1, name: "Camiseta Clásica Urbana", imageUrl: "https://content.pancake.vn/2-2509/s800x800/2025/9/29/267c7c5dcb8c2ea22ddf0e818974b81aac1234f8.jpg", price: 59900, description: "La camiseta perfecta para el día a día, con un corte moderno y algodón de alta calidad.", sizes: ["S", "M", "L", "XL"], colors: ["Negro", "Blanco", "Gris"], category: "Camisetas" },
-                { id: 2, name: "Camiseta Diseño Minimalista", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/2/06f76a5a2424a924bbe64c12ddb258603c1f462a.jpg", price: 64900, description: "Un diseño sutil para un look elegante y casual. Hecha con materiales reciclados.", sizes: ["S", "M", "L"], colors: ["Arena", "Azul Marino", "Verde Oliva"], category: "Camisetas" },
-                { id: 3, name: "Polo Premium de Piqué", imageUrl: "https://placehold.co/600x600/2A9D8F/FFFFFF?text=Polo+1", price: 89900, description: "Elegancia y comodidad se unen en este polo de tejido piqué transpirable.", sizes: ["M", "L", "XL"], colors: ["Turquesa", "Blanco", "Negro"], category: "Polos" },
-                { id: 4, name: "Buso con Capucha 'Hoodie'", imageUrl: "https://placehold.co/600x600/E76F51/FFFFFF?text=Buso+1", price: 129900, description: "Calidez y estilo urbano. Interior afelpado para máxima comodidad en días fríos.", sizes: ["S", "M", "L", "XL"], colors: ["Terracota", "Gris Jaspeado"], category: "Busos" },
-                { id: 5, name: "Buso Cuello Redondo Básico", imageUrl: "https://placehold.co/600x600/E9C46A/333333?text=Buso+2", price: 109900, description: "Un esencial en cualquier armario. Versátil, cómodo y fácil de combinar.", sizes: ["S", "M", "L"], colors: ["Mostaza", "Negro", "Azul Acero"], category: "Busos" },
-                { id: 6, name: "Polo Manga Larga", imageUrl: "https://placehold.co/600x600/264653/FFFFFF?text=Polo+2", price: 95900, description: "Perfecto para climas intermedios, manteniendo un estilo sofisticado y profesional.", sizes: ["S", "M", "L", "XL"], colors: ["Azul Oscuro", "Vino Tinto", "Gris"], category: "Polos" },
-                { id: 7, name: "Camiseta Gráfica 'Vintage'", imageUrl: "https://placehold.co/600x600/9b59b6/FFFFFF?text=Camiseta+3", price: 72900, description: "Un toque retro con estampados de alta durabilidad y un ajuste relajado.", sizes: ["M", "L"], colors: ["Morado", "Negro Lavado"], category: "Camisetas" },
+                { id: 1, name: "Camiseta Clásica Urbana", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/20/a3adfd6c8cbc407db7a7736c512a08e7f2d666e0.jpg", price: 59900, description: "La camiseta perfecta para el día a día, con un corte moderno y algodón de alta calidad.", sizes: ["S", "M", "L", "XL"], colors: ["Negro", "Blanco", "Gris"], category: "Camisetas" },
+                { id: 2, name: "Camiseta Diseño Minimalista", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/20/ac691a6807316618e6e408f033646e2c513f2667.jpg", price: 64900, description: "Un diseño sutil para un look elegante y casual. Hecha con materiales reciclados.", sizes: ["S", "M", "L"], colors: ["Arena", "Azul Marino", "Verde Oliva"], category: "Camisetas" },
+                { id: 3, name: "Polo Premium de Piqué", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/20/db85b12318163c6b57705a5bed4ae0bf83d00107.jpg", price: 89900, description: "Elegancia y comodidad se unen en este polo de tejido piqué transpirable.", sizes: ["M", "L", "XL"], colors: ["Turquesa", "Blanco", "Negro"], category: "Polos" },
+                { id: 4, name: "Buso con Capucha 'Hoodie'", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/20/dd5a1d41df2f2939ba15fcc6477202c99c78e386.jpg", price: 129900, description: "Calidez y estilo urbano. Interior afelpado para máxima comodidad en días fríos.", sizes: ["S", "M", "L", "XL"], colors: ["Terracota", "Gris Jaspeado"], category: "Busos" },
+                { id: 5, name: "Buso Cuello Redondo Básico", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/20/a3adfd6c8cbc407db7a7736c512a08e7f2d666e0.jpg", price: 109900, description: "Un esencial en cualquier armario. Versátil, cómodo y fácil de combinar.", sizes: ["S", "M", "L"], colors: ["Mostaza", "Negro", "Azul Acero"], category: "Busos" },
+                { id: 6, name: "Polo Manga Larga", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/20/ac691a6807316618e6e408f033646e2c513f2667.jpg", price: 95900, description: "Perfecto para climas intermedios, manteniendo un estilo sofisticado y profesional.", sizes: ["S", "M", "L", "XL"], colors: ["Azul Oscuro", "Vino Tinto", "Gris"], category: "Polos" },
+                { id: 7, name: "Camiseta Gráfica 'Vintage'", imageUrl: "https://content.pancake.vn/2-2510/s800x800/2025/10/20/db85b12318163c6b57705a5bed4ae0bf83d00107.jpg", price: 72900, description: "Un toque retro con estampados de alta durabilidad y un ajuste relajado.", sizes: ["M", "L"], colors: ["Morado", "Negro Lavado"], category: "Camisetas" },
             ];
             
             const phoneNumber = "+573154870448";
@@ -219,7 +219,7 @@
                         </div>
                         <div class="flex-grow">
                             <h3 class="text-base font-bold text-gray-800">${product.name}</h3>
-                            <p class="text-sm text-gray-500">${product.category}</p>
+                            <p class="text-sm text-gray-700">${product.category}</p>
                             <p class="text-lg font-extrabold text-emerald-600 mt-1">${formatPrice(product.price)}</p>
                         </div>
                     `;
@@ -237,7 +237,12 @@
                 `).join('');
                 document.querySelectorAll('.category-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        document.querySelector('.active-category')?.classList.remove('active-category');
+                        const currentActive = document.querySelector('.active-category');
+                        if (currentActive) {
+                            currentActive.classList.remove('active-category');
+                            currentActive.classList.add('bg-white', 'hover:bg-gray-200');
+                        }
+                        btn.classList.remove('bg-white', 'hover:bg-gray-200');
                         btn.classList.add('active-category');
                         renderProducts(btn.dataset.category);
                     });
@@ -289,7 +294,7 @@
                     <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-full aspect-video object-cover">
                     <div class="p-5">
                         <h2 class="text-3xl font-bold text-gray-800">${product.name}</h2>
-                        <p class="text-sm font-semibold text-emerald-600 mt-2">${product.category}</p>
+                        <p class="text-sm font-semibold text-gray-700 mt-2">${product.category}</p>
                         <p class="text-3xl font-extrabold text-gray-900 mt-2">${formatPrice(product.price)}</p>
                         <p class="text-base text-gray-600 mt-4">${product.description}</p>
                         
@@ -388,5 +393,7 @@
     </script>
 </body>
 </html>
+
+
 
 
