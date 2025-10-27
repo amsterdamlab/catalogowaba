@@ -366,15 +366,15 @@
                 message += `*Total Estimado: ${formatPrice(total)}*\n\n`;
                 message += "¡Quedo atento a la confirmación, muchas gracias!";
                 
-                const whatsappUrl = `httpsa://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, '_blank');
             });
             
             // --- FUNCIÓN PARA CONVERTIR CSV A ARRAY DE OBJETOS ---
+            // Esta función ya está ajustada para leer el separador ';'
             function parseCSV(csvText) {
                 const lines = csvText.trim().split('\n');
                 
-                // <-- ¡CAMBIO AQUÍ! Se usa ';' para separar las cabeceras
                 const headers = lines.shift().split(';').map(h => h.trim());
                 
                 const productsArray = [];
@@ -384,7 +384,6 @@
 
                     const obj = {};
                     
-                    // <-- ¡CAMBIO AQUÍ! Regex modificada para separar por ';' ignorando los que están dentro de comillas
                     const values = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
                     if (values.length !== headers.length) {
@@ -416,16 +415,29 @@
             // --- FUNCIÓN PARA CARGAR LOS PRODUCTOS DESDE CSV ---
             async function initializeApp() {
                 try {
-                    // <-- ¡CAMBIO AQUÍ! Buscamos el nuevo nombre de archivo
+                    // 1. Pedir el archivo
                     const response = await fetch('productos_mayorista.csv', { cache: 'no-store' });
                     
                     if (!response.ok) {
                         throw new Error(`No se pudo cargar productos_mayorista.csv: ${response.statusText}`);
                     }
-                    const csvData = await response.text();
+
+                    // --- ¡¡ESTE ES EL CAMBIO IMPORTANTE!! ---
+                    // En lugar de leer como texto (UTF-8), leemos los bytes "crudos"
+                    const buffer = await response.arrayBuffer();
                     
+                    // Creamos un decodificador para la codificación de Windows/Excel (ANSI)
+                    // 'windows-1252' es el nombre técnico de 'ANSI' para Europa Occidental/Latinoamérica
+                    const decoder = new TextDecoder('windows-1252'); 
+                    
+                    // Usamos el decodificador para convertir los bytes a texto con tildes correctas
+                    const csvData = decoder.decode(buffer); 
+                    // --- FIN DEL CAMBIO ---
+                    
+                    // 2. Convertir el CSV (ya lee ';')
                     products = parseCSV(csvData);
 
+                    // 3. Renderizar la página
                     setupCategories();
                     renderProducts();
                     updateTotal();
@@ -436,7 +448,7 @@
                         ❌ Error al cargar el catálogo.<br>
                         Asegúrate de que el archivo <strong>productos_mayorista.csv</strong> 
                         esté en la misma carpeta que el archivo HTML.
-                    </p>`; // <-- ¡CAMBIO AQUÍ! Mensaje de error actualizado
+                    </p>`;
                 }
             }
 
