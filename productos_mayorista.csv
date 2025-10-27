@@ -1,121 +1,121 @@
 id;name;imageUrl;priceMayorista;priceSugerido;description;variants;category
-1;Jabón Facial CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;21600;36000;Limpia profundamente mientras protege la barrera de la piel.;Único;CeramiLux
-2;Crema Hidratante CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22800;38000;Hidratación intensa con ceramidas para restaurar la piel.;Único;CeramiLux
-3;Tónico CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22200;37000;Equilibra el pH y prepara la piel para la hidratación.;Único;CeramiLux
-4;Suero CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22200;37000;Suero concentrado para una reparación intensiva.;Único;CeramiLux
-5;Bloqueador CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;30000;50000;Alta protección solar con acabado invisible.;Único;CeramiLux
-6;Kit Viajero CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;48000;80000;Incluye múltiples productos en tamaño de viaje.;Único;CeramiLux
-7;Suero de Ácido Hialurónico;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;23750;38000;Ayuda a retener la humedad de la piel. Disminuye líneas de expresión.;Único;Ácido Hialurónico
-8;Crema Hidratante de Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;22200;37000;Proporciona hidratación profunda y duradera.;Único;Ácido Hialurónico
-9;Espuma Limpiadora de Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;23400;39000;Hidrata y deja la piel suave y luminosa.;Único;Ácido Hialurónico
-10;Tónico de Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;23400;39000;Refresca al instante y aporta un glow natural.;Único;Ácido Hialurónico
-11;Kit x4 Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;98400;164000;Incluye: Espuma, Sérum, Tónico, Crema;Único;Ácido Hialurónico
-12;Mascarilla Ácido Hialurónico OG;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;3600;6000;Ayuda a retener la humedad de la piel.;Único;Ácido Hialurónico
-13;Mascarilla Ojos Ácido Hialurónico x6 Pares;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;10800;18000;Hidrata;Único;Ácido Hialurónico
-14;Espuma Limpiadora Niacinamida;https://placehold.co/400x400/FFF/333?text=Niacinamida;23400;39000;Limpia y ayuda a reducir la apariencia de poros.;Único;Niacinamida
-15;Crema Facial Hidratante Niacinamida;https://placehold.co/400x400/FFF/333?text=Niacinamida;23400;39000;Hidrata y unifica el tono de la piel.;Único;Niacinamida
-16;Tónico Hidratante Niacinamida;https://placehold.co/400x400/FFF/333?text=Niacinamida;21600;36000;Refresca y minimiza poros.;Único;Niacinamida
-17;Contorno de Ojos Niacinamida;https://placehold.co/400x400/FFF/333?text=Niacinamida;17880;29800;Ayuda a reducir ojeras y líneas finas.;Único;Niacinamida
-18;Suero Niacinamida;https://placehold.co/400x400/FFF/333?text=Niacinamida;22200;37000;Concentrado de niacinamida para control de grasa y manchas.;Único;Niacinamida
-19;Kit de Niacinamida x3 Productos;https://placehold.co/400x400/FFF/333?text=Niacinamida;60000;100000;Incluye: Contorno de Ojos, Sérum, Crema Facial;Único;Niacinamida
-20;Tónico Colágeno y Vitaminas;https://placehold.co/400x400/FFF/333?text=Colágeno;26250;42000;Proporciona hidratación profunda y duradera.;Único;Colágeno y Vitaminas
+1;Jabon Facial CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;21600;36000;Limpia profundamente mientras protege la barrera de la piel.;Unico;CeramiLux
+2;Crema Hidratante CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22800;38000;Hidratación intensa con ceramidas para restaurar la piel.;Unico;CeramiLux
+3;Tónico CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22200;37000;Equilibra el pH y prepara la piel para la hidratación.;Unico;CeramiLux
+4;Suero CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22200;37000;Suero concentrado para una reparación intensiva.;Unico;CeramiLux
+5;Bloqueador CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;30000;50000;Alta protección solar con acabado invisible.;Unico;CeramiLux
+6;Kit Viajero CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;48000;80000;Incluye múltiples productos en tamaño de viaje.;Unico;CeramiLux
+7;Suero de Ácido Hialurónico;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;23750;38000;Ayuda a retener la humedad de la piel. Disminuye líneas de expresión.;Unico;Ácido Hialurónico
+8;Crema Hidratante de Ácido Hialurónico;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;22200;37000;Proporciona hidratación profunda y duradera.;Unico;Ácido Hialurónico
+9;Espuma Limpiadora de Ácido Hialurónico;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;23400;39000;Hidrata y deja la piel suave y luminosa.;Unico;Ácido Hialurónico
+10;Tónico de Ácido Hialurónico;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;23400;39000;Refresca al instante y aporta un glow natural.;Unico;Ácido Hialurónico
+11;Kit x4 Ácido Hialurónico;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;98400;164000;Incluye: Espuma, Sérum, Tónico, Crema;Unico;Ácido Hialurónico
+12;Mascarilla Ácido Hialurónico OG;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;3600;6000;Ayuda a retener la humedad de la piel.;Unico;Ácido Hialurónico
+13;Mascarilla Ojos Ácido Hialurónico x6 Pares;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;10800;18000;Hidrata;Unico;Ácido Hialurónico
+14;Espuma Limpiadora Niacinamida;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f2284ddde8467e13fc938ddb72f596dd61fa8567.jpg;23400;39000;Limpia y ayuda a reducir la apariencia de poros.;Unico;Niacinamida
+15;Crema Facial Hidratante Niacinamida;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f2284ddde8467e13fc938ddb72f596dd61fa8567.jpg;23400;39000;Hidrata y unifica el tono de la piel.;Unico;Niacinamida
+16;Tónico Hidratante Niacinamida;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f2284ddde8467e13fc938ddb72f596dd61fa8567.jpg;21600;36000;Refresca y minimiza poros.;Unico;Niacinamida
+17;Contorno de Ojos Niacinamida;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f2284ddde8467e13fc938ddb72f596dd61fa8567.jpg;17880;29800;Ayuda a reducir ojeras y líneas finas.;Unico;Niacinamida
+18;Suero Niacinamida;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f2284ddde8467e13fc938ddb72f596dd61fa8567.jpg;22200;37000;Concentrado de niacinamida para control de grasa y manchas.;Unico;Niacinamida
+19;Kit de Niacinamida x3 Productos;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f2284ddde8467e13fc938ddb72f596dd61fa8567.jpg;60000;100000;Incluye: Contorno de Ojos, Sérum, Crema Facial;Unico;Niacinamida
+20;Tónico Colágeno y Vitaminas;https://placehold.co/400x400/FFF/333?text=Colágeno;26250;42000;Proporciona hidratación profunda y duradera.;Unico;Colágeno y Vitaminas
 21;Espuma Auto Bronceadora Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;30000;50000;Bronceado natural y uniforme sin sol.;Light Medium|Medium Dark;Aurum
-22;Crema Rostro Péptidos Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;25200;42000;Crema facial con péptidos para firmeza.;Único;Aurum
-23;Contorno de Ojos Péptidos Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;25200;42000;Reduce arrugas y reafirma el contorno de ojos.;Único;Aurum
-24;Suero de Rostro Péptidos Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;16800;28000;Suero concentrado de péptidos antiedad.;Único;Aurum
-25;Crema Hidratante Post Bronceado Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;24000;40000;Calma e hidrata la piel después del bronceado.;Único;Aurum
-26;Kit Péptidos Aurum con Cosmetiquera;https://placehold.co/400x400/FFF/333?text=Aurum;70800;118000;Incluye: Crema Rostro, Contorno de Ojos, Suero;Único;Aurum
-27;Finalizador Ultra Glow Daily Essentials;https://placehold.co/400x400/FFF/333?text=Finalizador;14280;23800;Refresca;Único;Finalizadores
-28;Fijador Rejuvenecedor con Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=Finalizador;15674;25957;Unifica el tono y aporta luminosidad.;Único;Finalizadores
+22;Crema Rostro Péptidos Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;25200;42000;Crema facial con péptidos para firmeza.;Unico;Aurum
+23;Contorno de Ojos Péptidos Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;25200;42000;Reduce arrugas y reafirma el contorno de ojos.;Unico;Aurum
+24;Suero de Rostro Péptidos Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;16800;28000;Suero concentrado de péptidos antiedad.;Unico;Aurum
+25;Crema Hidratante Post Bronceado Aurum;https://placehold.co/400x400/FFF/333?text=Aurum;24000;40000;Calma e hidrata la piel después del bronceado.;Unico;Aurum
+26;Kit Péptidos Aurum con Cosmetiquera;https://placehold.co/400x400/FFF/333?text=Aurum;70800;118000;Incluye: Crema Rostro, Contorno de Ojos, Suero;Unico;Aurum
+27;Finalizador Ultra Glow Daily Essentials;https://placehold.co/400x400/FFF/333?text=Finalizador;14280;23800;Refresca;Unico;Finalizadores
+28;Fijador Rejuvenecedor con Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=Finalizador;15674;25957;Unifica el tono y aporta luminosidad.;Unico;Finalizadores
 29;Base Aqua;https://placehold.co/400x400/FFF/333?text=Base;24375;39000;Acabado natural dewy (hidratado);02|03|04|05|06|07|4.5;Bases
 30;Base Stay Matte;https://placehold.co/400x400/FFF/333?text=Base;28125;45000;Acabado mate, libre de aceite, textura ligera;420|425|525|535|620|625|630|635;Bases
 31;Base Nude Illusion;https://placehold.co/400x400/FFF/333?text=Base;32375;50000;Alta cobertura para imperfecciones;802|804|808|812;Bases
 32;Corrector Máximo Cubrimiento;https://placehold.co/400x400/FFF/333?text=Corrector;18750;30000;Alta cobertura para imperfecciones;01|02|04|05|06|07|09|11;Correctores
 33;Corrector Hidratante con Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=Corrector;17400;29000;Cobertura media, acabado natural;2 tonos;Correctores
-34;Contorno Cremoso con Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=Corrector;11250;18000;Textura cremosa para corregir e iluminar;Único;Correctores
-35;Polvo Finalizador HD;https://placehold.co/400x400/FFF/333?text=Polvo;19800;33000;Fija el maquillaje, acabado mate;Único;Polvos
+34;Contorno Cremoso con Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=Corrector;11250;18000;Textura cremosa para corregir e iluminar;Unico;Correctores
+35;Polvo Finalizador HD;https://placehold.co/400x400/FFF/333?text=Polvo;19800;33000;Fija el maquillaje, acabado mate;Unico;Polvos
 36;Polvo Compacto Rice Silk;https://placehold.co/400x400/FFF/333?text=Polvo;22375;35800;Prolonga duración, difumina poros, controla brillo;03|04|06;Polvos
 37;Polvo Mineralizado Cobertura Total;https://placehold.co/400x400/FFF/333?text=Polvo;15000;25000;Polvo mineralizado de alta cobertura.;03|06|08;Polvos
-38;Polvo Suelto Rice Silk;https://placehold.co/400x400/FFF/333?text=Polvo;19801;33801;Controla brillo, acabado mate;Único;Polvos
-39;Rubor Color Bost;https://placehold.co/400x400/FFF/333?text=Rubor;15600;26000;Rubor compacto de alta pigmentación.;Único;Rubores
-40;Rubor Líquido Daily Essentials Display x36;https://placehold.co/400x400/FFF/333?text=Rubor;13200;22000;Acabado natural y jugoso, fácil de difuminar.;Único;Rubores
-41;Iluminador Compacto Get Picture;https://placehold.co/400x400/FFF/333?text=Iluminador;19375;31000;Textura sedosa con micro perlas reflectantes;Único;Iluminadores
-42;Iluminador Gel Display x36;https://placehold.co/400x400/FFF/333?text=Iluminador;19080;31800;Acabado luminoso, textura suave;Único;Iluminadores
+38;Polvo Suelto Rice Silk;https://placehold.co/400x400/FFF/333?text=Polvo;19801;33801;Controla brillo, acabado mate;Unico;Polvos
+39;Rubor Color Bost;https://placehold.co/400x400/FFF/333?text=Rubor;15600;26000;Rubor compacto de alta pigmentación.;Unico;Rubores
+40;Rubor Líquido Daily Essentials Display x36;https://placehold.co/400x400/FFF/333?text=Rubor;13200;22000;Acabado natural y jugoso, fácil de difuminar.;Unico;Rubores
+41;Iluminador Compacto Get Picture;https://placehold.co/400x400/FFF/333?text=Iluminador;19375;31000;Textura sedosa con micro perlas reflectantes;Unico;Iluminadores
+42;Iluminador Gel Display x36;https://placehold.co/400x400/FFF/333?text=Iluminador;19080;31800;Acabado luminoso, textura suave;Unico;Iluminadores
 43;Iluminador Líquido Daily Essentials;https://placehold.co/400x400/FFF/333?text=Iluminador;20280;33800;Iluminador líquido para un glow intenso.;AH01|AH02|AH03|AH04|AH05|AH06;Iluminadores
-44;Paleta Iluminadores Daily Essentials Display x24;https://placehold.co/400x400/FFF/333?text=Iluminador;15600;26000;Paleta con múltiples tonos de iluminador.;Único;Iluminadores
-45;Paleta de Sombras Pink Cloud;https://placehold.co/400x400/FFF/333?text=Paleta;20280;38800;Tonos rosados y nudes para looks románticos.;Único;Paletas
-46;Paleta de Sombras Red Clay;https://placehold.co/400x400/FFF/333?text=Paleta;20280;38800;Tonos cálidos y terracota.;Único;Paletas
-47;Paleta Contornos Daily Essentials OG Display x24;https://placehold.co/400x400/FFF/333?text=Paleta;15600;26000;Paleta para contorno e iluminación.;Único;Paletas
-48;Delineador Líquido en Plumón Negro;https://placehold.co/400x400/FFF/333?text=Ojos;10625;17000;Acabado mate, punta súper fina;Único;Ojos
-49;Lápiz en Gel a Prueba de Agua;https://placehold.co/400x400/FFF/333?text=Ojos;10200;17000;Lápiz de ojos en gel de larga duración.;Único;Ojos
-50;Lápiz Ojos Gel Keep Your Balance;https://placehold.co/400x400/FFF/333?text=Ojos;7800;13000;Lápiz cremoso y de alta pigmentación.;Único;Ojos
-51;Lápiz Ojos Gel Keep Your Balance;https://placehold.co/400x400/FFF/333?text=Ojos;7800;13000;Lápiz cremoso y de alta pigmentación.;Único;Ojos
-52;Lápiz con Cepillo para Cejas;https://placehold.co/400x400/FFF/333?text=Ojos;5375;8600;Acabado mate, incluye cepillo difuminador;Único;Ojos
-53;Pestañina Voluminizadora a Prueba de Agua;https://placehold.co/400x400/FFF/333?text=Ojos;13080;21800;Volumen extremo y resistente al agua.;Único;Ojos
-54;Pestañina Volumen;https://placehold.co/400x400/FFF/333?text=Ojos;18750;30000;Engrosa y da volumen a las pestañas;Único;Ojos
-55;Brillo Labial Nude Pure Glow Display x36;https://placehold.co/400x400/FFF/333?text=Labios;18000;30000;Hidratación y volumen con aceites naturales;Único;Labios
-56;Brillo Labial Metalizado Pure Glow Display x36;https://placehold.co/400x400/FFF/333?text=Labios;18000;30000;Hidratación de larga duración hasta 8 horas;Único;Labios
+44;Paleta Iluminadores Daily Essentials Display x24;https://placehold.co/400x400/FFF/333?text=Iluminador;15600;26000;Paleta con múltiples tonos de iluminador.;Unico;Iluminadores
+45;Paleta de Sombras Pink Cloud;https://placehold.co/400x400/FFF/333?text=Paleta;20280;38800;Tonos rosados y nudes para looks románticos.;Unico;Paletas
+46;Paleta de Sombras Red Clay;https://placehold.co/400x400/FFF/333?text=Paleta;20280;38800;Tonos cálidos y terracota.;Unico;Paletas
+47;Paleta Contornos Daily Essentials OG Display x24;https://placehold.co/400x400/FFF/333?text=Paleta;15600;26000;Paleta para contorno e iluminación.;Unico;Paletas
+48;Delineador Líquido en Plumón Negro;https://placehold.co/400x400/FFF/333?text=Ojos;10625;17000;Acabado mate, punta súper fina;Unico;Ojos
+49;Lápiz en Gel a Prueba de Agua;https://placehold.co/400x400/FFF/333?text=Ojos;10200;17000;Lápiz de ojos en gel de larga duración.;Unico;Ojos
+50;Lápiz Ojos Gel Keep Your Balance;https://placehold.co/400x400/FFF/333?text=Ojos;7800;13000;Lápiz cremoso y de alta pigmentación.;Unico;Ojos
+51;Lápiz Ojos Gel Keep Your Balance;https://placehold.co/400x400/FFF/333?text=Ojos;7800;13000;Lápiz cremoso y de alta pigmentación.;Unico;Ojos
+52;Lápiz con Cepillo para Cejas;https://placehold.co/400x400/FFF/333?text=Ojos;5375;8600;Acabado mate, incluye cepillo difuminador;Unico;Ojos
+53;Pestañina Voluminizadora a Prueba de Agua;https://placehold.co/400x400/FFF/333?text=Ojos;13080;21800;Volumen extremo y resistente al agua.;Unico;Ojos
+54;Pestañina Volumen;https://placehold.co/400x400/FFF/333?text=Ojos;18750;30000;Engrosa y da volumen a las pestañas;Unico;Ojos
+55;Brillo Labial Nude Pure Glow Display x36;https://placehold.co/400x400/FFF/333?text=Labios;18000;30000;Hidratación y volumen con aceites naturales;Unico;Labios
+56;Brillo Labial Metalizado Pure Glow Display x36;https://placehold.co/400x400/FFF/333?text=Labios;18000;30000;Hidratación de larga duración hasta 8 horas;Unico;Labios
 57;Bálsamo Labial Pure Glow x36;https://placehold.co/400x400/FFF/333?text=Labios;18000;30000;Hidrata;Q4 Strawberry|Q5 Raspberry;Labios
 58;Lápiz Labial True Nude;https://placehold.co/400x400/FFF/333?text=Labios;7080;11000;Labial mate en tonos nude.;T06|T07|T08|T09|T10|T11;Labios
 59;Kit True Nude;https://placehold.co/400x400/FFF/333?text=Labios;22600;37800;Kit de labiales en tonos nude.;06|09|10;Labios
 60;Labial True Nude;https://placehold.co/400x400/FFF/333?text=Labios;22600;37800;Labial mate confortable.;6.09;Labios
-61;Mascarilla Labios Display x24;https://placehold.co/400x400/FFF/333?text=Labios;17880;29800;Exfolia e hidrata labios;Único;Labios
-62;Limpia Brochas;https://placehold.co/400x400/FFF/333?text=Brochas;17106;28511;Limpia y desinfecta brochas;Único;Brochas
-63;Brocha para Polvos Mediana;https://placehold.co/4CHaracters: 400x400/FFF/333?text=Brochas;13773;22955;Brocha suave para aplicar polvos.;Único;Brochas
-64;Brocha Gota Iluminador;https://placehold.co/400x400/FFF/333?text=Brochas;7393;12321;Brocha en forma de gota para iluminador.;Único;Brochas
-65;Brocha para Polvos Grande;https://placehold.co/400x400/FFF/333?text=Brochas;16046;26743;Brocha grande para polvos sueltos o compactos.;Único;Brochas
-66;Pincel Difuminador Plano;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel plano para difuminar sombras.;Único;Brochas
-67;Pincel Difuminador Redondo;https://placehold.co/400x400/FFF/333?text=Brochas;6106;10177;Pincel redondo para difuminar en la cuenca.;Único;Brochas
-68;Pincel Difuminador Gota;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel de precisión para difuminar.;Único;Brochas
-69;Pincel Doble de Cejas;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel angular y cepillo para cejas.;Único;Brochas
-70;Pincel Corto Lengua de Gato;https://placehold.co/400x400/FFF/333?text=Brochas;4680;7800;Pincel para aplicar corrector o sombra.;Único;Brochas
-71;Brocha Deluxe Gota Iluminador;https://placehold.co/400x400/FFF/333?text=Brochas;16046;26743;Brocha deluxe para iluminador.;Único;Brochas
-72;Brocha Deluxe para Polvos Grande;https://placehold.co/400x400/FFF/333?text=Brochas;13773;22955;Brocha deluxe para polvos.;Único;Brochas
-73;Brocha Deluxe para Polvos Mediana;https://placehold.co/400x400/FFF/333?text=Brochas;7393;12321;Brocha deluxe mediana para polvos.;Único;Brochas
-74;Pincel Deluxe para Corrector;https://placehold.co/400x400/FFF/333?text=Brochas;7054;13090;Pincel deluxe para aplicar corrector.;Único;Brochas
-75;Pincel Deluxe Difuminador Gota;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel deluxe de precisión.;Único;Brochas
-76;Pincel Deluxe Difuminador Redondo;https://placehold.co/400x400/FFF/333?text=Brochas;6106;10177;Pincel deluxe para difuminar.;Único;Brochas
-77;Pincel Deluxe Difuminador Plano;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel deluxe plano.;Único;Brochas
-78;Pincel Deluxe Doble de Cejas;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel deluxe para cejas.;Único;Brochas
-79;Espejo iPad Pequeños Colores Surtidos;https://placehold.co/400x400/FFF/333?text=Espejo;8400;14000;Espejo de mano en colores surtidos.;Único;Espejos
-80;Espejo iPad Rosa Grande;https://placehold.co/400x400/FFF/333?text=Espejo;14000;24000;Espejo grande con diseño iPad.;Único;Espejos
-81;Espejo iPad Negro Grande;https://placehold.co/400x400/FFF/333?text=Espejo;14000;24000;Espejo grande con diseño iPad.;Único;Espejos
+61;Mascarilla Labios Display x24;https://placehold.co/400x400/FFF/333?text=Labios;17880;29800;Exfolia e hidrata labios;Unico;Labios
+62;Limpia Brochas;https://placehold.co/400x400/FFF/333?text=Brochas;17106;28511;Limpia y desinfecta brochas;Unico;Brochas
+63;Brocha para Polvos Mediana;https://placehold.co/4CHaracters: 400x400/FFF/333?text=Brochas;13773;22955;Brocha suave para aplicar polvos.;Unico;Brochas
+64;Brocha Gota Iluminador;https://placehold.co/400x400/FFF/333?text=Brochas;7393;12321;Brocha en forma de gota para iluminador.;Unico;Brochas
+65;Brocha para Polvos Grande;https://placehold.co/400x400/FFF/333?text=Brochas;16046;26743;Brocha grande para polvos sueltos o compactos.;Unico;Brochas
+66;Pincel Difuminador Plano;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel plano para difuminar sombras.;Unico;Brochas
+67;Pincel Difuminador Redondo;https://placehold.co/400x400/FFF/333?text=Brochas;6106;10177;Pincel redondo para difuminar en la cuenca.;Unico;Brochas
+68;Pincel Difuminador Gota;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel de precisión para difuminar.;Unico;Brochas
+69;Pincel Doble de Cejas;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel angular y cepillo para cejas.;Unico;Brochas
+70;Pincel Corto Lengua de Gato;https://placehold.co/400x400/FFF/333?text=Brochas;4680;7800;Pincel para aplicar corrector o sombra.;Unico;Brochas
+71;Brocha Deluxe Gota Iluminador;https://placehold.co/400x400/FFF/333?text=Brochas;16046;26743;Brocha deluxe para iluminador.;Unico;Brochas
+72;Brocha Deluxe para Polvos Grande;https://placehold.co/400x400/FFF/333?text=Brochas;13773;22955;Brocha deluxe para polvos.;Unico;Brochas
+73;Brocha Deluxe para Polvos Mediana;https://placehold.co/400x400/FFF/333?text=Brochas;7393;12321;Brocha deluxe mediana para polvos.;Unico;Brochas
+74;Pincel Deluxe para Corrector;https://placehold.co/400x400/FFF/333?text=Brochas;7054;13090;Pincel deluxe para aplicar corrector.;Unico;Brochas
+75;Pincel Deluxe Difuminador Gota;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel deluxe de precisión.;Unico;Brochas
+76;Pincel Deluxe Difuminador Redondo;https://placehold.co/400x400/FFF/333?text=Brochas;6106;10177;Pincel deluxe para difuminar.;Unico;Brochas
+77;Pincel Deluxe Difuminador Plano;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel deluxe plano.;Unico;Brochas
+78;Pincel Deluxe Doble de Cejas;https://placehold.co/400x400/FFF/333?text=Brochas;5175;8626;Pincel deluxe para cejas.;Unico;Brochas
+79;Espejo iPad Pequeños Colores Surtidos;https://placehold.co/400x400/FFF/333?text=Espejo;8400;14000;Espejo de mano en colores surtidos.;Unico;Espejos
+80;Espejo iPad Rosa Grande;https://placehold.co/400x400/FFF/333?text=Espejo;14000;24000;Espejo grande con diseño iPad.;Unico;Espejos
+81;Espejo iPad Negro Grande;https://placehold.co/400x400/FFF/333?text=Espejo;14000;24000;Espejo grande con diseño iPad.;Unico;Espejos
 82;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Negro| gris| rosado;Cosmetiqueras
-83;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Único;Cosmetiqueras
-84;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Único;Cosmetiqueras
-85;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Único;Cosmetiqueras
-86;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Único;Cosmetiqueras
-87;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Único;Cosmetiqueras
-88;Cosmetiquera Tejida OG Grande Crema;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;26400;44000;Cosmetiquera tejida de gran capacidad.;Único;Cosmetiqueras
-89;Maleta Mediana Negra con Luz LED;https://placehold.co/400x400/FFF/333?text=Maleta;90000;150000;Incluye cargador y separador;Único;Maletas
-90;Maleta Mediana Palo de Rosa con Luz LED;https://placehold.co/400x400/FFF/333?text=Maleta;90000;150000;Incluye cargador y separador;Único;Maletas
-91;Bolso Maquillaje Premium Transparente;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Bolso transparente para maquillaje.;Único;Maletas
-92;Maleta Maquillaje + Cosmetiqueras Auxiliares;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x28x11 cm;Único;Maletas
-93;Maleta Maquillaje + Cosmetiqueras Auxiliares;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x28x11 cm;Único;Maletas
-94;Maleta + Bolso Maquillador Profesional Premium;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x40x70 cm;Único;Maletas
-95;Maleta Dura Maquillador con Compartimientos;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta rígida profesional.;Único;Maletas
-96;Maleta Negra Lisa Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana lisa de color negro.;Único;Maletas
-97;Maleta Rosada Lisa Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana lisa de color rosado.;Único;Maletas
-98;Maleta Blanca Lisa Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana lisa de color blanco.;Único;Maletas
-99;Maleta Tornasol Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana con acabado tornasol.;Único;Maletas
-100;Maleta Leopardo Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana con estampado de leopardo.;Único;Maletas
-101;Maleta Boreal Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana con acabado boreal.;Único;Maletas
-102;Maleta Gris F. Geométricas Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana gris con figuras geométricas.;Único;Maletas
-103;Maleta Dorada Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana de color dorado.;Único;Maletas
-104;Maleta Verde Esmeralda F. Geométricas Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana verde con figuras geométricas.;Único;Maletas
-105;Maleta Dorada Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Único;Maletas
-106;Maleta Blanca Lisa Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Único;Maletas
-107;Maleta Verde Esmeralda F. Geométricas Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Único;Maletas
-108;Maleta Boreal Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Único;Maletas
-109;Maleta Leopardo Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Único;Maletas
-110;Maleta Doble Cierre Marmol Blanca;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta doble cierre con diseño de mármol.;Único;Maletas
-111;Maleta Doble Cierre Marmol Negra;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta doble cierre con diseño de mármol.;Único;Maletas
-112;Maleta Doble Cierre Palo de Rosa;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta doble cierre color palo de rosa.;Único;Maletas
-113;Depilador;https://placehold.co/400x400/FFF/333?text=Herramienta;3000;5000;Perfilador/Depilador facial.;Único;Herramientas
-114;Papeles Quita Grasa;https://placehold.co/400x400/FFF/333?text=Herramienta;5400;9000;Papeles de arroz para absorber grasa facial.;Único;Herramientas
-115;Beauty Sponge OG;https://placehold.co/400x400/FFF/333?text=Herramienta;4200;7000;Colores surtidos;Único;Herramientas
-116;Luz LED Inalámbrica;https://placehold.co/400x400/FFF/333?text=Herramienta;24900;0;Tres modos de color;Único;Herramientas
-117;Spray Hidratante de Vitamina C;https://placehold.co/400x400/FFF/333?text=Cuidado;0;0;Spray facial hidratante con Vitamina C.;Único;Cuidado Personal
-118;Contorno de Ojos Crisantemo Negro;https://placehold.co/400x400/FFF/333?text=Cuidado;0;0;Contorno de ojos para hidratación.;Único;Cuidado Personal
-119;Spray Bucal Arándanos;https://placehold.co/400x400/FFF/333?text=Cuidado;0;0;Spray bucal refrescante sabor arándanos.;Único;Cuidado Personal
-120;Spray Bucal Durazno;https://placehold.co/400x400/FFF/333?text=Cuidado;0;0;Spray bucal refrescante sabor durazno.;Único;Cuidado Personal
+83;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Unico;Cosmetiqueras
+84;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Unico;Cosmetiqueras
+85;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Unico;Cosmetiqueras
+86;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Unico;Cosmetiqueras
+87;Cosmetiquera OG;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;12000;20000;Colores surtidos;Unico;Cosmetiqueras
+88;Cosmetiquera Tejida OG Grande Crema;https://placehold.co/400x400/FFF/333?text=Cosmetiquera;26400;44000;Cosmetiquera tejida de gran capacidad.;Unico;Cosmetiqueras
+89;Maleta Mediana Negra con Luz LED;https://placehold.co/400x400/FFF/333?text=Maleta;90000;150000;Incluye cargador y separador;Unico;Maletas
+90;Maleta Mediana Palo de Rosa con Luz LED;https://placehold.co/400x400/FFF/333?text=Maleta;90000;150000;Incluye cargador y separador;Unico;Maletas
+91;Bolso Maquillaje Premium Transparente;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Bolso transparente para maquillaje.;Unico;Maletas
+92;Maleta Maquillaje + Cosmetiqueras Auxiliares;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x28x11 cm;Unico;Maletas
+93;Maleta Maquillaje + Cosmetiqueras Auxiliares;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x28x11 cm;Unico;Maletas
+94;Maleta + Bolso Maquillador Profesional Premium;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x40x70 cm;Unico;Maletas
+95;Maleta Dura Maquillador con Compartimientos;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta rígida profesional.;Unico;Maletas
+96;Maleta Negra Lisa Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana lisa de color negro.;Unico;Maletas
+97;Maleta Rosada Lisa Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana lisa de color rosado.;Unico;Maletas
+98;Maleta Blanca Lisa Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana lisa de color blanco.;Unico;Maletas
+99;Maleta Tornasol Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana con acabado tornasol.;Unico;Maletas
+100;Maleta Leopardo Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana con estampado de leopardo.;Unico;Maletas
+101;Maleta Boreal Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana con acabado boreal.;Unico;Maletas
+102;Maleta Gris F. Geométricas Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana gris con figuras geométricas.;Unico;Maletas
+103;Maleta Dorada Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana de color dorado.;Unico;Maletas
+104;Maleta Verde Esmeralda F. Geométricas Mediana;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta mediana verde con figuras geométricas.;Unico;Maletas
+105;Maleta Dorada Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Unico;Maletas
+106;Maleta Blanca Lisa Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Unico;Maletas
+107;Maleta Verde Esmeralda F. Geométricas Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Unico;Maletas
+108;Maleta Boreal Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Unico;Maletas
+109;Maleta Leopardo Grande;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Medidas: 28x10.5x40.5 cm;Unico;Maletas
+110;Maleta Doble Cierre Marmol Blanca;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta doble cierre con diseño de mármol.;Unico;Maletas
+111;Maleta Doble Cierre Marmol Negra;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta doble cierre con diseño de mármol.;Unico;Maletas
+112;Maleta Doble Cierre Palo de Rosa;https://placehold.co/400x400/FFF/333?text=Maleta;0;0;Maleta doble cierre color palo de rosa.;Unico;Maletas
+113;Depilador;https://placehold.co/400x400/FFF/333?text=Herramienta;3000;5000;Perfilador/Depilador facial.;Unico;Herramientas
+114;Papeles Quita Grasa;https://placehold.co/400x400/FFF/333?text=Herramienta;5400;9000;Papeles de arroz para absorber grasa facial.;Unico;Herramientas
+115;Beauty Sponge OG;https://placehold.co/400x400/FFF/333?text=Herramienta;4200;7000;Colores surtidos;Unico;Herramientas
+116;Luz LED Inalámbrica;https://placehold.co/400x400/FFF/333?text=Herramienta;24900;0;Tres modos de color;Unico;Herramientas
+117;Spray Hidratante de Vitamina C;https://placehold.co/400x400/FFF/333?text=Cuidado;0;0;Spray facial hidratante con Vitamina C.;Unico;Cuidado Personal
+118;Contorno de Ojos Crisantemo Negro;https://placehold.co/400x400/FFF/333?text=Cuidado;0;0;Contorno de ojos para hidratación.;Unico;Cuidado Personal
+119;Spray Bucal Arándanos;https://placehold.co/400x400/FFF/333?text=Cuidado;0;0;Spray bucal refrescante sabor arándanos.;Unico;Cuidado Personal
+120;Spray Bucal Durazno;https://placehold.co/400x400/FFF/333?text=Cuidado;0;0;Spray bucal refrescante sabor durazno.;Unico;Cuidado Personal
