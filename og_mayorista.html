@@ -102,7 +102,7 @@
         <p id="notification-message"></p>
     </div>
 
-    <script>
+   <script>
         document.addEventListener('DOMContentLoaded', () => {
             
             // --- CONFIGURACIÓN DE NÚMERO DE WHATSAPP ---
@@ -415,19 +415,25 @@
             // --- FUNCIÓN PARA CARGAR LOS PRODUCTOS DESDE CSV ---
             async function initializeApp() {
                 try {
-                    // 1. Pedir el archivo (sigue siendo el correcto)
+                    // 1. Pedir el archivo
                     const response = await fetch('productos_mayorista.csv', { cache: 'no-store' });
                     
                     if (!response.ok) {
                         throw new Error(`No se pudo cargar productos_mayorista.csv: ${response.statusText}`);
                     }
 
-                    // --- ¡CAMBIO AQUÍ! Revertimos al método original ---
-                    // Leemos el texto directamente. El navegador usará UTF-8 por defecto.
-                    const csvData = await response.text(); 
-                    // --- FIN DEL CAMBIO ---
+                    // --- ¡¡ESTE ES EL CÓDIGO CORRECTO!! ---
+                    // Lee los bytes "crudos" del archivo
+                    const buffer = await response.arrayBuffer();
                     
-                    // 2. Convertir el CSV (sigue leyendo ';')
+                    // Crea un decodificador para la codificación de Windows/Excel (ANSI)
+                    const decoder = new TextDecoder('windows-1252'); 
+                    
+                    // Usa el decodificador para convertir los bytes a texto con tildes correctas
+                    const csvData = decoder.decode(buffer); 
+                    // --- FIN DEL CÓDIGO CORRECTO ---
+                    
+                    // 2. Convertir el CSV (ya lee ';')
                     products = parseCSV(csvData);
 
                     // 3. Renderizar la página
