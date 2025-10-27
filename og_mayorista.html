@@ -415,26 +415,19 @@
             // --- FUNCIÓN PARA CARGAR LOS PRODUCTOS DESDE CSV ---
             async function initializeApp() {
                 try {
-                    // 1. Pedir el archivo
+                    // 1. Pedir el archivo (sigue siendo el correcto)
                     const response = await fetch('productos_mayorista.csv', { cache: 'no-store' });
                     
                     if (!response.ok) {
                         throw new Error(`No se pudo cargar productos_mayorista.csv: ${response.statusText}`);
                     }
 
-                    // --- ¡¡ESTE ES EL CAMBIO IMPORTANTE!! ---
-                    // En lugar de leer como texto (UTF-8), leemos los bytes "crudos"
-                    const buffer = await response.arrayBuffer();
-                    
-                    // Creamos un decodificador para la codificación de Windows/Excel (ANSI)
-                    // 'windows-1252' es el nombre técnico de 'ANSI' para Europa Occidental/Latinoamérica
-                    const decoder = new TextDecoder('windows-1252'); 
-                    
-                    // Usamos el decodificador para convertir los bytes a texto con tildes correctas
-                    const csvData = decoder.decode(buffer); 
+                    // --- ¡CAMBIO AQUÍ! Revertimos al método original ---
+                    // Leemos el texto directamente. El navegador usará UTF-8 por defecto.
+                    const csvData = await response.text(); 
                     // --- FIN DEL CAMBIO ---
                     
-                    // 2. Convertir el CSV (ya lee ';')
+                    // 2. Convertir el CSV (sigue leyendo ';')
                     products = parseCSV(csvData);
 
                     // 3. Renderizar la página
