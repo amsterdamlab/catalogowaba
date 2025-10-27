@@ -106,13 +106,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // --- CONFIGURACIÓN DE NÚMERO DE WHATSAPP ---
-            // Asegúrate de incluir el código de país, por ejemplo +57 para Colombia
             const phoneNumber = "+573154870448";
             
             // --- DATOS DE PRODUCTOS ---
-            // Esta variable se llenará dinámicamente desde el archivo productos_mayorista.csv
             let products = [];
-            
             let cart = [];
 
             // --- ELEMENTOS DEL DOM ---
@@ -145,7 +142,7 @@
             const updateTotal = () => {
                 const total = cart.reduce((sum, item) => {
                     const product = products.find(p => p.id === item.productId);
-                    return sum + (item.quantity * product.priceMayorista); // MODIFICADO: Usar priceMayorista
+                    return sum + (item.quantity * product.priceMayorista);
                 }, 0);
                 totalPriceEl.textContent = formatPrice(total);
                 footer.classList.toggle('translate-y-full', total === 0);
@@ -180,7 +177,6 @@
                 }
                 updateTotal();
                 updateBadges();
-                // Actualizar la lista de variantes en el modal si está abierto
                 if(!modalContainer.classList.contains('hidden')){
                     renderVariantListInModal(productId);
                 }
@@ -192,8 +188,7 @@
                 const filteredProducts = products.filter(p => filter === 'Todo' || p.category === filter);
                 
                 filteredProducts.forEach(product => {
-                    // No mostrar productos con precio 0 o negativo
-                    if (product.priceMayorista <= 0) return; // MODIFICADO: Filtrar por priceMayorista
+                    if (product.priceMayorista <= 0) return;
                     
                     const productCard = document.createElement('div');
                     productCard.className = "product-card flex items-center p-4 gap-4 border-b last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors";
@@ -206,7 +201,6 @@
                         </div>
                         <div class="flex-grow">
                             <h3 class="text-base font-bold text-gray-800">${product.name}</h3>
-                            
                             <div class="mt-1 flex items-start gap-4">
                                 <div>
                                     <span class="block text-xs font-medium text-gray-500">Precio Mayorista:</span>
@@ -225,8 +219,7 @@
             };
             
             const setupCategories = () => {
-                // Filtrar categorías de productos que sí tienen precio
-                const categories = ['Todo', ...new Set(products.filter(p => p.priceMayorista > 0).map(p => p.category))]; // MODIFICADO: Filtrar por priceMayorista
+                const categories = ['Todo', ...new Set(products.filter(p => p.priceMayorista > 0).map(p => p.category))];
                 categoryFilters.innerHTML = categories.map(cat => `
                     <button class="category-btn px-4 py-2 rounded-full font-semibold transition-colors duration-200 ${cat === 'Todo' ? 'active-category' : 'bg-white hover:bg-gray-200'}" data-category="${cat}">
                         ${cat}
@@ -252,7 +245,7 @@
                 if (!variantListContainer) return;
 
                 const variantsInCart = cart.filter(item => item.productId == productId);
-                variantListContainer.innerHTML = ''; // Limpiar la lista
+                variantListContainer.innerHTML = '';
 
                 if (variantsInCart.length > 0) {
                     variantListContainer.innerHTML += `<h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2 border-b pb-2">Variantes en tu pedido</h4>`;
@@ -285,7 +278,8 @@
                             Volver
                         </button>
                         <h3 class="font-bold text-lg truncate px-4">${product.name}</h3>
-                        <div class="w-16 flex-shrink-0"></div> </div>
+                        <div class="w-16 flex-shrink-0"></div>
+                    </div>
                     <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-full aspect-square object-cover">
                     <div class="p-5">
                         <h2 class="text-3xl font-bold text-gray-800">${product.name}</h2>
@@ -295,13 +289,12 @@
                                 <span class="block text-lg font-semibold text-gray-700">Precio Mayorista:</span>
                                 <span class="text-3xl font-extrabold text-gray-900">${formatPrice(product.priceMayorista)}</span>
                             </div>
-                            ${product.priceSugerido > 0 ? `<div class=""> <span class="block text-base font-medium text-gray-500">Precio Sugerido:</span>
+                            ${product.priceSugerido > 0 ? `<div class="">
+                                <span class="block text-base font-medium text-gray-500">Precio Sugerido:</span>
                                 <span class="text-lg text-gray-600">${formatPrice(product.priceSugerido)}</span>
                             </div>` : ''}
                         </div>
-                        
                         <p class="text-base text-gray-600 mt-4">${product.description || 'Descripción no disponible.'}</p>
-                        
                         <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow-inner">
                             <h4 class="text-lg font-semibold text-gray-800 mb-2">Añadir una variante</h4>
                             <div>
@@ -314,15 +307,12 @@
                                 Añadir al pedido
                             </button>
                         </div>
-
-                        <div id="variant-list" class="pb-8">
-                            </div>
+                        <div id="variant-list" class="pb-8"></div>
                     </div>
                 `;
                 renderVariantListInModal(productId);
                 modalContainer.dataset.productId = productId;
                 modalContainer.classList.remove('hidden', 'opacity-0');
-                // Asegurarse de que el scroll del modal esté arriba
                 modalContent.scrollTop = 0; 
             };
 
@@ -332,26 +322,22 @@
                 if (card) openModal(card.dataset.productId);
             });
             
-            // Usar 'mousedown' o 'touchstart' para mejor respuesta en modal
             modalContent.addEventListener('click', (e) => {
                 const productId = modalContainer.dataset.productId;
                 if (!productId) return;
 
-                // Botón de Volver
                 if (e.target.closest('#modal-back-btn')) {
                     modalContainer.classList.add('opacity-0');
-                    setTimeout(() => modalContainer.classList.add('hidden'), 300); // Sincronizar con transición
+                    setTimeout(() => modalContainer.classList.add('hidden'), 300);
                     return;
                 }
 
-                // Botón de Añadir Variante
                 if (e.target.closest('#add-variant-btn')) {
                     const variant = modalContent.querySelector('.product-variant').value;
                     updateCart(parseInt(productId), variant, 1);
                     return;
                 }
 
-                // Botones de Cantidad (+/-)
                 const btn = e.target.closest('.quantity-btn');
                 if (btn) {
                     const change = btn.classList.contains('increase') ? 1 : -1;
@@ -371,7 +357,7 @@
 
                 cart.forEach(item => {
                     const product = products.find(p => p.id === item.productId);
-                    total += item.quantity * product.priceMayorista; // MODIFICADO: Usar priceMayorista
+                    total += item.quantity * product.priceMayorista;
                     message += `*${product.name}*\n`;
                     message += `- Cantidad: ${item.quantity}\n`;
                     message += `- Variante: ${item.variant}\n\n`;
@@ -380,25 +366,26 @@
                 message += `*Total Estimado: ${formatPrice(total)}*\n\n`;
                 message += "¡Quedo atento a la confirmación, muchas gracias!";
                 
-                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                const whatsappUrl = `httpsa://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, '_blank');
             });
             
-            // --- NUEVO: FUNCIÓN PARA CONVERTIR CSV A ARRAY DE OBJETOS ---
+            // --- FUNCIÓN PARA CONVERTIR CSV A ARRAY DE OBJETOS ---
             function parseCSV(csvText) {
                 const lines = csvText.trim().split('\n');
-                // Tomar la primera línea como cabeceras
-                const headers = lines.shift().split(',').map(h => h.trim());
+                
+                // <-- ¡CAMBIO AQUÍ! Se usa ';' para separar las cabeceras
+                const headers = lines.shift().split(';').map(h => h.trim());
                 
                 const productsArray = [];
 
                 lines.forEach(row => {
-                    if (!row) return; // Saltar líneas vacías
+                    if (!row) return;
 
                     const obj = {};
                     
-                    // Regex para separar por comas, PERO ignorando comas dentro de comillas dobles
-                    const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    // <-- ¡CAMBIO AQUÍ! Regex modificada para separar por ';' ignorando los que están dentro de comillas
+                    const values = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
                     if (values.length !== headers.length) {
                         console.warn("Fila malformada, se saltará:", row);
@@ -408,16 +395,13 @@
                     headers.forEach((header, i) => {
                         let value = values[i].trim();
                         
-                        // Limpiar comillas dobles al inicio y final
                         if (value.startsWith('"') && value.endsWith('"')) {
                             value = value.substring(1, value.length - 1).replace(/""/g, '"');
                         }
 
-                        // Convertir tipos de datos
                         if (header === 'id' || header === 'priceMayorista' || header === 'priceSugerido') {
                             obj[header] = parseInt(value) || 0;
                         } else if (header === 'variants') {
-                            // Separar variantes por el carácter '|' y limpiar espacios
                             obj[header] = value.split('|').map(v => v.trim());
                         } else {
                             obj[header] = value;
@@ -429,24 +413,21 @@
                 return productsArray;
             }
 
-            // --- NUEVO: FUNCIÓN PARA CARGAR LOS PRODUCTOS DESDE CSV ---
+            // --- FUNCIÓN PARA CARGAR LOS PRODUCTOS DESDE CSV ---
             async function initializeApp() {
                 try {
-                    // 1. Pedir el archivo productos_mayorista.csv
-                    // 'cache: 'no-store'' asegura que siempre pida la última versión
+                    // <-- ¡CAMBIO AQUÍ! Buscamos el nuevo nombre de archivo
                     const response = await fetch('productos_mayorista.csv', { cache: 'no-store' });
+                    
                     if (!response.ok) {
-                        throw new Error(`No se pudo cargar productosmayorista.csv: ${response.statusText}`);
+                        throw new Error(`No se pudo cargar productos_mayorista.csv: ${response.statusText}`);
                     }
                     const csvData = await response.text();
                     
-                    // 2. Convertir el CSV en el array de productos
-                    // Asignamos el resultado a la variable 'products' del scope superior
                     products = parseCSV(csvData);
 
-                    // 3. Llamar a las funciones originales que construyen la página
                     setupCategories();
-                    renderProducts(); // Renderizar 'Todo' por defecto
+                    renderProducts();
                     updateTotal();
 
                 } catch (error) {
@@ -454,17 +435,16 @@
                     productList.innerHTML = `<p class="p-6 text-red-600 font-semibold">
                         ❌ Error al cargar el catálogo.<br>
                         Asegúrate de que el archivo <strong>productos_mayorista.csv</strong> 
-                        esté en la misma carpeta que el archivo HTML y que la página se esté 
-                        viendo desde un servidor web (no abriendo el HTML directamente).
-                    </p>`;
+                        esté en la misma carpeta que el archivo HTML.
+                    </p>`; // <-- ¡CAMBIO AQUÍ! Mensaje de error actualizado
                 }
             }
 
             // --- INICIALIZACIÓN ---
-            // Ahora solo llamamos a nuestra nueva función
             initializeApp();
 
         });
     </script>
+
 </body>
 </html>
