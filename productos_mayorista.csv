@@ -1,11 +1,11 @@
 id;name;imageUrl;priceMayorista;priceSugerido;description;variants;category
-1;Jabón Facial CeramiLux;https://placehold.co/400x400/FFF/333?text=CeramiLux;21600;36000;Limpia profundamente mientras protege la barrera de la piel.;Único;CeramiLux
-2;Crema Hidratante CeramiLux;https://placehold.co/400x400/FFF/333?text=CeramiLux;22800;38000;Hidratación intensa con ceramidas para restaurar la piel.;Único;CeramiLux
-3;Tónico CeramiLux;https://placehold.co/400x400/FFF/333?text=CeramiLux;22200;37000;Equilibra el pH y prepara la piel para la hidratación.;Único;CeramiLux
-4;Suero CeramiLux;https://placehold.co/400x400/FFF/333?text=CeramiLux;22200;37000;Suero concentrado para una reparación intensiva.;Único;CeramiLux
-5;Bloqueador CeramiLux;https://placehold.co/400x400/FFF/333?text=CeramiLux;30000;50000;Alta protección solar con acabado invisible.;Único;CeramiLux
-6;Kit Viajero CeramiLux;https://placehold.co/400x400/FFF/333?text=CeramiLux;48000;80000;Incluye múltiples productos en tamaño de viaje.;Único;CeramiLux
-7;Suero de Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;23750;38000;Ayuda a retener la humedad de la piel. Disminuye líneas de expresión.;Único;Ácido Hialurónico
+1;Jabón Facial CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;21600;36000;Limpia profundamente mientras protege la barrera de la piel.;Único;CeramiLux
+2;Crema Hidratante CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22800;38000;Hidratación intensa con ceramidas para restaurar la piel.;Único;CeramiLux
+3;Tónico CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22200;37000;Equilibra el pH y prepara la piel para la hidratación.;Único;CeramiLux
+4;Suero CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;22200;37000;Suero concentrado para una reparación intensiva.;Único;CeramiLux
+5;Bloqueador CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;30000;50000;Alta protección solar con acabado invisible.;Único;CeramiLux
+6;Kit Viajero CeramiLux;https://content.pancake.vn/2-2510/s800x800/2025/10/27/f307be65f776f9324897ccdffe596d7e1500b79a.jpg;48000;80000;Incluye múltiples productos en tamaño de viaje.;Único;CeramiLux
+7;Suero de Ácido Hialurónico;https://content.pancake.vn/2-2510/s800x800/2025/10/27/c418de9503cb1b68d9994b7b7723156d7ee24991.jpg;23750;38000;Ayuda a retener la humedad de la piel. Disminuye líneas de expresión.;Único;Ácido Hialurónico
 8;Crema Hidratante de Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;22200;37000;Proporciona hidratación profunda y duradera.;Único;Ácido Hialurónico
 9;Espuma Limpiadora de Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;23400;39000;Hidrata y deja la piel suave y luminosa.;Único;Ácido Hialurónico
 10;Tónico de Ácido Hialurónico;https://placehold.co/400x400/FFF/333?text=A.+Hialurónico;23400;39000;Refresca al instante y aporta un glow natural.;Único;Ácido Hialurónico
