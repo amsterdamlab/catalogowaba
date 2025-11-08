@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Raspa y Gana!</title>
+    <!-- Carga de Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap');
+
+        /* Estilos generales para el fondo vibrante */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #1a0f2b; /* Fondo base oscuro */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%232b1a45" opacity="0.8"><path d="M50 0 L100 50 L50 100 L0 50 Z" /><path d="M25 0 L50 25 L25 50 L0 25 Z" /><path d="M75 0 L100 25 L75 50 L50 25 Z" /><path d="M25 50 L50 75 L25 100 L0 75 Z" /><path d="M75 50 L100 75 L75 100 L50 75 Z" /></svg>'); /* Patrón geométrico sutil */
+            background-size: 80px; /* Tamaño del patrón */
+            animation: backgroundShift 60s linear infinite; /* Animación de fondo */
+        }
+
+        @keyframes backgroundShift {
+            from { background-position: 0 0; }
+            to { background-position: 800px 800px; }
+        }
+
+        /* Fuentes personalizadas */
+        .font-bebas { font-family: 'Bebas Neue', cursive; }
+
+        /* Estilo para el cursor de "raspar" */
+        .scratch-card canvas {
+            cursor: grabbing;
+            cursor: -webkit-grab;
+            cursor: -moz-grab;
+        }
+
+        /* Ocultar el texto del premio por defecto */
+        .prize-item {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.5s linear;
+            transform: scale(0.8); /* Efecto de zoom al aparecer */
+        }
+
+        /* Clase para mostrar el premio cuando se ha raspado */
+        .prize-revealed .prize-item {
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Clase para ocultar el canvas cuando se ha raspado */
+        .prize-revealed canvas {
+            opacity: 0;
+            transition: opacity 0.5s linear;
+        }
+
+        /* Estilo para las figuras de color (zapatillas) */
+        .sneaker-icon {
+            width: 70%; /* Ajusta el tamaño del icono */
+            height: 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Aquí el color de la zapatilla será el stroke del SVG */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
+            border-radius: 10px; /* Ligeramente redondeado */
+            padding: 5%; /* Pequeño padding para el SVG */
+        }
+
+        .sneaker-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: none; /* Las zapatillas son solo el contorno */
+            stroke-width: 3; /* Grosor del contorno */
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 5px currentColor) drop-shadow(0 0 10px currentColor); /* Efecto glow */
+        }
+
+
+        /* Estilo para el contorno "neón" de las tarjetas y botones */
+        .neon-border-blue {
+            box-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff, 0 0 30px #00eaff, inset 0 0 5px #00eaff;
+            border: 2px solid #00eaff;
+        }
+        .neon-border-pink {
+            box-shadow: 0 0 10px #ff00ea, 0 0 20px #ff00ea, 0 0 30px #ff00ea, inset 0 0 5px #ff00ea;
+            border: 2px solid #ff00ea;
+        }
+        .neon-border-green {
+            box-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66, 0 0 30px #00ff66, inset 0 0 5px #00ff66;
+            border: 2px solid #00ff66;
+        }
+        .neon-border-yellow {
+            box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffeb3b, 0 0 30px #ffeb3b, inset 0 0 5px #ffeb3b;
+            border: 2px solid #ffeb3b;
+        }
+
+        /* Fondo del encabezado con degradado y glow */
+        .header-bg {
+            background: linear-gradient(45deg, #a700e0, #ff00ea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(255, 0, 234, 0.6), 0 0 15px rgba(167, 0, 224, 0.4);
+        }
+
+        /* Estilo para el contenedor principal, para simular el fondo con iconos */
+        .game-container {
+            position: relative;
+            background-color: #1a0f2b; /* Fondo base oscuro */
+            border-radius: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(167, 0, 224, 0.5); /* Sombra y glow */
+            overflow: hidden; /* Asegura que los iconos no se salgan del contenedor */
+        }
+
+        /* Patrón de iconos de zapatillas para el fondo del contenedor */
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.2"><g fill="none" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path stroke="%2300eaff" d="M30 40 L40 40 L45 35 L40 30 L30 30 L25 35 Z M32 37 L38 37 M35 32 L35 38"/><path stroke="%23ff00ea" d="M60 70 L70 70 L75 65 L70 60 L60 60 L55 65 Z M62 67 L68 67 M65 62 L65 68"/><path stroke="%2300ff66" d="M10 80 L20 80 L25 75 L20 70 L10 70 L5 75 Z M12 77 L18 77 M15 72 L15 78"/><path stroke="%23ffeb3b" d="M80 20 L90 20 L95 15 L90 10 L80 10 L75 15 Z M82 17 L88 17 M85 12 L85 18"/></g></svg>'); /* Iconos de zapatillas */
+            background-size: 150px; /* Tamaño de los iconos de fondo */
+            animation: iconScroll 40s linear infinite; /* Animación de los iconos */
+            z-index: 0; /* Asegura que esté detrás del contenido */
+        }
+
+        @keyframes iconScroll {
+            from { background-position: 0 0; }
+            to { background-position: 1500px 1500px; }
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 1; /* Asegura que el contenido esté por encima del fondo animado */
+        }
+
+        /* Estilos para el botón de reclamar, para evitar conflictos */
+        #claim-button {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #claim-button:hover {
+            transform: scale(1.05); /* Efecto de escala en hover */
+            box-shadow: 0 0 25px rgba(0,255,102,0.9), 0 0 45px rgba(0,234,255,0.7) !important; /* Glow más intenso */
+        }
+
+    </style>
+</head>
+<body class="selection:bg-cyan-400 selection:text-white">
+
+    <div class="min-h-screen flex flex-col items-center justify-center p-4">
+        
+        <div class="game-container w-full max-w-md p-6 md:p-8 text-center">
+            <div class="content-layer">
+                <!-- Encabezado --><h1 class="text-4xl md:text-6xl font-bebas header-bg mb-2 tracking-wider">¡Raspa y Gana!</h1>
+                <p class="text-lg text-gray-200 mb-6 neon-border-blue-text">¡Desbloquea tu estilo!</p> <!-- Mensaje secundario adaptado --><!-- Contenedor de las tarjetas para raspar --><div id="scratch-grid" class="grid grid-cols-3 gap-4 mb-8">
+                    <!-- Generado por JavaScript --></div>
+
+                <!-- Mensaje de Premio --><div id="prize-message" class="hidden text-center mb-6">
+                    <h2 class="text-2xl font-bebas text-white mb-4 neon-border-pink p-3 rounded-lg" id="prize-title" style="background-color: rgba(255,0,234,0.2);">¡Genial!</h2>
+                </div>
+
+                <!-- Reemplazo del botón por el contador automático --><p id="countdown-message" class="hidden text-white text-lg mt-6">
+                    Serás redirigido a Whatsapp en 
+                    <span id="countdown-timer" class="font-bold text-2xl">10</span> 
+                    segundos...
+                </p>
+            </div>
+        </div>
+
+        <!-- Texto eliminado --><!-- <p class="text-white text-opacity-70 mt-4 text-sm">Un juego de lealtad para nuestros mejores clientes.</p> --></div>
+
+    <script type="module">
+        // --- CONFIGURACIÓN PRINCIPAL (¡IMPORTANTE!) ---
+
+        /**
+         * Reemplaza este número con el número de WhatsApp de tu negocio.
+         * Incluye el código del país, sin el símbolo '+' ni espacios.
+         * Ejemplo para Colombia: 573001234567
+         */
+        const WHATSAPP_PHONE_NUMBER = "573154870448"; 
+
+        /**
+         * Define los premios y su lógica.
+         * No cambies esto a menos que quieras cambiar la lógica del juego.
+         */
+        const PRIZE_LOGIC = {
+            "20%": { rule: "3 Iguales", title: "¡Has ganado un Cupón Oro!" },
+            "15%": { rule: "2 Iguales", title: "¡Has ganado un Cupón Plata!" },
+            "10%": { rule: "3 Diferentes", title: "¡Has ganado un Cupón Bronce!" }
+        };
+        const PRIZE_OPTIONS = ["10%", "15%", "20%"];
+        
+        // --- SVG DE ZAPATILLA ---
+        // Usamos la MISMA silueta de zapatilla para todos
+        const SNEAKER_SVG_PATH = `<svg viewBox="0 0 24 24"><path d="M20.89 3.11c-.48-.28-1.06-.4-1.66-.4H5.21c-.6 0-1.18.12-1.66.4C2.08 3.73.5 5.5.5 8.5v3c0 .55.45 1 1 1s1-.45 1-1v-3c0-2.3 1.12-3.7 2.71-4.3C5.55 4.1 5.87 4 6.21 4h11.58c.34 0 .66.1 1 .2C20.38 4.8 21.5 6.2 21.5 8.5v3c0 .55.45 1 1 1s1-.45 1-1v-3c0-3-1.58-4.77-3.11-5.39zM5.5 12h13c.83 0 1.5.67 1.5 1.5V19c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2v-5.5C4 12.67 4.67 12 5.5 12zM18 19v-5.5c0-.28-.22-.5-.5-.5h-11c-.28 0-.5.22-.5.5V19h12z"></path></svg>`;
+
+        // Mapeo de colores a SVG para las zapatillas
+        const SNEAKER_COLORS_SVG = {
+            '#00eaff': SNEAKER_SVG_PATH, // Cian
+            '#ff00ea': SNEAKER_SVG_PATH, // Magenta
+            '#00ff66': SNEAKER_SVG_PATH  // Verde Neón
+        };
+        const SNEAKER_COLOR_KEYS = Object.keys(SNEAKER_COLORS_SVG);
+
+        // --- FIN DE LA CONFIGURACIÓN ---
+
+
+        // Variables globales del juego
+        let currentPrize = ""; // "10%", "15%", o "20%"
+        let cardResults = []; // Array de colores, ej: ['#dc3545', '#dc3545', '#007bff']
+        let isGameFinished = false; // Previene que el premio se revele múltiples veces
+        let whatsappUrl = ""; // URL de WhatsApp se guarda aquí
+        
+        const scratchGrid = document.getElementById('scratch-grid');
+        const prizeMessage = document.getElementById('prize-message');
+        const prizeTitle = document.getElementById('prize-title');
+        // El botón ya no es una constante global
+        
+        const scratchCards = []; // Almacenará la info de cada tarjeta
+
+        // Función para inicializar el juego
+        function initGame() {
+            // Reiniciar estado
+            isGameFinished = false;
+            scratchCards.length = 0;
+            cardResults = [];
+            scratchGrid.innerHTML = '';
+            
+            // Ocultar botones y mensaje
+            prizeMessage.classList.add('hidden');
+            document.getElementById('countdown-message').classList.add('hidden'); // Ocultar el nuevo contador
+
+            // 1. Seleccionar un premio final al azar
+            currentPrize = PRIZE_OPTIONS[Math.floor(Math.random() * PRIZE_OPTIONS.length)];
+
+            // 2. Generar la combinación de tarjetas para ese premio
+            generateCardCombination();
+
+            // 3. Crear las 3 tarjetas para raspar
+            for (let i = 0; i < 3; i++) {
+                createScratchCard(cardResults[i], i); // Pasar el índice para asignar bordes neón
+            }
+
+            // 4. Configurar el enlace de WhatsApp con el premio final
+            const prizeInfo = PRIZE_LOGIC[currentPrize]; // Obtenemos la info del premio
+            // Mensaje de WhatsApp mejorado - SIN %
+            const message = `¡Hola! Jugué al Raspa y Gana y gané un *${prizeInfo.title.replace("¡Has ganado un ", "").replace("!", "")}*! ¡Quiero activarlo!`;
+            // Guardar la URL globalmente en lugar de asignarla a un botón
+            whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(message)}`;
+        }
+
+        // Función para generar la combinación de 3 tarjetas
+        function generateCardCombination() {
+            const colors = [...SNEAKER_COLOR_KEYS]; // Usar las claves de color SVG
+            const shuffle = (arr) => arr.sort(() => 0.5 - Math.random()); // Función para mezclar
+
+            if (currentPrize === "20%") { // 3 Iguales
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                cardResults = [color, color, color];
+            } else if (currentPrize === "15%") { // 2 Iguales
+                let colorsShuffled = shuffle(colors);
+                const color1 = colorsShuffled.pop(); // Color que se repite
+                const color2 = colorsShuffled.pop(); // Color diferente
+                cardResults = shuffle([color1, color1, color2]);
+            } else { // "10%" - 3 Diferentes
+                cardResults = shuffle(colors);
+            }
+        }
+
+        // Función para crear una tarjeta individual
+        function createScratchCard(color, index) {
+            const cardWrapper = document.createElement('div');
+            // Asigna un color de borde neón diferente a cada tarjeta para el look vibrante
+            const neonBorderClass = 'neon-border-blue'; // <-- CAMBIO: Todas las tarjetas son azules
+            cardWrapper.className = `scratch-card relative w-full aspect-square bg-gray-900 rounded-xl shadow-inner overflow-hidden flex items-center justify-center p-1 ${neonBorderClass}`;
+            
+            // Capa inferior (Premio: Figura de Zapatilla SVG)
+            const prizeLayer = document.createElement('div');
+            // Usamos 'prize-item' para la animación
+            prizeLayer.className = "prize-item absolute inset-0 flex items-center justify-center";
+            // Creamos el contenedor para el SVG de la zapatilla
+            const sneakerContainer = document.createElement('div');
+            sneakerContainer.className = "sneaker-icon";
+            sneakerContainer.innerHTML = SNEAKER_COLORS_SVG[color]; // Insertar el SVG de la zapatilla
+            sneakerContainer.querySelector('svg').style.stroke = color; // Asignar color al stroke del SVG
+            
+            prizeLayer.appendChild(sneakerContainer);
+            
+            // Capa superior (Canvas para raspar)
+            const canvas = document.createElement('canvas');
+            canvas.className = "absolute top-0 left-0 w-full h-full";
+            
+            cardWrapper.appendChild(prizeLayer);
+            cardWrapper.appendChild(canvas);
+            scratchGrid.appendChild(cardWrapper);
+
+            // Guardar referencia y configurar el canvas
+            const card = {
+                canvas,
+                ctx: canvas.getContext('2d'),
+                isDrawing: false,
+                isRevealed: false, // Estado individual de la tarjeta
+                wrapper: cardWrapper
+            };
+            scratchCards.push(card);
+            setupCanvas(card);
+        }
+
+        // Configurar un canvas individual
+        function setupCanvas(card) {
+            const { canvas, ctx } = card;
+
+            // Ajustar el tamaño real del canvas al de su contenedor
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            // Dibujar la capa superior (la que se raspa)
+            // Degradado vibrante para la capa raspable
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#5A189A'); /* Morado oscuro */
+            gradient.addColorStop(0.5, '#9D4EDD'); /* Morado medio */
+            gradient.addColorStop(1, '#5A189A'); /* Morado oscuro */
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Configurar la brocha para "raspar"
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineWidth = Math.max(20, canvas.width / 4); // Brocha ancha
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            // Añadir Listeners de eventos
+            canvas.addEventListener('mousedown', (e) => startScratch(e, card), { passive: false });
+            canvas.addEventListener('touchstart', (e) => startScratch(e, card), { passive: false });
+            canvas.addEventListener('mousemove', (e) => scratch(e, card), { passive: false });
+            canvas.addEventListener('touchmove', (e) => scratch(e, card), { passive: false });
+            canvas.addEventListener('mouseup', () => stopScratch(card));
+            canvas.addEventListener('touchend', () => stopScratch(card));
+            canvas.addEventListener('mouseleave', () => stopScratch(card));
+        }
+
+        // Obtener coordenadas del evento (mouse o touch)
+        function getEventCoords(e, canvas) {
+            const rect = canvas.getBoundingClientRect();
+            let x, y;
+
+            if (e.touches && e.touches[0]) {
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            } else {
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+            }
+            return { x, y };
+        }
+
+        // Iniciar el raspado
+        function startScratch(e, card) {
+            card.isDrawing = true;
+            card.ctx.beginPath();
+            const { x, y } = getEventCoords(e, card.canvas);
+            card.ctx.moveTo(x, y);
+            e.preventDefault();
+        }
+
+        // Continuar raspando
+        function scratch(e, card) {
+            if (!card.isDrawing) return;
+            
+            const { x, y } = getEventCoords(e, card.canvas);
+            card.ctx.lineTo(x, y);
+            card.ctx.stroke();
+            
+            card.ctx.beginPath();
+            card.ctx.moveTo(x, y);
+
+            e.preventDefault();
+
+            // Si esta tarjeta no ha sido revelada, márcala como revelada
+            if (!card.isRevealed) {
+                card.isRevealed = true;
+                card.wrapper.classList.add('prize-revealed');
+            }
+        }
+
+        // Detener el raspado
+        function stopScratch(card) {
+            card.isDrawing = false;
+            card.ctx.beginPath(); // Finalizar cualquier trazo pendiente
+
+            // Comprobar si el juego ha terminado solo cuando el usuario suelta el dedo/mouse
+            if (card.isRevealed) {
+                checkGameCompletion();
+            }
+        }
+        
+        // Función para comprobar si todas las tarjetas se han raspado
+        function checkGameCompletion() {
+            if (isGameFinished) return; // No hacer nada si ya se mostró el premio
+
+            const allRevealed = scratchCards.every(card => card.isRevealed);
+            
+            if (allRevealed) {
+                isGameFinished = true; // Marcar que el juego terminó
+                
+                // Esperar 1 segundo para que el usuario vea la combinación
+                setTimeout(revealFinalPrize, 1000);
+            }
+        }
+
+        // Función para revelar el premio FINAL (10%, 15%, 20%)
+        function revealFinalPrize() {
+            const prizeInfo = PRIZE_LOGIC[currentPrize];
+
+            // Personalizar el mensaje final
+            prizeTitle.textContent = prizeInfo.title;
+            
+            prizeMessage.classList.remove('hidden');
+            
+            // Esperar un poco más antes de mostrar el contador
+            setTimeout(() => {
+                // Mostrar el mensaje del contador
+                const countdownMessage = document.getElementById('countdown-message');
+                const countdownTimer = document.getElementById('countdown-timer');
+                
+                if (countdownMessage && countdownTimer) {
+                    countdownMessage.classList.remove('hidden');
+                    
+                    let secondsLeft = 10;
+                    countdownTimer.textContent = secondsLeft;
+
+                    // Iniciar el intervalo del contador
+                    const countdownInterval = setInterval(() => {
+                        secondsLeft--;
+                        countdownTimer.textContent = secondsLeft;
+
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdownInterval);
+                            window.location.href = whatsappUrl; // Redirigir a WhatsApp
+                        }
+                    }, 1000); // 1 segundo
+                }
+            }, 500); // Espera 0.5s después de mostrar el premio
+        }
+
+        // Iniciar el juego cuando la página cargue
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
