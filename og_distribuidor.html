@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Belleza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilos para ocultar las flechas en los inputs de tipo número */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        /* Estilos para el modal y la notificación */
+        #notification-modal, #product-modal-container {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .active-category {
+            background-color: #f763a1; /* Color solicitado */
+            color: white; /* Color de texto solicitado */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        /* Estilos para el scrollbar de categorías */
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10B981;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
+        }
+        /* Ocultar scrollbar en la barra de categorías, body y modal */
+        .no-scrollbar::-webkit-scrollbar, 
+        html::-webkit-scrollbar,
+        #product-modal-content::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar, 
+        html,
+        #product-modal-content {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl pb-40">
+        
+        <header class="text-center md:text-left mb-8 flex items-center justify-center md:justify-start gap-4">
+            <img src="https://placehold.co/150x150/E2E8F0/334155?text=TU+LOGO" alt="[Logo de la tienda]" class="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover shadow-md">
+            <div>
+                <h1 class="text-2xl md:text-4xl font-extrabold text-gray-800">Catálogo de Belleza</h1>
+                <p class="text-gray-600 mt-1">Selecciona los productos y envíanos tu pedido.</p>
+            </div>
+        </header>
+
+        <div class="sticky top-0 z-30 bg-gray-100/80 backdrop-blur-sm pt-4 pb-3 -mx-4 px-4">
+             <nav id="category-filters" class="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+                </nav>
+        </div>
+
+        <main id="product-list" class="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
+            </main>
+
+    </div>
+
+    <footer class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm shadow-[0_-2px_10px_rgba(0,0,0,0.08)] transition-transform duration-300 transform translate-y-full">
+        <div class="container mx-auto max-w-7xl flex items-center justify-between p-4">
+            <div>
+                <span class="block text-sm text-gray-600 font-semibold">Total del Pedido</span>
+                <span id="total-price" class="text-2xl font-extrabold text-gray-800">$ 0</span>
+            </div>
+            <button id="send-whatsapp" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-5 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 flex items-center whitespace-nowrap">
+                <span>Enviar Pedido</span>
+            </button>
+        </div>
+    </footer>
+
+
+    <div id="product-modal-container" class="fixed inset-0 bg-white z-50 hidden opacity-0 transition-opacity duration-300">
+        <div id="product-modal-content" class="w-full h-full overflow-y-auto">
+            </div>
+    </div>
+
+    <div id="notification-modal" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-red-500 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10 z-50">
+        <p id="notification-message"></p>
+    </div>
+
+   <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- CONFIGURACIÓN DE NÚMERO DE WHATSAPP ---
+            const phoneNumber = "+573154870448";
+            
+            // --- DATOS DE PRODUCTOS ---
+            let products = [];
+            let cart = [];
+
+            // --- ELEMENTOS DEL DOM ---
+            const productList = document.getElementById('product-list');
+            const categoryFilters = document.getElementById('category-filters');
+            const sendButton = document.getElementById('send-whatsapp');
+            const notificationModal = document.getElementById('notification-modal');
+            const notificationMessage = document.getElementById('notification-message');
+            const modalContainer = document.getElementById('product-modal-container');
+            const modalContent = document.getElementById('product-modal-content');
+            const totalPriceEl = document.getElementById('total-price');
+            const footer = document.querySelector('footer');
+            let notificationTimeout;
+
+            // --- FUNCIONES AUXILIARES ---
+            const formatPrice = (price) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(price);
+            
+            const showNotification = (message) => {
+                clearTimeout(notificationTimeout);
+                notificationMessage.textContent = message;
+                notificationModal.classList.replace('opacity-0', 'opacity-100');
+                notificationModal.classList.replace('translate-y-10', 'translate-y-0');
+                notificationTimeout = setTimeout(() => {
+                    notificationModal.classList.replace('opacity-100', 'opacity-0');
+                    notificationModal.classList.replace('translate-y-0', 'translate-y-10');
+                }, 3000);
+            };
+            
+            // --- LÓGICA DE CARRITO Y TOTAL ---
+            const updateTotal = () => {
+                const total = cart.reduce((sum, item) => {
+                    const product = products.find(p => p.id === item.productId);
+                    return sum + (item.quantity * product.priceMayorista);
+                }, 0);
+                totalPriceEl.textContent = formatPrice(total);
+                footer.classList.toggle('translate-y-full', total === 0);
+            };
+            
+            const updateBadges = () => {
+                document.querySelectorAll('.quantity-badge').forEach(badge => {
+                    const productId = badge.dataset.productId;
+                    const totalQuantity = cart
+                        .filter(item => item.productId == productId)
+                        .reduce((sum, item) => sum + item.quantity, 0);
+                    
+                    if (totalQuantity > 0) {
+                        badge.textContent = totalQuantity;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                });
+            };
+
+            const updateCart = (productId, variant, change) => {
+                let itemInCart = cart.find(item => item.productId === productId && item.variant === variant);
+                
+                if (itemInCart) {
+                    itemInCart.quantity += change;
+                    if (itemInCart.quantity <= 0) {
+                        cart = cart.filter(item => item !== itemInCart);
+                    }
+                } else if (change > 0) {
+                    cart.push({ productId, variant, quantity: 1 });
+                }
+                updateTotal();
+                updateBadges();
+                if(!modalContainer.classList.contains('hidden')){
+                    renderVariantListInModal(productId);
+                }
+            };
+
+            // --- LÓGICA DE RENDERIZADO Y FILTROS ---
+            const renderProducts = (filter = 'Todo') => {
+                productList.innerHTML = '';
+                const filteredProducts = products.filter(p => filter === 'Todo' || p.category === filter);
+                
+                filteredProducts.forEach(product => {
+                    if (product.priceMayorista <= 0) return;
+                    
+                    const productCard = document.createElement('div');
+                    productCard.className = "product-card flex items-center p-4 gap-4 border-b last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors";
+                    productCard.dataset.productId = product.id;
+                    
+                    productCard.innerHTML = `
+                        <div class="relative flex-shrink-0">
+                            <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-24 h-24 object-cover rounded-md shadow-sm">
+                            <div data-product-id="${product.id}" class="quantity-badge absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-md hidden">0</div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-base font-bold text-gray-800">${product.name}</h3>
+                            <div class="mt-1 flex items-start gap-4">
+                                <div>
+                                    <span class="block text-xs font-medium text-gray-500">Precio Mayorista:</span>
+                                    <span class="text-lg font-extrabold text-emerald-600">${formatPrice(product.priceMayorista)}</span>
+                                </div>
+                                ${product.priceSugerido > 0 ? `<div>
+                                    <span class="block text-xs font-medium text-gray-500">Precio Sugerido:</span>
+                                    <span class="text-sm text-gray-600">${formatPrice(product.priceSugerido)}</span>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    productList.appendChild(productCard);
+                });
+                updateBadges();
+            };
+            
+            const setupCategories = () => {
+                const categories = ['Todo', ...new Set(products.filter(p => p.priceMayorista > 0).map(p => p.category))];
+                categoryFilters.innerHTML = categories.map(cat => `
+                    <button class="category-btn px-4 py-2 rounded-full font-semibold transition-colors duration-200 ${cat === 'Todo' ? 'active-category' : 'bg-white hover:bg-gray-200'}" data-category="${cat}">
+                        ${cat}
+                    </button>
+                `).join('');
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const currentActive = document.querySelector('.active-category');
+                        if (currentActive) {
+                            currentActive.classList.remove('active-category');
+                            currentActive.classList.add('bg-white', 'hover:bg-gray-200');
+                        }
+                        btn.classList.remove('bg-white', 'hover:bg-gray-200');
+                        btn.classList.add('active-category');
+                        renderProducts(btn.dataset.category);
+                    });
+                });
+            };
+            
+            // --- LÓGICA DE MODAL ---
+            const renderVariantListInModal = (productId) => {
+                const variantListContainer = modalContent.querySelector('#variant-list');
+                if (!variantListContainer) return;
+
+                const variantsInCart = cart.filter(item => item.productId == productId);
+                variantListContainer.innerHTML = '';
+
+                if (variantsInCart.length > 0) {
+                    variantListContainer.innerHTML += `<h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2 border-b pb-2">Variantes en tu pedido</h4>`;
+                    variantsInCart.forEach(variant => {
+                        const variantItem = document.createElement('div');
+                        variantItem.className = 'flex justify-between items-center py-3 border-b';
+                        variantItem.innerHTML = `
+                            <div>
+                                <p class="font-semibold">Variante: ${variant.variant}</p>
+                            </div>
+                            <div class="flex items-center justify-center gap-1">
+                                <button class="quantity-btn decrease bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg hover:bg-gray-300" data-variant="${variant.variant}">-</button>
+                                <input type="number" value="${variant.quantity}" class="w-12 text-center rounded-md border-gray-300 py-1" readonly>
+                                <button class="quantity-btn increase bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg hover:bg-gray-300" data-variant="${variant.variant}">+</button>
+                            </div>
+                        `;
+                        variantListContainer.appendChild(variantItem);
+                    });
+                }
+            };
+            
+            const openModal = (productId) => {
+                const product = products.find(p => p.id == productId);
+                if (!product) return;
+                
+                modalContent.innerHTML = `
+                    <div class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm p-4 border-b flex justify-between items-center">
+                        <button id="modal-back-btn" class="flex items-center gap-2 font-semibold text-gray-700 hover:text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                            Volver
+                        </button>
+                        <h3 class="font-bold text-lg truncate px-4">${product.name}</h3>
+                        <div class="w-16 flex-shrink-0"></div>
+                    </div>
+                    <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-full aspect-square object-cover">
+                    <div class="p-5">
+                        <h2 class="text-3xl font-bold text-gray-800">${product.name}</h2>
+                        <p class="text-sm font-semibold text-gray-700 mt-2">${product.category}</p>
+                        <div class="mt-2 flex items-start gap-6">
+                            <div>
+                                <span class="block text-lg font-semibold text-gray-700">Precio Mayorista:</span>
+                                <span class="text-3xl font-extrabold text-gray-900">${formatPrice(product.priceMayorista)}</span>
+                            </div>
+                            ${product.priceSugerido > 0 ? `<div class="">
+                                <span class="block text-base font-medium text-gray-500">Precio Sugerido:</span>
+                                <span class="text-lg text-gray-600">${formatPrice(product.priceSugerido)}</span>
+                            </div>` : ''}
+                        </div>
+                        <p class="text-base text-gray-600 mt-4">${product.description || 'Descripción no disponible.'}</p>
+                        <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow-inner">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Añadir una variante</h4>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Tono / Variante:</label>
+                                <select class="mt-1 block w-full pl-3 pr-10 py-2 border-gray-300 rounded-md product-variant focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                    ${product.variants.map(v => `<option>${v}</option>`).join('')}
+                                </select>
+                            </div>
+                            <button id="add-variant-btn" class="mt-4 w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition-colors focus:outline-none focus:ring-4 focus:ring-green-300">
+                                Añadir al pedido
+                            </button>
+                        </div>
+                        <div id="variant-list" class="pb-8"></div>
+                    </div>
+                `;
+                renderVariantListInModal(productId);
+                modalContainer.dataset.productId = productId;
+                modalContainer.classList.remove('hidden', 'opacity-0');
+                modalContent.scrollTop = 0; 
+            };
+
+            // --- MANEJO DE EVENTOS ---
+            productList.addEventListener('click', (e) => {
+                const card = e.target.closest('.product-card');
+                if (card) openModal(card.dataset.productId);
+            });
+            
+            modalContent.addEventListener('click', (e) => {
+                const productId = modalContainer.dataset.productId;
+                if (!productId) return;
+
+                if (e.target.closest('#modal-back-btn')) {
+                    modalContainer.classList.add('opacity-0');
+                    setTimeout(() => modalContainer.classList.add('hidden'), 300);
+                    return;
+                }
+
+                if (e.target.closest('#add-variant-btn')) {
+                    const variant = modalContent.querySelector('.product-variant').value;
+                    updateCart(parseInt(productId), variant, 1);
+                    return;
+                }
+
+                const btn = e.target.closest('.quantity-btn');
+                if (btn) {
+                    const change = btn.classList.contains('increase') ? 1 : -1;
+                    const variant = btn.dataset.variant;
+                    updateCart(parseInt(productId), variant, change);
+                }
+            });
+
+            sendButton.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showNotification("Por favor, añade al menos un producto.");
+                    return;
+                }
+                
+                let message = "¡Hola! 👋 Quisiera hacer el siguiente pedido:\n\n";
+                let total = 0;
+
+                cart.forEach(item => {
+                    const product = products.find(p => p.id === item.productId);
+                    total += item.quantity * product.priceMayorista;
+                    message += `*${product.name}*\n`;
+                    message += `- Cantidad: ${item.quantity}\n`;
+                    message += `- Variante: ${item.variant}\n\n`;
+                });
+                
+                message += `*Total Estimado: ${formatPrice(total)}*\n\n`;
+                message += "¡Quedo atento a la confirmación, muchas gracias!";
+                
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // --- FUNCIÓN PARA CONVERTIR CSV A ARRAY DE OBJETOS ---
+            // Esta función ya está ajustada para leer el separador ';'
+            function parseCSV(csvText) {
+                const lines = csvText.trim().split('\n');
+                
+                const headers = lines.shift().split(';').map(h => h.trim());
+                
+                const productsArray = [];
+
+                lines.forEach(row => {
+                    if (!row) return;
+
+                    const obj = {};
+                    
+                    const values = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+
+                    if (values.length !== headers.length) {
+                        console.warn("Fila malformada, se saltará:", row);
+                        return;
+                    }
+
+                    headers.forEach((header, i) => {
+                        let value = values[i].trim();
+                        
+                        if (value.startsWith('"') && value.endsWith('"')) {
+                            value = value.substring(1, value.length - 1).replace(/""/g, '"');
+                        }
+
+                        if (header === 'id' || header === 'priceMayorista' || header === 'priceSugerido') {
+                            obj[header] = parseInt(value) || 0;
+                        } else if (header === 'variants') {
+                            obj[header] = value.split('|').map(v => v.trim());
+                        } else {
+                            obj[header] = value;
+                        }
+                    });
+                    productsArray.push(obj);
+                });
+                
+                return productsArray;
+            }
+
+            // --- FUNCIÓN PARA CARGAR LOS PRODUCTOS DESDE CSV ---
+            async function initializeApp() {
+                try {
+                    // 1. Pedir el archivo
+                    const response = await fetch('productos_distribuidor.csv', { cache: 'no-store' });
+                    
+                    if (!response.ok) {
+                        throw new Error(`No se pudo cargar productos_distribuidor.csv: ${response.statusText}`);
+                    }
+
+                    // --- ¡¡ESTE ES EL CÓDIGO CORRECTO!! ---
+                    // Lee los bytes "crudos" del archivo
+                    const buffer = await response.arrayBuffer();
+                    
+                    // Crea un decodificador para la codificación de Windows/Excel (ANSI)
+                    const decoder = new TextDecoder('windows-1252'); 
+                    
+                    // Usa el decodificador para convertir los bytes a texto con tildes correctas
+                    const csvData = decoder.decode(buffer); 
+                    // --- FIN DEL CÓDIGO CORRECTO ---
+                    
+                    // 2. Convertir el CSV (ya lee ';')
+                    products = parseCSV(csvData);
+
+                    // 3. Renderizar la página
+                    setupCategories();
+                    renderProducts();
+                    updateTotal();
+
+                } catch (error) {
+                    console.error("Error al inicializar la app:", error);
+                    productList.innerHTML = `<p class="p-6 text-red-600 font-semibold">
+                        ❌ Error al cargar el catálogo.<br>
+                        Asegúrate de que el archivo <strong>productos_distribuidor.csv</strong> 
+                        esté en la misma carpeta que el archivo HTML.
+                    </p>`;
+                }
+            }
+
+            // --- INICIALIZACIÓN ---
+            initializeApp();
+
+        });
+    </script>
+
+</body>
+</html>
