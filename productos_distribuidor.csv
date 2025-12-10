@@ -1,13 +1,5 @@
 id;name;imageUrl;priceMayorista;priceSugerido;description;variants;category
-1;Jabon Facial CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/51a9f6f1fdd4ba9cec4cc4a8bee7a04e9b27d497.jpg;17900;36000;"Limpieza suave, piel equilibrada.
-
-Elimina impurezas sin resecar gracias a su fórmula con ceramidas esenciales que protegen la barrera cutánea y mantienen la hidratación natural de la piel.
-
-De textura ligera y fácil de enjuagar, deja tu rostro limpio, suave y saludable desde el primer uso.
-
-? Apto para todo tipo de piel
-? No deja sensación tirante
-? Textura ligera y suave al tacto";N/A;CeramiLux
+1;Jabon Facial CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/51a9f6f1fdd4ba9cec4cc4a8bee7a04e9b27d497.jpg;17900;36000;Limpieza suave, piel equilibrada. Elimina impurezas sin resecar gracias a su fórmula con ceramidas esenciales que protegen la barrera cutánea y mantienen la hidratación natural de la piel.;N/A;CeramiLux
 2;Crema Hidratante CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/ce75547c9b4bc2d1667011fa10d2492428ee5d33.jpg;22800;38000;Hidratación intensa con ceramidas para restaurar la piel.;N/A;CeramiLux
 3;Tónico CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/164d395cb3f399c8f628f9f907c22f3dd97dc7f6.jpg;22200;37000;Equilibra el pH y prepara la piel para la hidratación.;N/A;CeramiLux
 4;Suero CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/a4c4a7b3a391e26ce010bc33ae8d2e5febf61757.jpg;22200;37000;Suero concentrado para una reparación intensiva.;N/A;CeramiLux
