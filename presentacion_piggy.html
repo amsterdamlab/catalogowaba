@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo de Negocio Piggy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            /* Brand Colors - Modernized */
+            --primary: #ec4899;
+            --primary-dark: #be185d;
+            --primary-light: #fdf2f8;
+            
+            --secondary: #10b981;
+            --secondary-dark: #047857;
+            --secondary-light: #ecfdf5;
+
+            /* Neutral Colors */
+            --bg-body: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-secondary: #475569;
+            --border: #e2e8f0;
+            
+            /* Effects */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 80px;
+        }
+
+        /* --- Header Section --- */
+        header {
+            background: var(--surface);
+            padding: 60px 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative background blur */
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(236,72,153,0.08) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .brand-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* --- Toggle Switch (Segmented Control) --- */
+        .toggle-container {
+            display: inline-flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            background: transparent;
+        }
+
+        .toggle-btn.active {
+            background: var(--surface);
+            color: var(--text-main);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Dynamic Active Colors */
+        body[data-mode="user"] .toggle-btn.active { color: var(--primary); }
+        body[data-mode="partner"] .toggle-btn.active { color: var(--secondary); }
+
+        /* --- Main Content Grid --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            position: relative;
+            margin-bottom: 80px; /* Space for FAQ */
+        }
+
+        /* Line connecting steps */
+        .process-line {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        /* --- Step Cards --- */
+        .step-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(0,0,0,0.05);
+        }
+
+        /* Number Badge */
+        .step-badge {
+            width: 32px;
+            height: 32px;
+            background: var(--text-main);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+            z-index: 2;
+            box-shadow: 0 0 0 6px var(--surface); /* Mask for the line */
+        }
+
+        /* Icons */
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Typography inside card */
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            flex-grow: 1; /* Pushes footer down */
+            margin-bottom: 20px;
+        }
+
+        /* Tags */
+        .meta-tag {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- FAQ SECTION --- */
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .faq-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .faq-item:hover {
+            border-color: #cbd5e1;
+        }
+
+        summary {
+            padding: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-main);
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after {
+            content: '\f078'; /* FontAwesome Chevron Down */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: transform 0.2s;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px 20px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            border-top: 1px solid transparent;
+        }
+
+        details[open] .faq-answer {
+            border-top-color: #f1f5f9;
+            padding-top: 15px;
+        }
+
+        /* Color accents for FAQ based on mode */
+        body[data-mode="user"] details[open] summary { color: var(--primary); }
+        body[data-mode="partner"] details[open] summary { color: var(--secondary); }
+
+
+        /* --- THEME VARIATIONS --- */
+        
+        /* User Theme (Pink) */
+        body[data-mode="user"] .icon-box { background: var(--primary-light); color: var(--primary); }
+        body[data-mode="user"] .step-badge { background: var(--primary); }
+        body[data-mode="user"] .cta-btn { background: var(--primary); }
+        body[data-mode="user"] .cta-btn:hover { background: var(--primary-dark); }
+        
+        /* Partner Theme (Green) */
+        body[data-mode="partner"] .icon-box { background: var(--secondary-light); color: var(--secondary); }
+        body[data-mode="partner"] .step-badge { background: var(--secondary); }
+        body[data-mode="partner"] .cta-btn { background: var(--secondary); }
+        body[data-mode="partner"] .cta-btn:hover { background: var(--secondary-dark); }
+
+        /* --- CTA Section --- */
+        .cta-container {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 1.05rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .disclaimer {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .process-line { display: none; }
+            h1 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 600px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation utilities */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Utility Class for Toggling */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body data-mode="user">
+
+    <header>
+        <div class="header-content">
+            <div class="brand-pill">
+                <i class="fa-solid fa-layer-group"></i> Modelo de negocio Piggy App
+            </div>
+            <h1>¿Cómo funciona el Ecosistema?</h1>
+            <p class="subtitle">Conectamos capital inteligente con productividad real. Selecciona tu perfil para ver tu ruta de valor.</p>
+
+            <div class="toggle-container">
+                <button class="toggle-btn active" onclick="setMode('user', this)">
+                    <i class="fa-regular fa-user"></i> Soy Usuario
+                </button>
+                <button class="toggle-btn" onclick="setMode('partner', this)">
+                    <i class="fa-solid fa-store"></i> Soy Aliado (Granja)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- USER FLOW -->
+        <div id="user-flow" class="process-grid fade-in">
+            <div class="process-line"></div>
+            
+            <!-- Card 1 -->
+            <div class="step-card">
+                <div class="step-badge">1</div>
+                <div class="icon-box">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                </div>
+                <h3 class="step-title">Adopción Digital</h3>
+                <p class="step-desc">Eliges tu Piggy desde la app. Pagas la primera cuota de $250k y firmas tu contrato de propiedad.</p>
+                <div class="card-footer">
+                    <span class="meta-tag">Mes 0 • Inicio</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="step-card">
+                <div class="step-badge">2</div>
+                <div class="icon-box">
+                    <i class="fa-solid fa-credit-card"></i>
+                </div>
+                <h3 class="step-title">Aportes Flexibles</h3>
+                <p class="step-desc">Realizas los pagos mensuales restantes. Tienes trazabilidad virtual de tu activo.</p>
+                <div class="card-footer">
+                    <span class="meta-tag">Mes 1-4 • Gestión</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="step-card">
+                <div class="step-badge">3</div>
+                <div class="icon-box">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                </div>
+                <h3 class="step-title">Valorización</h3>
+                <p class="step-desc">Nuestro aliado experto se encarga del engorde. Tu activo gana peso y valor biológico diariamente.</p>
+                <div class="card-footer">
+                    <span class="meta-tag">100% Delegado</span>
+                </div>
+            </div>
+
+            <!-- Card 4 (UPDATED) -->
+            <div class="step-card">
+                <div class="step-badge">4</div>
+                <div class="icon-box">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <h3 class="step-title">Liquidación</h3>
+                <p class="step-desc">Tú decides: <strong>recibe tu cerdo en casa</strong> o <strong>véndelo a través de Piggy</strong> para recibir capital + utilidad en tu wallet.</p>
+                <div class="card-footer">
+                    <span class="meta-tag">Mes 4 • Retorno</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARTNER FLOW -->
+        <div id="partner-flow" class="process-grid hidden fade-in">
+            <div class="process-line"></div>
+            
+            <!-- Card 1 -->
+            <div class="step-card">
+                <div class="step-badge">1</div>
+                <div class="icon-box">
+                    <i class="fa-solid fa-handshake"></i>
+                </div>
+                <h3 class="step-title">Vinculación</h3>
+                <p class="step-desc">Te unes como aliado certificado. Piggy agrupa la demanda de cientos de usuarios para tu granja.</p>
+                <div class="card-footer">
+                    <span class="meta-tag">Sin Burocracia</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="step-card">
+                <div class="step-badge">2</div>
+                <div class="icon-box">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="step-title">Inyección Capital</h3>
+                <p class="step-desc">Recibes el 100% del capital ($1M por unidad) desde el día 1 para operar sin deuda.</p>
+                <div class="card-footer">
+                    <span class="meta-tag">Liquidez Inmediata</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="step-card">
+                <div class="step-badge">3</div>
+                <div class="icon-box">
+                    <i class="fa-solid fa-wheat-awn"></i>
+                </div>
+                <h3 class="step-title">Operación</h3>
+                <p class="step-desc">Te enfocas en producir eficientemente. Usas el capital para insumos y logística de engorde.</p>
+                <div class="card-footer">
+                    <span class="meta-tag">Ciclo 4 Meses</span>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="step-card">
+                <div class="step-badge">4</div>
+                <div class="icon-box">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </div>
+                <h3 class="step-title">Re-inversión</h3>
+                <p class="step-desc">Comercializas, pagas la rentabilidad pactada y repites el ciclo con capital garantizado.</p>
+                <div class="card-footer">
+                    <span class="meta-tag">Escalabilidad</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ SECTION -->
+        <div class="faq-section fade-in">
+            <div class="faq-header">
+                <h2>Preguntas Frecuentes</h2>
+                <p class="subtitle" style="margin-bottom: 20px;">Resolvemos tus dudas principales</p>
+            </div>
+
+            <!-- USER FAQs -->
+            <div id="user-faq" class="faq-group">
+                <details class="faq-item">
+                    <summary>¿Qué pasa si dejo de pagar una cuota?</summary>
+                    <div class="faq-answer">
+                        Tienes un periodo de gracia de 5 días. Si el pago no se realiza, Piggy puede vender tu activo en el marketplace interno con una penalidad del 10% sobre el capital aportado. Esto protege la sostenibilidad de la granja aliada. <strong>Importante:</strong> El crecimiento de tu Piggy no se puede ver afectado por falta de pago en las cuotas mensuales.
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>¿Estoy invirtiendo dinero en un fondo?</summary>
+                    <div class="faq-answer">
+                        No. Piggy no es una entidad financiera ni capta dinero. Estás realizando un contrato de compraventa de un activo real (un cerdo) que gana valor biológico. Tu rentabilidad proviene de la venta comercial de ese activo.
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>¿Puedo ir a visitar a mi Piggy?</summary>
+                    <div class="faq-answer">
+                        Por razones de bioseguridad, el acceso a las granjas es restringido. Sin embargo, recibirás reportes y actualizaciones sobre el estado general del lote donde se encuentra tu activo.
+                    </div>
+                </details>
+            </div>
+
+            <!-- PARTNER FAQs (UPDATED FOR COMMERCIALIZER) -->
+            <div id="partner-faq" class="faq-group hidden">
+                <details class="faq-item">
+                    <summary>¿Cuánto capital recibo y cómo funciona el retorno?</summary>
+                    <div class="faq-answer">
+                        Recibes <strong>$1.000.000 COP</strong> desde el inicio, por cada usuario que ingrese a la app. Se establece un acuerdo entre las partes para obtener un retorno mensual sobre el capital invertido durante un periodo de 4 meses (finalización del ciclo). Para este momento el capital se debería retirar si se requiere.
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>¿Qué beneficios obtengo como aliado?</summary>
+                    <div class="faq-answer">
+                        <strong>Crecimiento sin deuda</strong>: accedes a capital de trabajo sin comprometer tu cupo bancario ni hipotecar tu patrimonio. Además, optimizas tu flujo de caja con capital para poner a trabajar entregando una parte de la utilidad de tu operación. Como aliado estratégico obtienes también visibilidad de marca en la app.
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>¿Qué sucede al cierre del ciclo?</summary>
+                    <div class="faq-answer">
+                        Como comercializadora experta, eres responsable de la venta final del producto o entrega de unidades de consumo. Al terminar el ciclo (4 meses), devuelves el capital base a Piggy (si es requerido) y conservas el excedente operativo como tu utilidad neta, luego de comisiones.
+                    </div>
+                </details>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="cta-container">
+        <a href="#" class="cta-btn">
+            <span>Comenzar ahora</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <p class="disclaimer">* Rentabilidades estimadas basadas en el histórico de ventas. Aplican T&C.</p>
+    </div>
+
+    <script>
+        function setMode(mode, btnElement) {
+            // Update Body Data Attribute for CSS theming
+            document.body.setAttribute('data-mode', mode);
+
+            // Update Toggle Buttons
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Activate clicked button
+            if (btnElement) {
+                btnElement.classList.add('active');
+            }
+
+            // Switch Flow Content
+            const userFlow = document.getElementById('user-flow');
+            const partnerFlow = document.getElementById('partner-flow');
+            
+            // Switch FAQ Content
+            const userFaq = document.getElementById('user-faq');
+            const partnerFaq = document.getElementById('partner-faq');
+
+            if (mode === 'user') {
+                userFlow.classList.remove('hidden');
+                partnerFlow.classList.add('hidden');
+                
+                userFaq.classList.remove('hidden');
+                partnerFaq.classList.add('hidden');
+            } else {
+                userFlow.classList.add('hidden');
+                partnerFlow.classList.remove('hidden');
+                
+                userFaq.classList.add('hidden');
+                partnerFaq.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
