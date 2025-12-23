@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Ropa - Distribuidor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        #notification-modal, #product-modal-container {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .active-category {
+            background-color: #f763a1; 
+            color: white; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10B981;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
+        }
+        .no-scrollbar::-webkit-scrollbar, 
+        html::-webkit-scrollbar,
+        #product-modal-content::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar, 
+        html,
+        #product-modal-content {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl pb-40">
+        
+        <header class="text-center md:text-left mb-8 flex items-center justify-center md:justify-start gap-4">
+            <img src="https://content.pancake.vn/2-2510/s800x800/2025/10/20/79d72014e41051da9630530130bd4c6eb25bf388.jpg" alt="[Logo de la Tienda]" class="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover shadow-md">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800">Catálogo de Moda</h1>
+                <p class="text-gray-600 mt-1">Elige tus prendas, tallas y colores favoritos.</p>
+            </div>
+        </header>
+
+        <div class="sticky top-0 z-30 bg-gray-100/80 backdrop-blur-sm pt-4 pb-3 -mx-4 px-4">
+             <nav id="category-filters" class="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+                </nav>
+        </div>
+
+        <main id="product-list" class="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Los productos se cargan aquí -->
+        </main>
+
+    </div>
+
+    <footer class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm shadow-[0_-2px_10px_rgba(0,0,0,0.08)] transition-transform duration-300 transform translate-y-full">
+        <div class="container mx-auto max-w-7xl flex items-center justify-between p-4">
+            <div>
+                <span class="block text-sm text-gray-600 font-semibold">Total del Pedido</span>
+                <span id="total-price" class="text-2xl font-extrabold text-gray-800">$ 0</span>
+            </div>
+            <button id="send-whatsapp" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-5 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 flex items-center whitespace-nowrap">
+                <span>Enviar Pedido</span>
+            </button>
+        </div>
+    </footer>
+
+
+    <div id="product-modal-container" class="fixed inset-0 bg-white z-50 hidden opacity-0 transition-opacity duration-300">
+        <div id="product-modal-content" class="w-full h-full overflow-y-auto">
+            <!-- Contenido del modal dinámico -->
+        </div>
+    </div>
+
+    <div id="notification-modal" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-red-500 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10 z-50">
+        <p id="notification-message"></p>
+    </div>
+
+   <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- CONFIGURACIÓN DE NÚMERO DE WHATSAPP ---
+            const phoneNumber = "+573044050238";
+            
+            // --- DATOS DE PRODUCTOS ---
+            let products = [];
+            let cart = [];
+
+            // --- ELEMENTOS DEL DOM ---
+            const productList = document.getElementById('product-list');
+            const categoryFilters = document.getElementById('category-filters');
+            const sendButton = document.getElementById('send-whatsapp');
+            const notificationModal = document.getElementById('notification-modal');
+            const notificationMessage = document.getElementById('notification-message');
+            const modalContainer = document.getElementById('product-modal-container');
+            const modalContent = document.getElementById('product-modal-content');
+            const totalPriceEl = document.getElementById('total-price');
+            const footer = document.querySelector('footer');
+            let notificationTimeout;
+
+            // --- FUNCIONES AUXILIARES ---
+            const formatPrice = (price) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(price);
+            
+            const showNotification = (message) => {
+                clearTimeout(notificationTimeout);
+                notificationMessage.textContent = message;
+                notificationModal.classList.replace('opacity-0', 'opacity-100');
+                notificationModal.classList.replace('translate-y-10', 'translate-y-0');
+                notificationTimeout = setTimeout(() => {
+                    notificationModal.classList.replace('opacity-100', 'opacity-0');
+                    notificationModal.classList.replace('translate-y-0', 'translate-y-10');
+                }, 3000);
+            };
+            
+            // --- LÓGICA DE CARRITO Y TOTAL ---
+            const updateTotal = () => {
+                const total = cart.reduce((sum, item) => {
+                    const product = products.find(p => p.id === item.productId);
+                    return sum + (item.quantity * product.priceMayorista);
+                }, 0);
+                totalPriceEl.textContent = formatPrice(total);
+                footer.classList.toggle('translate-y-full', total === 0);
+            };
+            
+            const updateBadges = () => {
+                document.querySelectorAll('.quantity-badge').forEach(badge => {
+                    const productId = badge.dataset.productId;
+                    const totalQuantity = cart
+                        .filter(item => item.productId == productId)
+                        .reduce((sum, item) => sum + item.quantity, 0);
+                    
+                    if (totalQuantity > 0) {
+                        badge.textContent = totalQuantity;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                });
+            };
+
+            const updateCart = (productId, size, color, change) => {
+                let itemInCart = cart.find(item => 
+                    item.productId === productId && 
+                    item.size === size && 
+                    item.color === color
+                );
+                
+                if (itemInCart) {
+                    itemInCart.quantity += change;
+                    if (itemInCart.quantity <= 0) {
+                        cart = cart.filter(item => item !== itemInCart);
+                    }
+                } else if (change > 0) {
+                    cart.push({ productId, size, color, quantity: 1 });
+                }
+                updateTotal();
+                updateBadges();
+                if(!modalContainer.classList.contains('hidden')){
+                    renderVariantListInModal(productId);
+                }
+            };
+
+            // --- LÓGICA DE RENDERIZADO Y FILTROS ---
+            const renderProducts = (filter = 'Todo') => {
+                productList.innerHTML = '';
+                const filteredProducts = products.filter(p => filter === 'Todo' || p.category === filter);
+                
+                filteredProducts.forEach(product => {
+                    if (product.priceMayorista <= 0) return;
+                    
+                    const productCard = document.createElement('div');
+                    productCard.className = "product-card flex items-center p-4 gap-4 border-b last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors";
+                    productCard.dataset.productId = product.id;
+                    
+                    productCard.innerHTML = `
+                        <div class="relative flex-shrink-0">
+                            <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-24 h-24 object-cover rounded-md shadow-sm" onerror="this.src='https://via.placeholder.com/150?text=Ropa'">
+                            <div data-product-id="${product.id}" class="quantity-badge absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-md hidden">0</div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-base font-bold text-gray-800">${product.name}</h3>
+                            <div class="mt-1 flex items-start gap-4">
+                                <div>
+                                    <span class="block text-xs font-medium text-gray-500">Precio Distribuidor:</span>
+                                    <span class="text-lg font-extrabold text-emerald-600">${formatPrice(product.priceMayorista)}</span>
+                                </div>
+                                ${product.priceSugerido > 0 ? `<div>
+                                    <span class="block text-xs font-medium text-gray-500">Precio Sugerido:</span>
+                                    <span class="text-sm text-gray-600">${formatPrice(product.priceSugerido)}</span>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    productList.appendChild(productCard);
+                });
+                updateBadges();
+            };
+            
+            const setupCategories = () => {
+                const categories = ['Todo', ...new Set(products.filter(p => p.priceMayorista > 0).map(p => p.category))];
+                categoryFilters.innerHTML = categories.map(cat => `
+                    <button class="category-btn px-4 py-2 rounded-full font-semibold transition-colors duration-200 ${cat === 'Todo' ? 'active-category' : 'bg-white hover:bg-gray-200'}" data-category="${cat}">
+                        ${cat}
+                    </button>
+                `).join('');
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const currentActive = document.querySelector('.active-category');
+                        if (currentActive) {
+                            currentActive.classList.remove('active-category');
+                            currentActive.classList.add('bg-white', 'hover:bg-gray-200');
+                        }
+                        btn.classList.remove('bg-white', 'hover:bg-gray-200');
+                        btn.classList.add('active-category');
+                        renderProducts(btn.dataset.category);
+                    });
+                });
+            };
+            
+            // --- LÓGICA DE MODAL ---
+            const renderVariantListInModal = (productId) => {
+                const variantListContainer = modalContent.querySelector('#variant-list');
+                if (!variantListContainer) return;
+
+                const variantsInCart = cart.filter(item => item.productId == productId);
+                variantListContainer.innerHTML = '';
+
+                if (variantsInCart.length > 0) {
+                    variantListContainer.innerHTML += `<h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2 border-b pb-2">Tu selección</h4>`;
+                    variantsInCart.forEach(item => {
+                        const variantItem = document.createElement('div');
+                        variantItem.className = 'flex justify-between items-center py-3 border-b';
+                        variantItem.innerHTML = `
+                            <div class="flex-grow">
+                                <p class="font-bold text-gray-800">${item.size} / ${item.color}</p>
+                            </div>
+                            <div class="flex items-center justify-center gap-1">
+                                <button class="quantity-btn decrease bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg hover:bg-gray-300" 
+                                    data-size="${item.size}" data-color="${item.color}">-</button>
+                                <input type="number" value="${item.quantity}" class="w-10 text-center rounded-md border-gray-300 py-1" readonly>
+                                <button class="quantity-btn increase bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg hover:bg-gray-300" 
+                                    data-size="${item.size}" data-color="${item.color}">+</button>
+                            </div>
+                        `;
+                        variantListContainer.appendChild(variantItem);
+                    });
+                }
+            };
+            
+            const openModal = (productId) => {
+                const product = products.find(p => p.id == productId);
+                if (!product) return;
+                
+                modalContent.innerHTML = `
+                    <div class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm p-4 border-b flex justify-between items-center">
+                        <button id="modal-back-btn" class="flex items-center gap-2 font-semibold text-gray-700 hover:text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                            Volver
+                        </button>
+                        <h3 class="font-bold text-lg truncate px-4">${product.name}</h3>
+                        <div class="w-16 flex-shrink-0"></div>
+                    </div>
+                    <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-full aspect-square object-cover" onerror="this.src='https://via.placeholder.com/600?text=Ropa'">
+                    <div class="p-5">
+                        <h2 class="text-3xl font-bold text-gray-800">${product.name}</h2>
+                        <p class="text-sm font-semibold text-gray-700 mt-1 uppercase tracking-wider">${product.category}</p>
+                        <div class="mt-4 flex items-end gap-6">
+                            <div>
+                                <span class="block text-sm font-semibold text-gray-500 uppercase">Precio Distribuidor:</span>
+                                <span class="text-3xl font-extrabold text-emerald-600">${formatPrice(product.priceMayorista)}</span>
+                            </div>
+                            ${product.priceSugerido > 0 ? `<div class="pb-1">
+                                <span class="block text-xs font-medium text-gray-400 uppercase">Precio Sugerido:</span>
+                                <span class="text-lg text-gray-500 line-through">${formatPrice(product.priceSugerido)}</span>
+                            </div>` : ''}
+                        </div>
+                        <p class="text-base text-gray-600 mt-6 leading-relaxed">${product.description || 'Descripción del producto no disponible.'}</p>
+                        
+                        <div class="mt-8 bg-gray-50 p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">Selecciona Talla y Color</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Talla:</label>
+                                    <select id="select-size" class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+                                        ${product.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Color:</label>
+                                    <select id="select-color" class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+                                        ${product.colors.map(c => `<option value="${c}">${c}</option>`).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                            <button id="add-to-cart-btn" class="mt-6 w-full bg-emerald-600 text-white font-extrabold py-4 rounded-xl hover:bg-emerald-700 shadow-lg transition-all active:scale-95">
+                                Añadir al pedido
+                            </button>
+                        </div>
+                        <div id="variant-list" class="pb-12"></div>
+                    </div>
+                `;
+                renderVariantListInModal(productId);
+                modalContainer.dataset.productId = productId;
+                modalContainer.classList.remove('hidden', 'opacity-0');
+                modalContent.scrollTop = 0; 
+            };
+
+            // --- MANEJO DE EVENTOS ---
+            productList.addEventListener('click', (e) => {
+                const card = e.target.closest('.product-card');
+                if (card) openModal(card.dataset.productId);
+            });
+            
+            modalContent.addEventListener('click', (e) => {
+                const productId = modalContainer.dataset.productId;
+                if (!productId) return;
+
+                if (e.target.closest('#modal-back-btn')) {
+                    modalContainer.classList.add('opacity-0');
+                    setTimeout(() => modalContainer.classList.add('hidden'), 300);
+                    return;
+                }
+
+                if (e.target.closest('#add-to-cart-btn')) {
+                    const size = modalContent.querySelector('#select-size').value;
+                    const color = modalContent.querySelector('#select-color').value;
+                    updateCart(parseInt(productId), size, color, 1);
+                    return;
+                }
+
+                const btn = e.target.closest('.quantity-btn');
+                if (btn) {
+                    const change = btn.classList.contains('increase') ? 1 : -1;
+                    const size = btn.dataset.size;
+                    const color = btn.dataset.color;
+                    updateCart(parseInt(productId), size, color, change);
+                }
+            });
+
+            sendButton.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showNotification("Por favor, añade al menos un artículo.");
+                    return;
+                }
+                
+                let message = "¡Hola! 👋 Quisiera hacer el siguiente pedido de ropa:\n\n";
+                let total = 0;
+
+                // Agrupamos por producto para que el mensaje sea más legible
+                const groupedByProduct = cart.reduce((acc, item) => {
+                    if (!acc[item.productId]) acc[item.productId] = [];
+                    acc[item.productId].push(item);
+                    return acc;
+                }, {});
+
+                for (const productId in groupedByProduct) {
+                    const product = products.find(p => p.id == productId);
+                    message += `👕 *${product.name}*\n`;
+                    groupedByProduct[productId].forEach(item => {
+                        message += `  - ${item.quantity}x (Talla: ${item.size}, Color: ${item.color})\n`;
+                        total += item.quantity * product.priceMayorista;
+                    });
+                    message += `\n`;
+                }
+                
+                message += `*Total Estimado: ${formatPrice(total)}*\n\n`;
+                message += "¡Quedo atento a la disponibilidad, gracias!";
+                
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // --- FUNCIÓN PARA CONVERTIR CSV A ARRAY DE OBJETOS ---
+            function parseCSV(csvText) {
+                const lines = csvText.trim().split('\n');
+                const headers = lines.shift().split(';').map(h => h.trim());
+                const productsArray = [];
+
+                lines.forEach(row => {
+                    if (!row) return;
+                    const obj = {};
+                    const values = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+
+                    if (values.length !== headers.length) return;
+
+                    headers.forEach((header, i) => {
+                        let value = values[i].trim();
+                        if (value.startsWith('"') && value.endsWith('"')) {
+                            value = value.substring(1, value.length - 1).replace(/""/g, '"');
+                        }
+
+                        if (header === 'id' || header === 'priceMayorista' || header === 'priceSugerido') {
+                            obj[header] = parseInt(value) || 0;
+                        } else if (header === 'sizes' || header === 'colors') {
+                            // Split por tubería para las variantes
+                            obj[header] = value.split('|').map(v => v.trim()).filter(v => v !== "");
+                        } else {
+                            obj[header] = value;
+                        }
+                    });
+                    
+                    // Fallback si no hay tallas o colores definidos
+                    if (!obj.sizes || obj.sizes.length === 0) obj.sizes = ["Única"];
+                    if (!obj.colors || obj.colors.length === 0) obj.colors = ["Único"];
+                    
+                    productsArray.push(obj);
+                });
+                return productsArray;
+            }
+
+            // --- INICIALIZACIÓN ---
+            async function initializeApp() {
+                try {
+                    const response = await fetch('productos.csv', { cache: 'no-store' });
+                    if (!response.ok) throw new Error("Archivo no encontrado");
+
+                    const buffer = await response.arrayBuffer();
+                    const decoder = new TextDecoder('windows-1252'); 
+                    const csvData = decoder.decode(buffer); 
+                    
+                    products = parseCSV(csvData);
+                    setupCategories();
+                    renderProducts();
+                    updateTotal();
+
+                } catch (error) {
+                    console.error("Error al inicializar la app:", error);
+                    productList.innerHTML = `<div class="p-10 text-center">
+                        <p class="text-red-600 font-bold text-lg">❌ Error al cargar productos</p>
+                        <p class="text-gray-500 mt-2">Verifica que 'productos.csv' esté presente.</p>
+                    </div>`;
+                }
+            }
+
+            initializeApp();
+        });
+    </script>
+
+</body>
+</html>
