@@ -21,11 +21,12 @@
             font-family: 'Poppins', sans-serif;
             scroll-behavior: smooth;
             background-color: #ffffff;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .glass-nav {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 77, 141, 0.1);
         }
 
@@ -38,10 +39,12 @@
             border: 1px solid #f0f0f0;
         }
 
-        .piggy-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255, 77, 141, 0.15);
-            border-color: var(--piggy-pink);
+        @media (hover: hover) {
+            .piggy-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(255, 77, 141, 0.15);
+                border-color: var(--piggy-pink);
+            }
         }
 
         .btn-piggy {
@@ -53,18 +56,17 @@
             justify-content: center;
         }
 
-        .btn-piggy:hover {
-            background-color: #e63e7a;
-            transform: scale(1.05);
+        .btn-piggy:active {
+            transform: scale(0.95);
         }
 
         .floating-icon {
-            animation: float 3s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
         }
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-20px); }
             100% { transform: translateY(0px); }
         }
 
@@ -76,6 +78,8 @@
 
         input[type="range"] {
             accent-color: var(--piggy-pink);
+            height: 8px;
+            border-radius: 5px;
         }
 
         .step-number {
@@ -90,96 +94,112 @@
             font-weight: bold;
             font-size: 1.2rem;
             box-shadow: 0 4px 10px rgba(255, 77, 141, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Responsive Line for steps */
+        .step-line::after {
+            content: '';
+            position: absolute;
+            background: #f0f0f0;
+            z-index: 1;
+        }
+
+        @media (min-width: 768px) {
+            .step-line::after {
+                top: 22px;
+                left: 50%;
+                width: 100%;
+                height: 2px;
+            }
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 antialiased">
 
     <!-- Navbar -->
-    <nav class="fixed w-full z-50 glass-nav px-6 py-4">
+    <nav class="fixed w-full z-50 glass-nav px-4 md:px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-[#FF4D8D] rounded-xl flex items-center justify-center text-white text-xl shadow-lg">
+                <div class="w-8 h-8 md:w-10 md:h-10 bg-[#FF4D8D] rounded-xl flex items-center justify-center text-white text-lg md:text-xl shadow-lg">
                     <i class="fa-solid fa-piggy-bank"></i>
                 </div>
-                <span class="text-2xl font-extrabold tracking-tight text-gray-900">Piggy<span class="text-[#FF4D8D]">App</span></span>
+                <span class="text-xl md:text-2xl font-extrabold tracking-tight text-gray-900">Piggy<span class="text-[#FF4D8D]">App</span></span>
             </div>
-            <div class="hidden md:flex gap-8 font-medium text-gray-600">
+            <div class="hidden lg:flex gap-8 font-medium text-gray-600">
                 <a href="#modelo" class="hover:text-[#FF4D8D] transition">Modelo</a>
                 <a href="#beneficios" class="hover:text-[#FF4D8D] transition">Beneficios</a>
                 <a href="#calculadora" class="hover:text-[#FF4D8D] transition">Simulador</a>
             </div>
-            <a href="https://piggyapp.vercel.app/" target="_blank" class="btn-piggy text-white px-6 py-2 rounded-full font-bold">Ver Piggy App</a>
+            <a href="https://piggyapp.vercel.app/" target="_blank" class="btn-piggy text-white px-5 md:px-6 py-2 rounded-full font-bold text-sm md:text-base">Ver Piggy App</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-gradient pt-32 pb-20 px-6">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6">
-                <span class="bg-pink-100 text-[#FF4D8D] px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase whitespace-nowrap inline-block">
+    <section class="hero-gradient pt-28 md:pt-40 pb-16 md:pb-24 px-4 md:px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 md:gap-12 items-center">
+            <div class="space-y-6 text-center md:text-left">
+                <span class="bg-pink-100 text-[#FF4D8D] px-4 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase inline-block">
                     Propuesta para Granjas en Crecimiento
                 </span>
-                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight text-gray-900">
+                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-tight text-gray-900">
                     Inyectamos <span class="text-[#FF4D8D]">Capital</span> a tu Granja.
                 </h1>
-                <p class="text-xl text-gray-600 max-w-lg leading-relaxed">
+                <p class="text-base md:text-xl text-gray-600 max-w-lg mx-auto md:mx-0 leading-relaxed">
                     Transformamos la forma en que el agro se financia. Recibe capital desde el primer día, rota tu inventario y escala tu red comercial con capital progresivo.
                 </p>
-                <div class="flex gap-4 pt-4">
-                    <a href="https://piggyapp.vercel.app/" target="_blank" class="btn-piggy text-white px-8 py-4 rounded-2xl font-bold text-lg gap-3 shadow-lg">
+                <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 pt-4">
+                    <a href="https://piggyapp.vercel.app/" target="_blank" class="btn-piggy text-white px-8 py-4 rounded-2xl font-bold text-lg gap-3 shadow-lg w-full sm:w-auto">
                         Ver Piggy App <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
-            <div class="relative flex justify-center">
-                <div class="w-72 h-72 bg-pink-200 rounded-full absolute blur-3xl opacity-30 -z-10 animate-pulse"></div>
-                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=800&auto=format&fit=crop" alt="Piggy Fintech Illustration" class="w-full max-w-md floating-icon drop-shadow-2xl rounded-[3rem] border-8 border-white/50">
+            <div class="relative flex justify-center mt-10 md:mt-0">
+                <div class="w-48 h-48 md:w-72 md:h-72 bg-pink-200 rounded-full absolute blur-3xl opacity-30 -z-10 animate-pulse"></div>
+                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=800&auto=format&fit=crop" alt="Piggy Fintech Illustration" class="w-full max-w-[320px] md:max-w-md floating-icon drop-shadow-2xl rounded-[2.5rem] md:rounded-[3rem] border-4 md:border-8 border-white/50 object-cover aspect-square">
             </div>
         </div>
     </section>
 
     <!-- Steps Actualizados -->
-    <section class="py-24 px-6 bg-white border-y border-gray-50">
+    <section class="py-16 md:py-24 px-4 md:px-6 bg-white border-y border-gray-50">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
+            <div class="text-center mb-12 md:mb-16">
                 <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">
                     Así funciona Piggy paso a paso
                 </h2>
             </div>
             
-            <div class="grid md:grid-cols-4 gap-12">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-6 lg:gap-12">
                 <!-- Paso 1 -->
-                <div class="relative text-center group">
+                <div class="relative text-center group step-line">
                     <div class="flex justify-center mb-6">
                         <div class="step-number group-hover:scale-110 transition-transform">1</div>
                     </div>
-                    <p class="text-gray-700 font-bold leading-snug px-4">
+                    <p class="text-gray-700 font-bold leading-snug px-2 text-sm md:text-base">
                         El usuario adopta un cerdo de engorde como activo real
                     </p>
-                    <div class="hidden md:block absolute top-6 left-1/2 w-full h-0.5 bg-gray-100 -z-10 ml-6"></div>
                 </div>
 
                 <!-- Paso 2 -->
-                <div class="relative text-center group">
+                <div class="relative text-center group step-line">
                     <div class="flex justify-center mb-6">
                         <div class="step-number group-hover:scale-110 transition-transform">2</div>
                     </div>
-                    <p class="text-gray-700 font-bold leading-snug px-4">
+                    <p class="text-gray-700 font-bold leading-snug px-2 text-sm md:text-base">
                         Piggy gestiona el ciclo productivo del cerdo
                     </p>
-                    <div class="hidden md:block absolute top-6 left-1/2 w-full h-0.5 bg-gray-100 -z-10 ml-6"></div>
                 </div>
 
                 <!-- Paso 3 -->
-                <div class="relative text-center group">
+                <div class="relative text-center group step-line">
                     <div class="flex justify-center mb-6">
                         <div class="step-number group-hover:scale-110 transition-transform">3</div>
                     </div>
-                    <p class="text-gray-700 font-bold leading-snug px-4">
+                    <p class="text-gray-700 font-bold leading-snug px-2 text-sm md:text-base">
                         El cerdo crece dentro del sistema productivo en Piggy
                     </p>
-                    <div class="hidden md:block absolute top-6 left-1/2 w-full h-0.5 bg-gray-100 -z-10 ml-6"></div>
                 </div>
 
                 <!-- Paso 4 -->
@@ -187,7 +207,7 @@
                     <div class="flex justify-center mb-6">
                         <div class="step-number group-hover:scale-110 transition-transform">4</div>
                     </div>
-                    <p class="text-gray-700 font-bold leading-snug px-4">
+                    <p class="text-gray-700 font-bold leading-snug px-2 text-sm md:text-base">
                         Al final del ciclo, el activo se productiviza a través de su red comercial
                     </p>
                 </div>
@@ -196,31 +216,31 @@
     </section>
 
     <!-- The Problem & Solution -->
-    <section id="modelo" class="py-24 px-6 bg-[#fcfcfc]">
-        <div class="max-w-7xl mx-auto text-center mb-16">
-            <h2 class="text-4xl font-extrabold mb-4">El Puente que tu Granja necesita</h2>
-            <p class="text-gray-500 text-lg">Uniendo liquidez digital con activos reales.</p>
+    <section id="modelo" class="py-16 md:py-24 px-4 md:px-6 bg-[#fcfcfc]">
+        <div class="max-w-7xl mx-auto text-center mb-12 md:mb-16">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4">El Puente que tu Granja necesita</h2>
+            <p class="text-gray-500 text-base md:text-lg px-4">Uniendo liquidez digital con activos reales.</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <div class="piggy-card p-8 rounded-3xl bg-white space-y-4">
-                <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl text-gray-800">
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+            <div class="piggy-card p-6 md:p-8 rounded-3xl bg-white space-y-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-xl md:text-2xl text-gray-800">
                     <i class="fa-solid fa-users"></i>
                 </div>
                 <h3 class="text-xl font-bold">Comunidad Activa</h3>
                 <p class="text-gray-600 text-sm">Muchos usuarios están buscando proyectos reales para comprar activos productivos que se rentabilicen.</p>
             </div>
 
-            <div class="piggy-card p-8 rounded-3xl bg-white space-y-4 border-2 border-[#FF4D8D]">
-                <div class="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center text-2xl text-[#FF4D8D]">
+            <div class="piggy-card p-6 md:p-8 rounded-3xl bg-white space-y-4 border-2 border-[#FF4D8D]">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-pink-100 rounded-2xl flex items-center justify-center text-xl md:text-2xl text-[#FF4D8D]">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
                 <h3 class="text-xl font-bold text-[#FF4D8D]">Inyección Inmediata</h3>
                 <p class="text-gray-600 font-semibold text-sm">Tú recibes el capital al inicio del ciclo. Nosotros gestionamos al usuario. La granja solo se preocupa por vender y escalar.</p>
             </div>
 
-            <div class="piggy-card p-8 rounded-3xl bg-white space-y-4">
-                <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl text-gray-800">
+            <div class="piggy-card p-6 md:p-8 rounded-3xl bg-white space-y-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-xl md:text-2xl text-gray-800">
                     <i class="fa-solid fa-chart-line"></i>
                 </div>
                 <h3 class="text-xl font-bold">Flujo Predecible</h3>
@@ -230,43 +250,45 @@
     </section>
 
     <!-- Interactive ROI Calculator -->
-    <section id="calculadora" class="py-24 px-6 bg-[#f9fafb]">
-        <div class="max-w-5xl mx-auto calc-container p-8 md:p-16 shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl">
+    <section id="calculadora" class="py-16 md:py-24 px-4 md:px-6 bg-[#f9fafb]">
+        <div class="max-w-5xl mx-auto calc-container p-6 sm:p-10 md:p-16 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-10 opacity-5 text-7xl md:text-9xl pointer-events-none">
                 <i class="fa-solid fa-sack-dollar"></i>
             </div>
             
-            <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+            <div class="relative z-10 grid md:grid-cols-2 gap-10 md:gap-12 items-center">
                 <div class="space-y-8">
-                    <h2 class="text-3xl font-bold">Simulador de Capital en Piggy App</h2>
-                    <p class="text-gray-400">Desliza para ver cuánta liquidez podemos inyectar en tu operación y el retorno proyectado.</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-center md:text-left">Simulador de Capital en Piggy App</h2>
+                    <p class="text-gray-400 text-sm text-center md:text-left">Desliza para ver cuánta liquidez podemos inyectar en tu operación y el retorno proyectado.</p>
                     
-                    <div class="space-y-4">
-                        <div class="flex justify-between">
-                            <label class="font-medium">Monto de Inyección</label>
-                            <span id="monto-val" class="text-[#FF4D8D] font-bold">$1,000,000</span>
+                    <div class="space-y-6">
+                        <div class="space-y-4">
+                            <div class="flex justify-between text-sm md:text-base">
+                                <label class="font-medium">Monto de Inyección</label>
+                                <span id="monto-val" class="text-[#FF4D8D] font-bold">$1,000,000</span>
+                            </div>
+                            <input type="range" id="monto-range" min="1000000" max="100000000" step="1000000" value="1000000" class="w-full">
                         </div>
-                        <input type="range" id="monto-range" min="1000000" max="100000000" step="1000000" value="1000000" class="w-full h-2 bg-gray-300 rounded-lg cursor-pointer">
-                    </div>
 
-                    <div class="space-y-4">
-                        <div class="flex justify-between">
-                            <label class="font-medium">Tiempo de Operación (Meses)</label>
-                            <span id="meses-val" class="text-[#FF4D8D] font-bold">3 Meses</span>
+                        <div class="space-y-4">
+                            <div class="flex justify-between text-sm md:text-base">
+                                <label class="font-medium">Tiempo de Operación</label>
+                                <span id="meses-val" class="text-[#FF4D8D] font-bold">3 Meses</span>
+                            </div>
+                            <input type="range" id="meses-range" min="1" max="12" step="1" value="1" class="w-full">
                         </div>
-                        <input type="range" id="meses-range" min="1" max="12" step="1" value="1" class="w-full h-2 bg-gray-700 rounded-lg cursor-pointer">
                     </div>
                 </div>
 
-                <div class="bg-white/5 p-8 rounded-3xl border border-white/10 text-center space-y-6">
+                <div class="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 text-center space-y-6">
                     <div>
-                        <p class="text-gray-400 uppercase text-xs tracking-widest mb-1">Rentabilidad Proyectada para Piggy App</p>
-                        <h3 id="roi-val" class="text-5xl font-extrabold text-[#FF4D8D] tracking-tighter">$5,000,000</h3>
+                        <p class="text-gray-400 uppercase text-[10px] md:text-xs tracking-widest mb-2">Rentabilidad Proyectada para Piggy App</p>
+                        <h3 id="roi-val" class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#FF4D8D] tracking-tighter">$5,000,000</h3>
                     </div>
                     <div class="pt-6 border-t border-white/10">
-                        <p class="text-sm text-gray-300 italic">"Capital productivo que entra a trabajar desde el primer día en tu red de ventas."</p>
+                        <p class="text-xs md:text-sm text-gray-300 italic">"Capital productivo que entra a trabajar desde el primer día en tu red de ventas."</p>
                     </div>
-                    <button class="w-full py-4 bg-[#FF4D8D] rounded-2xl font-bold hover:bg-white hover:text-[#FF4D8D] transition-all">
+                    <button class="w-full py-4 bg-[#FF4D8D] rounded-2xl font-bold hover:bg-white hover:text-[#FF4D8D] transition-all text-sm md:text-base">
                         Todos crecemos con Piggy
                     </button>
                 </div>
@@ -275,18 +297,18 @@
     </section>
 
     <!-- Beneficio para todas las partes -->
-    <section id="beneficios" class="py-24 px-6 bg-white">
+    <section id="beneficios" class="py-16 md:py-24 px-4 md:px-6 bg-white">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl font-extrabold text-center mb-16">🏆 Beneficio para todas las partes</h2>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-12 md:mb-16">🏆 Beneficio para todas las partes</h2>
             
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
                 <!-- Beneficio Granja -->
-                <div class="p-8 rounded-3xl bg-gray-50 border border-gray-100 space-y-6 shadow-sm">
-                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-[#2D6A4F] text-xl">
+                <div class="p-6 md:p-8 rounded-3xl bg-gray-50 border border-gray-100 space-y-5 shadow-sm">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-xl flex items-center justify-center text-[#2D6A4F] text-lg md:text-xl">
                         <i class="fa-solid fa-tractor"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-[#2D6A4F]">✅ La granja comercializadora</h3>
-                    <ul class="space-y-3 text-sm font-medium text-gray-600">
+                    <h3 class="text-lg md:text-xl font-bold text-[#2D6A4F]">✅ La granja comercializadora</h3>
+                    <ul class="space-y-3 text-xs md:text-sm font-medium text-gray-600">
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-green-500 mt-1"></i> Capital constante</li>
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-green-500 mt-1"></i> Flujo mensual predecible</li>
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-green-500 mt-1"></i> Más volumen de venta</li>
@@ -295,12 +317,12 @@
                 </div>
 
                 <!-- Beneficio Usuario -->
-                <div class="p-8 rounded-3xl bg-pink-50 border border-pink-100 space-y-6 shadow-sm">
-                    <div class="w-12 h-12 bg-[#FF4D8D] rounded-xl flex items-center justify-center text-white text-xl">
+                <div class="p-6 md:p-8 rounded-3xl bg-pink-50 border border-pink-100 space-y-5 shadow-sm">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-[#FF4D8D] rounded-xl flex items-center justify-center text-white text-lg md:text-xl">
                         <i class="fa-solid fa-user-check"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-[#FF4D8D]">✅ El usuario Piggy</h3>
-                    <ul class="space-y-3 text-sm font-medium text-gray-600">
+                    <h3 class="text-lg md:text-xl font-bold text-[#FF4D8D]">✅ El usuario Piggy</h3>
+                    <ul class="space-y-3 text-xs md:text-sm font-medium text-gray-600">
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-[#FF4D8D] mt-1"></i> Acceso a un negocio real</li>
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-[#FF4D8D] mt-1"></i> Rentabilidad atractiva</li>
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-[#FF4D8D] mt-1"></i> Proceso estructurado</li>
@@ -309,12 +331,12 @@
                 </div>
 
                 <!-- Beneficio App -->
-                <div class="p-8 rounded-3xl bg-blue-50 border border-blue-100 space-y-6 shadow-sm">
-                    <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center text-white text-xl">
+                <div class="p-6 md:p-8 rounded-3xl bg-blue-50 border border-blue-100 space-y-5 shadow-sm sm:col-span-2 md:col-span-1">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-500 rounded-xl flex items-center justify-center text-white text-lg md:text-xl">
                         <i class="fa-solid fa-rocket"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-blue-600">✅ Piggy App</h3>
-                    <ul class="space-y-3 text-sm font-medium text-gray-600">
+                    <h3 class="text-lg md:text-xl font-bold text-blue-600">✅ Piggy App</h3>
+                    <ul class="space-y-3 text-xs md:text-sm font-medium text-gray-600">
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-500 mt-1"></i> Rentabilidad mensual constante</li>
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-500 mt-1"></i> Escalabilidad</li>
                         <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-500 mt-1"></i> Modelo repetible</li>
@@ -326,43 +348,42 @@
     </section>
 
     <!-- Seccion Sostenibilidad y Cierre -->
-    <section id="sostenibilidad" class="py-24 px-6 bg-[#FF4D8D] text-white relative overflow-hidden">
+    <section id="sostenibilidad" class="py-16 md:py-24 px-4 md:px-6 bg-[#FF4D8D] text-white relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 pointer-events-none">
             <svg width="100%" height="100%"><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/></pattern><rect width="100%" height="100%" fill="url(#grid)" /></svg>
         </div>
         
         <div class="max-w-7xl mx-auto text-center relative z-10">
             <div class="space-y-10 mb-12">
-                <div>
-                    <h2 class="text-4xl md:text-6xl font-extrabold mb-4">¿Por qué Piggy es sostenible?</h2>
-                    <p class="text-2xl font-light opacity-90">Un modelo simple, real y rentable para tu granja.</p>
+                <div class="px-4">
+                    <h2 class="text-3xl md:text-6xl font-extrabold mb-4 leading-tight">¿Por qué Piggy es sostenible?</h2>
+                    <p class="text-lg md:text-2xl font-light opacity-90">Un modelo simple, real y rentable para tu granja.</p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                    <div class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20">
-                        <i class="fa-solid fa-gem"></i> <span class="font-bold text-sm">Activos reales</span>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto px-2">
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-3 bg-white/10 p-4 rounded-2xl border border-white/20">
+                        <i class="fa-solid fa-gem text-lg md:text-xl"></i> <span class="font-bold text-[10px] md:text-sm">Activos reales</span>
                     </div>
-                    <div class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20">
-                        <i class="fa-solid fa-arrows-spin"></i> <span class="font-bold text-sm">Ciclos claros</span>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-3 bg-white/10 p-4 rounded-2xl border border-white/20">
+                        <i class="fa-solid fa-arrows-spin text-lg md:text-xl"></i> <span class="font-bold text-[10px] md:text-sm">Ciclos claros</span>
                     </div>
-                    <div class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20">
-                        <i class="fa-solid fa-user-tie"></i> <span class="font-bold text-sm">Gestión profesional</span>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-3 bg-white/10 p-4 rounded-2xl border border-white/20">
+                        <i class="fa-solid fa-user-tie text-lg md:text-xl"></i> <span class="font-bold text-[10px] md:text-sm">Gestión profesional</span>
                     </div>
-                    <div class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20">
-                        <i class="fa-solid fa-ban"></i> <span class="font-bold text-sm">Sin especulación</span>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-3 bg-white/10 p-4 rounded-2xl border border-white/20">
+                        <i class="fa-solid fa-ban text-lg md:text-xl"></i> <span class="font-bold text-[10px] md:text-sm">Sin especulación</span>
                     </div>
                 </div>
 
-                <div class="flex justify-center pt-6">
-                    <!-- Botón final actualizado con enlace a Google -->
-                    <a href="https://amsterdamlab.github.io/catalogowaba/presentacion_piggy.html" target="_blank" class="bg-white text-[#FF4D8D] px-12 py-5 rounded-[2rem] font-black text-2xl shadow-xl hover:scale-105 transition">
+                <div class="flex justify-center pt-6 px-4">
+                    <a href="https://amsterdamlab.github.io/catalogowaba/presentacion_piggy.html" target="_blank" class="bg-white text-[#FF4D8D] px-8 md:px-12 py-4 md:py-5 rounded-[1.5rem] md:rounded-[2rem] font-black text-lg md:text-2xl shadow-xl hover:scale-105 transition-transform active:scale-95 text-center inline-block w-full sm:w-auto">
                         ¿Cómo funciona el Ecosistema?
                     </a>
                 </div>
             </div>
         </div>
         
-        <div class="text-center mt-20 text-sm opacity-60">
+        <div class="text-center mt-12 md:mt-20 text-xs opacity-60 px-4">
             © 2026 Piggy App - El futuro del agro es hoy.
         </div>
     </section>
