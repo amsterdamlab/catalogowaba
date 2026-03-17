@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Emprendedores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilos para ocultar las flechas en los inputs de tipo número */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        /* Estilos para el modal */
+        #product-modal-container, #checkout-modal-container {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .active-category {
+            background-color: #761920; 
+            color: white; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        /* Estilos para el scrollbar de categorías y banners */
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #761920;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5c1319;
+        }
+        /* Ocultar scrollbar */
+        .no-scrollbar::-webkit-scrollbar, 
+        html::-webkit-scrollbar,
+        #product-modal-content::-webkit-scrollbar,
+        #checkout-modal-content::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar, 
+        html,
+        #product-modal-content,
+        #checkout-modal-content {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        /* Estilo para los banners */
+        .banner-snap {
+            scroll-snap-type: x mandatory;
+        }
+        .banner-item {
+            scroll-snap-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl pb-40">
+        
+        <header class="text-center md:text-left mb-6 flex items-center justify-center md:justify-start gap-4">
+            <img src="https://content.pancake.vn/2-2510/s800x800/2025/10/20/79d72014e41051da9630530130bd4c6eb25bf388.jpg" alt="[Logo de OG]" class="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover shadow-md">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800">Catálogo Emprendedores</h1>
+                <!-- Subtítulo modificado a máximo 2 líneas -->
+                <p class="text-gray-600 mt-1 max-w-sm mx-auto md:mx-0 line-clamp-2">Selecciona los productos de tu pedido.</p>
+            </div>
+        </header>
+
+        <!-- Banners de Combos Deslizables con Título y Eventos Clicables -->
+        <div class="mb-3">
+            <h2 class="text-xl font-bold text-gray-800">Los Más Pedidos</h2>
+        </div>
+        <div class="mb-4 -mx-4 px-4 overflow-x-auto flex gap-4 no-scrollbar banner-snap">
+            <div class="banner-item shrink-0 w-[85vw] md:w-[400px] h-36 md:h-48 rounded-xl overflow-hidden shadow-sm relative cursor-pointer transform transition-transform hover:scale-[1.02]" data-combo-id="101">
+                <img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=800" alt="[Banner Combo 1]" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                    <h3 class="text-white font-bold text-lg">Combos Skincare</h3>
+                </div>
+            </div>
+            <div class="banner-item shrink-0 w-[85vw] md:w-[400px] h-36 md:h-48 rounded-xl overflow-hidden shadow-sm relative cursor-pointer transform transition-transform hover:scale-[1.02]" data-combo-id="102">
+                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80&w=800" alt="[Banner Combo 2]" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                    <h3 class="text-white font-bold text-lg">Kit Emprendedor Básico</h3>
+                </div>
+            </div>
+            <div class="banner-item shrink-0 w-[85vw] md:w-[400px] h-36 md:h-48 rounded-xl overflow-hidden shadow-sm relative cursor-pointer transform transition-transform hover:scale-[1.02]" data-combo-id="103">
+                <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=800" alt="[Banner Combo 3]" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                    <h3 class="text-white font-bold text-lg">Especial Maquillaje</h3>
+                </div>
+            </div>
+            <div class="banner-item shrink-0 w-[85vw] md:w-[400px] h-36 md:h-48 rounded-xl overflow-hidden shadow-sm relative cursor-pointer transform transition-transform hover:scale-[1.02]" data-combo-id="104">
+                <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=800" alt="[Banner Combo 4]" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                    <h3 class="text-white font-bold text-lg">Combos Maletas 2x1</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky top-0 z-30 bg-gray-100/80 backdrop-blur-sm pt-4 pb-3 -mx-4 px-4">
+             <nav id="category-filters" class="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+                </nav>
+        </div>
+
+        <main id="product-list" class="mt-4 bg-white rounded-lg shadow-md overflow-hidden">
+            </main>
+
+    </div>
+
+    <!-- Footer Flotante Principal -->
+    <footer class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm shadow-[0_-2px_10px_rgba(0,0,0,0.08)] transition-transform duration-300 transform translate-y-full">
+        <div class="container mx-auto max-w-7xl flex items-center justify-between p-4">
+            <div>
+                <span class="block text-sm text-gray-600 font-semibold">Costo Total (Emprendedor):</span>
+                <span id="total-price" class="text-2xl font-extrabold text-gray-800">$ 0</span>
+            </div>
+            <button id="send-btn-main" class="bg-gradient-to-r from-gray-800 to-black hover:from-black hover:to-gray-900 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300 flex items-center whitespace-nowrap">
+                <span>Ir al Checkout</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modal Detalles de Producto -->
+    <div id="product-modal-container" class="fixed inset-0 bg-white z-50 hidden opacity-0 transition-opacity duration-300">
+        <div id="product-modal-content" class="w-full h-full overflow-y-auto">
+            </div>
+    </div>
+
+    <!-- Modal de Checkout -->
+    <div id="checkout-modal-container" class="fixed inset-0 z-50 hidden flex flex-col justify-end bg-black/50 opacity-0 transition-opacity duration-300">
+        <div id="checkout-modal-content" class="bg-white w-full max-w-2xl mx-auto rounded-t-3xl h-[90vh] flex flex-col transform translate-y-full transition-transform duration-300 shadow-2xl">
+            
+            <div class="p-5 border-b flex justify-between items-center bg-white rounded-t-3xl sticky top-0 z-10">
+                <h3 class="font-bold text-xl text-gray-800">Resumen y Datos de Envío</h3>
+                <button id="close-checkout-btn" class="bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-800 rounded-full p-2 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto flex-grow bg-gray-50">
+                
+                <!-- Formulario de Cliente -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                    <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-[#761920]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        Datos del Cliente
+                    </h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre Completo *</label>
+                            <input type="text" id="client-name" class="block w-full rounded-xl border-gray-300 border bg-gray-50 p-3 focus:bg-white focus:ring-[#761920] focus:border-[#761920] transition-colors" placeholder="Ej. María Pérez">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Dirección de Envío *</label>
+                            <input type="text" id="client-address" class="block w-full rounded-xl border-gray-300 border bg-gray-50 p-3 focus:bg-white focus:ring-[#761920] focus:border-[#761920] transition-colors" placeholder="Ej. Calle 123 #45-67, Apto 1, Ciudad">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Celular (Whatsapp) *</label>
+                            <input type="tel" id="client-phone" class="block w-full rounded-xl border-gray-300 border bg-gray-50 p-3 focus:bg-white focus:ring-[#761920] focus:border-[#761920] transition-colors" placeholder="Ej. 300 123 4567">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Tu Código Referido <span class="text-xs font-normal text-gray-400">(Registrado)</span></label>
+                            <input type="text" id="client-referrer" class="block w-full rounded-xl border-gray-300 border bg-gray-50 p-3 focus:bg-white focus:ring-[#761920] focus:border-[#761920] transition-colors" placeholder="Ej. REF-2024">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Productos y Precios Editables -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-[#761920]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                        Calculadora de Ganancias
+                    </h4>
+                    <p class="text-xs text-gray-500 mb-4">Ajusta el precio de venta sugerido para calcular tu margen exacto. El cliente final no verá el precio emprendedor.</p>
+                    
+                    <div id="checkout-items-list" class="space-y-4">
+                        <!-- Items inyectados desde JS -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Modal Checkout -->
+            <div class="p-5 border-t bg-white rounded-t-3xl shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] sticky bottom-0 z-10">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-gray-500 text-sm font-medium">Costo Total (Emprendedor):</span>
+                    <span id="checkout-total-cost" class="text-lg font-bold text-gray-800">$0</span>
+                </div>
+                <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
+                    <span class="text-gray-800 font-bold">Total Ganancias:</span>
+                    <span id="checkout-total-profit" class="text-2xl font-black text-emerald-500">$0</span>
+                </div>
+                
+                <button id="send-whatsapp-btn" class="w-full bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1da851] hover:to-[#0f7669] text-white font-bold py-4 px-5 rounded-xl shadow-lg transform transition-transform duration-200 hover:scale-[1.02] flex justify-center items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+                    </svg>
+                    <span class="whitespace-nowrap">Enviar Pedido</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificaciones Generales - Clases Base Corregidas -->
+    <div id="notification-modal" class="fixed bottom-24 left-1/2 -translate-x-1/2 text-white py-3 px-6 rounded-xl shadow-2xl transition-all duration-300 transform z-[60] w-[90%] max-w-md text-center opacity-0 translate-y-10">
+        <p id="notification-message" class="font-medium"></p>
+    </div>
+
+   <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- CONFIGURACIÓN DE NÚMERO DE WHATSAPP ---
+            const phoneNumber = "+573154870448";
+            
+            // --- DATOS GLOBALES ---
+            let products = [];
+            let cart = [];
+            let currentModalTempCart = {}; // Controla cantidades temporales en el modal de producto
+
+            // --- ELEMENTOS DEL DOM ---
+            const productList = document.getElementById('product-list');
+            const categoryFilters = document.getElementById('category-filters');
+            
+            // Elementos Main Footer
+            const sendBtnMain = document.getElementById('send-btn-main');
+            const totalPriceEl = document.getElementById('total-price');
+            const footer = document.querySelector('footer');
+            
+            // Elementos Notificaciones
+            const notificationModal = document.getElementById('notification-modal');
+            const notificationMessage = document.getElementById('notification-message');
+            let notificationTimeout;
+
+            // Elementos Modal Producto
+            const productModalContainer = document.getElementById('product-modal-container');
+            const productModalContent = document.getElementById('product-modal-content');
+            
+            // Elementos Modal Checkout
+            const checkoutModalContainer = document.getElementById('checkout-modal-container');
+            const checkoutModalContent = document.getElementById('checkout-modal-content');
+            const checkoutItemsList = document.getElementById('checkout-items-list');
+            const checkoutTotalCost = document.getElementById('checkout-total-cost');
+            const checkoutTotalProfit = document.getElementById('checkout-total-profit');
+            const closeCheckoutBtn = document.getElementById('close-checkout-btn');
+            const sendWhatsappBtn = document.getElementById('send-whatsapp-btn');
+
+            // Inputs Formulario Checkout
+            const clientNameInput = document.getElementById('client-name');
+            const clientAddressInput = document.getElementById('client-address');
+            const clientPhoneInput = document.getElementById('client-phone');
+            const clientReferrerInput = document.getElementById('client-referrer');
+
+
+            // --- FUNCIONES AUXILIARES ---
+            const formatPrice = (price) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(price);
+            
+            const showNotification = (message, isError = true) => {
+                clearTimeout(notificationTimeout);
+                notificationMessage.textContent = message;
+                
+                // Limpiar cualquier color previo
+                notificationModal.classList.remove('bg-red-500', 'bg-gray-900', 'opacity-0', 'translate-y-10');
+                
+                // Asignar color y mostrar
+                notificationModal.classList.add(isError ? 'bg-red-500' : 'bg-gray-900', 'opacity-100', 'translate-y-0');
+                
+                notificationTimeout = setTimeout(() => {
+                    notificationModal.classList.remove('opacity-100', 'translate-y-0');
+                    notificationModal.classList.add('opacity-0', 'translate-y-10');
+                }, 2000); // Se esconde a los 2 segundos exactos
+            };
+            
+            // --- LÓGICA DE CARRITO Y TOTALES MAIN ---
+            const getTotalCartValue = () => {
+                return cart.reduce((sum, item) => {
+                    const product = products.find(p => p.id === item.productId);
+                    return sum + (item.quantity * product.priceMayorista);
+                }, 0);
+            };
+
+            const updateTotal = () => {
+                const total = getTotalCartValue();
+                totalPriceEl.textContent = formatPrice(total);
+                footer.classList.toggle('translate-y-full', total === 0);
+            };
+            
+            const updateBadges = () => {
+                document.querySelectorAll('.quantity-badge').forEach(badge => {
+                    const productId = badge.dataset.productId;
+                    const totalQuantity = cart
+                        .filter(item => item.productId == productId)
+                        .reduce((sum, item) => sum + item.quantity, 0);
+                    
+                    if (totalQuantity > 0) {
+                        badge.textContent = totalQuantity;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                });
+            };
+
+            // --- LÓGICA DE RENDERIZADO PRODUCTOS PRINCIPAL ---
+            const renderProducts = (filter = 'Todo') => {
+                productList.innerHTML = '';
+                const filteredProducts = products.filter(p => filter === 'Todo' || p.category === filter);
+                
+                filteredProducts.forEach(product => {
+                    if (product.priceMayorista <= 0) return;
+                    
+                    const productCard = document.createElement('div');
+                    productCard.className = "product-card flex items-center p-4 gap-4 border-b last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors";
+                    productCard.dataset.productId = product.id;
+                    
+                    productCard.innerHTML = `
+                        <div class="relative flex-shrink-0">
+                            <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-24 h-24 object-cover rounded-md shadow-sm bg-white">
+                            <div data-product-id="${product.id}" class="quantity-badge absolute -top-2 -right-2 bg-[#761920] text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-md hidden">0</div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-base font-bold text-gray-800">${product.name}</h3>
+                            <div class="mt-1 flex flex-col gap-1">
+                                <div>
+                                    <span class="block text-xs font-medium text-gray-500">Precio Emprendedor:</span>
+                                    <span class="text-lg font-extrabold text-[#761920]">${formatPrice(product.priceMayorista)}</span>
+                                </div>
+                                ${product.priceSugerido > 0 ? `<div>
+                                    <span class="inline-block text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">Venta Sugerido: ${formatPrice(product.priceSugerido)}</span>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    productList.appendChild(productCard);
+                });
+                updateBadges();
+            };
+            
+            // Reutilizable para cambiar categoría de forma manual o desde un banner
+            const setActiveCategory = (categoryName) => {
+                const currentActive = document.querySelector('.active-category');
+                if (currentActive) {
+                    currentActive.classList.remove('active-category');
+                    currentActive.classList.add('bg-white', 'hover:bg-gray-200', 'text-gray-700');
+                }
+                const btn = document.querySelector(`.category-btn[data-category="${categoryName}"]`);
+                if (btn) {
+                    btn.classList.remove('bg-white', 'hover:bg-gray-200', 'text-gray-700');
+                    btn.classList.add('active-category');
+                }
+                renderProducts(categoryName);
+            };
+
+            const setupCategories = () => {
+                const rawCats = [...new Set(products.filter(p => p.priceMayorista > 0).map(p => p.category))];
+                // Se extraen las categorías y se asegura que 'Combos' sea siempre la segunda
+                const dynamicCats = rawCats.filter(c => c !== 'Combos');
+                const categories = ['Todo', 'Combos', ...dynamicCats];
+                
+                categoryFilters.innerHTML = categories.map(cat => `
+                    <button class="category-btn px-4 py-2 rounded-full font-semibold transition-colors duration-200 ${cat === 'Todo' ? 'active-category' : 'bg-white hover:bg-gray-200 text-gray-700'}" data-category="${cat}">
+                        ${cat}
+                    </button>
+                `).join('');
+                
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        setActiveCategory(btn.dataset.category);
+                    });
+                });
+            };
+            
+            // Event Listener para los Banners (Llevan a la categoría Combos y abren Modal)
+            document.querySelectorAll('.banner-item').forEach(banner => {
+                banner.addEventListener('click', () => {
+                    const comboId = banner.dataset.comboId;
+                    if (comboId) {
+                        setActiveCategory('Combos');
+                        setTimeout(() => openProductModal(comboId), 50); // Mínimo timeout para render fluido
+                    }
+                });
+            });
+
+            // --- LÓGICA DE MODAL PRODUCTO INDIVIDUAL ---
+            const updateModalTotal = (priceMayorista) => {
+                const totalQty = Object.values(currentModalTempCart).reduce((acc, curr) => acc + curr, 0);
+                const totalValue = totalQty * priceMayorista;
+                const totalEl = document.getElementById('modal-temp-total');
+                if (totalEl) {
+                    totalEl.textContent = formatPrice(totalValue);
+                }
+            };
+
+            const openProductModal = (productId) => {
+                const product = products.find(p => p.id == productId);
+                if (!product) return;
+                
+                currentModalTempCart = {};
+                const existingItems = cart.filter(item => item.productId == productId);
+                existingItems.forEach(item => {
+                    currentModalTempCart[item.variant] = item.quantity;
+                });
+
+                const hasVariants = product.variants && product.variants.length > 0 && product.variants[0] !== 'N/A';
+
+                const renderVariantRow = (variantName, label) => {
+                    const qty = currentModalTempCart[variantName] || 0;
+                    return `
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100 last:border-0">
+                            <span class="font-semibold text-gray-700">${label}</span>
+                            <div class="flex items-center gap-3">
+                                <button class="modal-qty-btn bg-gray-200 text-gray-600 rounded-full w-9 h-9 flex items-center justify-center font-bold text-xl hover:bg-gray-300 transition-colors" data-variant="${variantName}" data-change="-1">-</button>
+                                <span class="w-8 text-center font-bold text-gray-800 text-lg qty-display" data-variant="${variantName}">${qty}</span>
+                                <button class="modal-qty-btn bg-[#761920] text-white rounded-full w-9 h-9 flex items-center justify-center font-bold text-xl hover:bg-[#5c1319] shadow-sm transition-colors" data-variant="${variantName}" data-change="1">+</button>
+                            </div>
+                        </div>
+                    `;
+                };
+
+                let variantsHtml = hasVariants ? product.variants.map(v => renderVariantRow(v, v)).join('') : renderVariantRow('N/A', 'Cantidad');
+                
+                productModalContent.innerHTML = `
+                    <div class="sticky top-0 z-10 bg-white/90 backdrop-blur-md p-4 border-b flex justify-between items-center shadow-sm">
+                        <button id="product-modal-back-btn" class="flex items-center gap-2 font-semibold text-gray-600 hover:text-black transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                            Volver
+                        </button>
+                        <h3 class="font-bold text-lg truncate px-4 text-gray-800">${product.name}</h3>
+                        <div class="w-20 flex-shrink-0"></div>
+                    </div>
+
+                    <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-full aspect-square object-cover bg-gray-100">
+                    
+                    <div class="p-5 pb-24">
+                        <span class="text-xs font-bold uppercase tracking-wider text-[#761920]">${product.category}</span>
+                        <h2 class="text-2xl font-bold text-gray-900 leading-tight mt-1">${product.name}</h2>
+                        
+                        <div class="mt-4 flex items-start justify-between bg-[#761920]/5 p-4 rounded-xl border border-[#761920]/20">
+                            <div>
+                                <span class="block text-sm font-medium text-gray-500">Precio Emprendedor</span>
+                                <span class="text-3xl font-black text-[#761920]">${formatPrice(product.priceMayorista)}</span>
+                            </div>
+                            ${product.priceSugerido > 0 ? `<div class="text-right">
+                                <span class="block text-xs font-medium text-gray-500">Precio Venta Sugerido</span>
+                                <span class="text-lg font-semibold text-gray-600">${formatPrice(product.priceSugerido)}</span>
+                            </div>` : ''}
+                        </div>
+                        
+                        <p class="text-base text-gray-600 mt-5 leading-relaxed">${product.description || 'Descripción no disponible.'}</p>
+                        
+                        <div class="mt-8">
+                            <h4 class="text-lg font-extrabold text-gray-800 mb-4 border-b pb-2">
+                                ${hasVariants ? 'Selecciona tus variantes' : 'Cantidad a llevar'}
+                            </h4>
+                            <div class="flex flex-col gap-1">
+                                ${variantsHtml}
+                            </div>
+                            <button id="product-modal-confirm-btn" class="mt-6 w-full bg-gray-900 text-white font-bold py-4 px-5 rounded-2xl shadow-lg transform transition-transform duration-200 hover:scale-[1.02] flex justify-between items-center focus:outline-none focus:ring-4 focus:ring-gray-300">
+                                <span class="text-lg">Añadir al pedido</span>
+                                <span id="modal-temp-total" class="bg-white/20 px-3 py-1.5 rounded-lg text-sm tracking-wide font-mono">$ 0</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                updateModalTotal(product.priceMayorista);
+
+                productModalContainer.dataset.productId = productId;
+                productModalContainer.classList.remove('hidden');
+                // Mini timeout for transition to trigger
+                setTimeout(() => productModalContainer.classList.remove('opacity-0'), 10);
+                productModalContent.scrollTop = 0; 
+            };
+
+
+            // --- LÓGICA DEL NUEVO MODAL DE CHECKOUT (FORMULARIO Y CÁLCULOS) ---
+            const updateCheckoutTotals = () => {
+                let totalCost = 0;
+                let totalProfit = 0;
+
+                const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
+                
+                sellPriceInputs.forEach(input => {
+                    const index = parseInt(input.dataset.index);
+                    const item = cart[index];
+                    const product = products.find(p => p.id === item.productId);
+                    
+                    const qty = item.quantity;
+                    const costMayorista = product.priceMayorista;
+                    
+                    // Asegurar que sea número, si está vacío asume 0 para el cálculo temporal
+                    const sellPrice = parseInt(input.value) || 0; 
+
+                    totalCost += costMayorista * qty;
+                    totalProfit += (sellPrice - costMayorista) * qty;
+                });
+
+                checkoutTotalCost.textContent = formatPrice(totalCost);
+                checkoutTotalProfit.textContent = formatPrice(totalProfit);
+                
+                // Color verde si hay ganancia, naranja/rojo si hay pérdida o 0 ganancia
+                if(totalProfit > 0) {
+                    checkoutTotalProfit.classList.replace('text-red-500', 'text-emerald-500');
+                    checkoutTotalProfit.classList.replace('text-gray-500', 'text-emerald-500');
+                } else if (totalProfit < 0) {
+                    checkoutTotalProfit.classList.replace('text-emerald-500', 'text-red-500');
+                    checkoutTotalProfit.classList.replace('text-gray-500', 'text-red-500');
+                } else {
+                    checkoutTotalProfit.classList.replace('text-emerald-500', 'text-gray-500');
+                    checkoutTotalProfit.classList.replace('text-red-500', 'text-gray-500');
+                }
+            };
+
+            const openCheckoutModal = () => {
+                // Generar HTML de la lista de productos
+                checkoutItemsList.innerHTML = '';
+                
+                cart.forEach((item, index) => {
+                    const product = products.find(p => p.id === item.productId);
+                    const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
+                    
+                    const itemHTML = `
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.04)] gap-3">
+                            <div class="flex-grow">
+                                <p class="font-bold text-sm text-gray-800 leading-tight">${product.name} <span class="text-[#761920] ml-1">x${item.quantity}</span></p>
+                                ${item.variant !== 'N/A' ? `<p class="text-xs text-gray-500 mt-0.5">Variante: <span class="font-medium">${item.variant}</span></p>` : ''}
+                                <p class="text-xs font-semibold text-gray-400 mt-1.5">Precio Costo: ${formatPrice(product.priceMayorista)} c/u</p>
+                            </div>
+                            <div class="flex-shrink-0 w-full sm:w-36 bg-gray-50 p-2 rounded-lg border border-gray-100">
+                                <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 text-center">Precio Venta (c/u)</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
+                                    <input type="number" 
+                                           class="editable-sell-price w-full pl-7 pr-2 py-1.5 text-center font-bold text-gray-800 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-[#761920] focus:border-transparent transition-shadow outline-none" 
+                                           data-index="${index}" 
+                                           value="${defaultSellPrice}">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    checkoutItemsList.insertAdjacentHTML('beforeend', itemHTML);
+                });
+
+                // Escuchar cambios en los inputs para actualizar totales en vivo
+                const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
+                sellPriceInputs.forEach(input => {
+                    input.addEventListener('input', updateCheckoutTotals);
+                });
+
+                updateCheckoutTotals();
+
+                // Mostrar modal
+                checkoutModalContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    checkoutModalContainer.classList.remove('opacity-0');
+                    checkoutModalContent.classList.remove('translate-y-full');
+                }, 10);
+            };
+
+            const closeCheckoutModal = () => {
+                checkoutModalContainer.classList.add('opacity-0');
+                checkoutModalContent.classList.add('translate-y-full');
+                setTimeout(() => checkoutModalContainer.classList.add('hidden'), 300);
+            };
+
+
+            // --- EVENT LISTENERS GENERALES ---
+            
+            // 1. Clics en la lista principal (Abre Modal de Producto)
+            productList.addEventListener('click', (e) => {
+                const card = e.target.closest('.product-card');
+                if (card) openProductModal(card.dataset.productId);
+            });
+            
+            // 2. Lógica dentro del Modal de Producto
+            productModalContent.addEventListener('click', (e) => {
+                const productId = productModalContainer.dataset.productId;
+                if (!productId) return;
+                const product = products.find(p => p.id == productId);
+
+                // Cerrar modal
+                if (e.target.closest('#product-modal-back-btn')) {
+                    productModalContainer.classList.add('opacity-0');
+                    setTimeout(() => productModalContainer.classList.add('hidden'), 300);
+                    return;
+                }
+
+                // Aumentar/Disminuir cantidad
+                const qtyBtn = e.target.closest('.modal-qty-btn');
+                if (qtyBtn) {
+                    const variant = qtyBtn.dataset.variant;
+                    const change = parseInt(qtyBtn.dataset.change);
+                    
+                    let currentQty = currentModalTempCart[variant] || 0;
+                    let newQty = currentQty + change;
+                    if (newQty < 0) newQty = 0;
+
+                    currentModalTempCart[variant] = newQty;
+
+                    const display = productModalContent.querySelector(`.qty-display[data-variant="${variant}"]`);
+                    if (display) display.textContent = newQty;
+
+                    updateModalTotal(product.priceMayorista);
+                    return;
+                }
+
+                // Confirmar y Añadir al Carrito Global
+                if (e.target.closest('#product-modal-confirm-btn')) {
+                    cart = cart.filter(item => item.productId != productId);
+                    
+                    for (const [variant, quantity] of Object.entries(currentModalTempCart)) {
+                        if (quantity > 0) {
+                            cart.push({ productId: parseInt(productId), variant, quantity });
+                        }
+                    }
+                    
+                    updateTotal();
+                    updateBadges();
+
+                    productModalContainer.classList.add('opacity-0');
+                    setTimeout(() => productModalContainer.classList.add('hidden'), 300);
+                }
+            });
+
+            // 3. Botón Principal "Ir al Checkout"
+            sendBtnMain.addEventListener('click', () => {
+                const currentTotal = getTotalCartValue();
+
+                if (cart.length === 0) {
+                    showNotification("Añade al menos un producto para continuar.");
+                    return;
+                }
+
+                if (currentTotal < 49000) {
+                    showNotification(`El pedido mínimo es de $ 49.000 (Faltan ${formatPrice(49000 - currentTotal)})`);
+                    return;
+                }
+                
+                openCheckoutModal();
+            });
+
+            // 4. Cerrar Modal de Checkout
+            closeCheckoutBtn.addEventListener('click', closeCheckoutModal);
+
+            // 5. Botón Final: Confirmar y Enviar Pedido por WhatsApp
+            sendWhatsappBtn.addEventListener('click', () => {
+                // Validaciones de formulario
+                const clientName = clientNameInput.value.trim();
+                const clientAddress = clientAddressInput.value.trim();
+                const clientPhone = clientPhoneInput.value.trim();
+                const clientReferrer = clientReferrerInput.value.trim() || 'Ninguno';
+
+                if (!clientName || !clientAddress || !clientPhone) {
+                    showNotification("Por favor, completa Nombre, Dirección y Celular.");
+                    return;
+                }
+
+                // Generar mensaje estructurado para Agentes IA
+                let message = `¡Hola! 👋 Nuevo pedido de emprendedor:\n\n`;
+                
+                message += `*DATOS DEL CLIENTE*\n`;
+                message += `Nombre: ${clientName}\n`;
+                message += `Dirección: ${clientAddress}\n`;
+                message += `Celular: ${clientPhone}\n`;
+                message += `Código Referido: ${clientReferrer}\n\n`;
+
+                message += `*PRODUCTOS*\n`;
+                
+                let totalCostoGlobal = 0;
+                let totalGananciaGlobal = 0;
+
+                const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
+
+                cart.forEach((item, index) => {
+                    const product = products.find(p => p.id === item.productId);
+                    const sellPriceInput = Array.from(sellPriceInputs).find(input => parseInt(input.dataset.index) === index);
+                    const sellPrice = sellPriceInput ? (parseInt(sellPriceInput.value) || 0) : product.priceMayorista;
+                    
+                    const costoTotalItem = product.priceMayorista * item.quantity;
+                    totalCostoGlobal += costoTotalItem;
+                    totalGananciaGlobal += (sellPrice - product.priceMayorista) * item.quantity;
+
+                    message += `${index + 1}. ${product.name}\n`;
+                    message += `- Variante: ${item.variant}\n`;
+                    message += `- Cantidad: ${item.quantity}\n`;
+                    message += `- Precio Costo (c/u): $${product.priceMayorista}\n`;
+                    message += `- Precio Venta (c/u): $${sellPrice}\n`;
+                    message += `- Total Costo (Item): $${costoTotalItem}\n\n`;
+                });
+
+                message += `*RESUMEN FINANCIERO*\n`;
+                message += `Costo Total (Emprendedor): $${totalCostoGlobal}\n`;
+                message += `Ganancia Estimada: $${totalGananciaGlobal}\n\n`;
+                message += `¡Quedo atento a las instrucciones para el pago y envío!`;
+                
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                // Opcional: Cerrar el modal al enviar
+                closeCheckoutModal();
+            });
+
+
+            // --- FUNCIÓN PARA CONVERTIR CSV A ARRAY DE OBJETOS ---
+            function parseCSV(csvText) {
+                const lines = csvText.trim().split('\n');
+                const headers = lines.shift().split(';').map(h => h.trim());
+                const productsArray = [];
+
+                lines.forEach(row => {
+                    if (!row) return;
+                    const obj = {};
+                    const values = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+
+                    if (values.length !== headers.length) {
+                        return;
+                    }
+
+                    headers.forEach((header, i) => {
+                        let value = values[i] ? values[i].trim() : '';
+                        
+                        if (value.startsWith('"') && value.endsWith('"')) {
+                            value = value.substring(1, value.length - 1).replace(/""/g, '"');
+                        }
+
+                        if (header === 'id' || header === 'priceMayorista' || header === 'priceSugerido') {
+                            obj[header] = parseInt(value) || 0;
+                        } else if (header === 'variants') {
+                            obj[header] = value.split('|').map(v => v.trim());
+                        } else {
+                            obj[header] = value;
+                        }
+                    });
+                    productsArray.push(obj);
+                });
+                
+                return productsArray;
+            }
+
+            // --- INICIALIZACIÓN ---
+            async function initializeApp() {
+                try {
+                    // DATOS MOCK INCRUSTADOS (Incluyendo Combos) PARA PODER PREVISUALIZAR EN ESTE ENTORNO
+                    const csvDataMock = `id;name;imageUrl;priceMayorista;priceSugerido;description;variants;category
+1;Jabon Facial CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/51a9f6f1fdd4ba9cec4cc4a8bee7a04e9b27d497.jpg;21600;36000;Limpieza suave, piel equilibrada. Elimina impurezas sin resecar.;N/A;CeramiLux
+2;Crema Hidratante CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/ce75547c9b4bc2d1667011fa10d2492428ee5d33.jpg;22800;38000;Hidrata en profundidad mientras refuerza la barrera cutánea.;N/A;CeramiLux
+3;Tinta de Labios Mágica;https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&q=80&w=800;12000;25000;Labial que cambia con tu pH.;Rojo Pasión|Rosa Chicle|Nude;Maquillaje
+4;Maleta rígida profesional;https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800;45000;75000;Maleta rígida para viajes cortos.;N/A;Maletas
+101;Combo Skincare;https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=800;80000;120000;El mejor combo para tu piel.;N/A;Combos
+102;Kit Emprendedor Básico;https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80&w=800;150000;250000;Inicia tu negocio con este kit.;N/A;Combos
+103;Especial Maquillaje;https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=800;90000;140000;Todo lo que necesitas en maquillaje.;N/A;Combos
+104;Combos Maletas 2x1;https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=800;85000;150000;Lleva dos maletas al precio de una.;N/A;Combos`;
+
+                    products = parseCSV(csvDataMock);
+
+                    setupCategories();
+                    renderProducts();
+                    updateTotal();
+
+                } catch (error) {
+                    console.error("Error al inicializar la app:", error);
+                    productList.innerHTML = `<p class="p-6 text-red-600 font-semibold">
+                        ❌ Error al cargar el catálogo.
+                    </p>`;
+                }
+            }
+
+            initializeApp();
+
+        });
+    </script>
+
+</body>
+</html>
