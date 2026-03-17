@@ -232,8 +232,8 @@
             
             // --- DATOS GLOBALES ---
             let products = [];
-            let cart = [];
-            let currentModalTempCart = {}; // Controla cantidades temporales en el modal de producto
+            let cart = []; // Ahora cada objeto guardará {productId, variant, quantity, editedSellPrice}
+            let currentModalTempCart = {}; 
 
             // --- ELEMENTOS DEL DOM ---
             const productList = document.getElementById('product-list');
@@ -278,17 +278,14 @@
             const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
             const dd = String(tomorrow.getDate()).padStart(2, '0');
             
-            // Configurar el mínimo elegible como el día de mañana
             clientDeliveryDateInput.min = `${yyyy}-${mm}-${dd}`;
             
-            // Validar que no elijan domingo
             clientDeliveryDateInput.addEventListener('change', (e) => {
                 if (!e.target.value) return;
-                // Parseamos respetando la zona horaria local asumiendo media noche
                 const selectedDate = new Date(e.target.value + 'T00:00:00');
-                if (selectedDate.getDay() === 0) { // 0 corresponde a Domingo
+                if (selectedDate.getDay() === 0) { 
                     showNotification("No hacemos entregas los domingos. Por favor elige otra fecha.");
-                    e.target.value = ''; // Limpiar el input
+                    e.target.value = ''; 
                 }
             });
 
@@ -299,16 +296,13 @@
                 clearTimeout(notificationTimeout);
                 notificationMessage.textContent = message;
                 
-                // Limpiar cualquier color previo
                 notificationModal.classList.remove('bg-red-500', 'bg-gray-900', 'opacity-0', 'translate-y-10');
-                
-                // Asignar color y mostrar
                 notificationModal.classList.add(isError ? 'bg-red-500' : 'bg-gray-900', 'opacity-100', 'translate-y-0');
                 
                 notificationTimeout = setTimeout(() => {
                     notificationModal.classList.remove('opacity-100', 'translate-y-0');
                     notificationModal.classList.add('opacity-0', 'translate-y-10');
-                }, 2000); // Se esconde a los 2 segundos exactos
+                }, 2000); 
             };
             
             // --- LÓGICA DE CARRITO Y TOTALES MAIN ---
@@ -316,8 +310,11 @@
                 return cart.reduce((sum, item) => {
                     const product = products.find(p => p.id === item.productId);
                     const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
-                    // Ahora suma el Precio de Venta Sugerido para mantener coherencia en la UI
-                    return sum + (item.quantity * defaultSellPrice);
+                    
+                    // Si ya se editó previamente en el checkout, toma ese valor, sino el default
+                    const activeSellPrice = item.editedSellPrice !== undefined ? item.editedSellPrice : defaultSellPrice;
+                    
+                    return sum + (item.quantity * activeSellPrice);
                 }, 0);
             };
 
@@ -378,7 +375,6 @@
                 updateBadges();
             };
             
-            // Reutilizable para cambiar categoría de forma manual o desde un banner
             const setActiveCategory = (categoryName) => {
                 const currentActive = document.querySelector('.active-category');
                 if (currentActive) {
@@ -395,7 +391,6 @@
 
             const setupCategories = () => {
                 const rawCats = [...new Set(products.filter(p => p.priceMayorista > 0).map(p => p.category))];
-                // Se extraen las categorías y se asegura que 'Combos' sea siempre la segunda
                 const dynamicCats = rawCats.filter(c => c !== 'Combos');
                 const categories = ['Todo', 'Combos', ...dynamicCats];
                 
@@ -412,13 +407,12 @@
                 });
             };
             
-            // Event Listener para los Banners (Llevan a la categoría Combos y abren Modal)
             document.querySelectorAll('.banner-item').forEach(banner => {
                 banner.addEventListener('click', () => {
                     const comboId = banner.dataset.comboId;
                     if (comboId) {
                         setActiveCategory('Combos');
-                        setTimeout(() => openProductModal(comboId), 50); // Mínimo timeout para render fluido
+                        setTimeout(() => openProductModal(comboId), 50); 
                     }
                 });
             });
@@ -510,7 +504,6 @@
 
                 productModalContainer.dataset.productId = productId;
                 productModalContainer.classList.remove('hidden');
-                // Mini timeout for transition to trigger
                 setTimeout(() => productModalContainer.classList.remove('opacity-0'), 10);
                 productModalContent.scrollTop = 0; 
             };
@@ -531,10 +524,11 @@
                     const qty = item.quantity;
                     const costMayorista = product.priceMayorista;
                     
-                    // Asegurar que sea número, si está vacío asume 0 para el cálculo temporal
                     const sellPrice = parseInt(input.value) || 0; 
 
-                    // FIX: Ahora suma el Precio de Venta (x cantidad) al total de ventas
+                    // IMPORTANTE: Guardamos el precio editado en el carrito global
+                    item.editedSellPrice = sellPrice;
+
                     totalSellPrice += sellPrice * qty;
                     totalProfit += (sellPrice - costMayorista) * qty;
                 });
@@ -542,7 +536,7 @@
                 checkoutTotalCost.textContent = formatPrice(totalSellPrice);
                 checkoutTotalProfit.textContent = formatPrice(totalProfit);
                 
-                // Color verde si hay ganancia, naranja/rojo si hay pérdida o 0 ganancia
+                // Color verde si hay ganancia, rojo si hay pérdida
                 if(totalProfit > 0) {
                     checkoutTotalProfit.classList.replace('text-red-500', 'text-emerald-500');
                     checkoutTotalProfit.classList.replace('text-gray-500', 'text-emerald-500');
@@ -553,15 +547,20 @@
                     checkoutTotalProfit.classList.replace('text-emerald-500', 'text-gray-500');
                     checkoutTotalProfit.classList.replace('text-red-500', 'text-gray-500');
                 }
+
+                // Sincroniza en tiempo real el footer principal de abajo
+                updateTotal();
             };
 
             const openCheckoutModal = () => {
-                // Generar HTML de la lista de productos
                 checkoutItemsList.innerHTML = '';
                 
                 cart.forEach((item, index) => {
                     const product = products.find(p => p.id === item.productId);
                     const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
+                    
+                    // Al abrir, toma el precio editado si existe, o el sugerido si es nuevo
+                    const activeSellPrice = item.editedSellPrice !== undefined ? item.editedSellPrice : defaultSellPrice;
                     
                     const itemHTML = `
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.04)] gap-3">
@@ -577,7 +576,7 @@
                                     <input type="number" 
                                            class="editable-sell-price w-full pl-7 pr-2 py-1.5 text-center font-bold text-gray-800 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-[#761920] focus:border-transparent transition-shadow outline-none" 
                                            data-index="${index}" 
-                                           value="${defaultSellPrice}">
+                                           value="${activeSellPrice}">
                                 </div>
                             </div>
                         </div>
@@ -585,7 +584,6 @@
                     checkoutItemsList.insertAdjacentHTML('beforeend', itemHTML);
                 });
 
-                // Escuchar cambios en los inputs para actualizar totales en vivo
                 const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
                 sellPriceInputs.forEach(input => {
                     input.addEventListener('input', updateCheckoutTotals);
@@ -593,7 +591,6 @@
 
                 updateCheckoutTotals();
 
-                // Mostrar modal
                 checkoutModalContainer.classList.remove('hidden');
                 setTimeout(() => {
                     checkoutModalContainer.classList.remove('opacity-0');
@@ -610,26 +607,22 @@
 
             // --- EVENT LISTENERS GENERALES ---
             
-            // 1. Clics en la lista principal (Abre Modal de Producto)
             productList.addEventListener('click', (e) => {
                 const card = e.target.closest('.product-card');
                 if (card) openProductModal(card.dataset.productId);
             });
             
-            // 2. Lógica dentro del Modal de Producto
             productModalContent.addEventListener('click', (e) => {
                 const productId = productModalContainer.dataset.productId;
                 if (!productId) return;
                 const product = products.find(p => p.id == productId);
 
-                // Cerrar modal
                 if (e.target.closest('#product-modal-back-btn')) {
                     productModalContainer.classList.add('opacity-0');
                     setTimeout(() => productModalContainer.classList.add('hidden'), 300);
                     return;
                 }
 
-                // Aumentar/Disminuir cantidad
                 const qtyBtn = e.target.closest('.modal-qty-btn');
                 if (qtyBtn) {
                     const variant = qtyBtn.dataset.variant;
@@ -648,7 +641,6 @@
                     return;
                 }
 
-                // Confirmar y Añadir al Carrito Global
                 if (e.target.closest('#product-modal-confirm-btn')) {
                     cart = cart.filter(item => item.productId != productId);
                     
@@ -666,17 +658,14 @@
                 }
             });
 
-            // 3. Botón Principal "Ir al Checkout"
             sendBtnMain.addEventListener('click', () => {
-                const currentTotal = getTotalCartValue(); // Ahora es el valor sugerido de venta
+                const currentTotal = getTotalCartValue(); 
 
                 if (cart.length === 0) {
                     showNotification("Añade al menos un producto para continuar.");
                     return;
                 }
                 
-                // NOTA: Dejé la validación mínima en $49.000 con el valor total de venta
-                // Si prefieres que valide contra el costo mayorista, habría que separarlo
                 if (currentTotal < 49000) {
                     showNotification(`El pedido mínimo es de $ 49.000 (Faltan ${formatPrice(49000 - currentTotal)})`);
                     return;
@@ -685,12 +674,9 @@
                 openCheckoutModal();
             });
 
-            // 4. Cerrar Modal de Checkout
             closeCheckoutBtn.addEventListener('click', closeCheckoutModal);
 
-            // 5. Botón Final: Confirmar y Enviar Pedido por WhatsApp
             sendWhatsappBtn.addEventListener('click', () => {
-                // Validaciones de formulario
                 const clientName = clientNameInput.value.trim();
                 const clientAddress = clientAddressInput.value.trim();
                 const clientPhone = clientPhoneInput.value.trim();
@@ -702,7 +688,6 @@
                     return;
                 }
 
-                // Generar mensaje estructurado para Agentes IA
                 let message = `¡Hola! 👋 Ya tengo un nuevo pedido emprendedor:\n\n`;
                 
                 message += `*DATOS DEL CLIENTE*\n`;
@@ -717,19 +702,20 @@
                 let totalVentaGlobal = 0;
                 let totalGananciaGlobal = 0;
 
-                const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
-
-                cart.forEach((item, index) => {
+                cart.forEach((item) => {
                     const product = products.find(p => p.id === item.productId);
-                    const sellPriceInput = Array.from(sellPriceInputs).find(input => parseInt(input.dataset.index) === index);
-                    const sellPrice = sellPriceInput ? (parseInt(sellPriceInput.value) || 0) : product.priceMayorista;
+                    const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
                     
-                    const ventaTotalItem = sellPrice * item.quantity; // FIX: Sumar Venta, no Costo Mayorista
+                    // Toma el precio guardado durante el checkout
+                    const sellPrice = item.editedSellPrice !== undefined ? item.editedSellPrice : defaultSellPrice;
+                    
+                    const ventaTotalItem = sellPrice * item.quantity;
                     totalVentaGlobal += ventaTotalItem;
                     totalGananciaGlobal += (sellPrice - product.priceMayorista) * item.quantity;
 
-                    // Ajustes de estructura y limpieza (solo muestra variante si aplica)
+                    // Si hay variante y es distinto de "N/A", la agregamos limpia con un "-"
                     let variantText = (item.variant && item.variant !== 'N/A') ? ` - ${item.variant}` : '';
+                    
                     message += `🔸 ${product.name}${variantText}\n`;
                     message += `- Cantidad: ${item.quantity}\n`;
                     message += `- Precio Venta (c/u): $${sellPrice}\n\n`;
@@ -743,7 +729,6 @@
                 const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, '_blank');
                 
-                // Opcional: Cerrar el modal al enviar
                 closeCheckoutModal();
             });
 
@@ -787,7 +772,6 @@
             // --- INICIALIZACIÓN ---
             async function initializeApp() {
                 try {
-                    // DATOS MOCK INCRUSTADOS (Incluyendo Combos) PARA PODER PREVISUALIZAR EN ESTE ENTORNO
                     const csvDataMock = `id;name;imageUrl;priceMayorista;priceSugerido;description;variants;category
 1;Jabon Facial CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/51a9f6f1fdd4ba9cec4cc4a8bee7a04e9b27d497.jpg;21600;36000;Limpieza suave, piel equilibrada. Elimina impurezas sin resecar.;N/A;CeramiLux
 2;Crema Hidratante CeramiLux;https://content.pancake.vn/2-2512/s800x800/2025/12/9/ce75547c9b4bc2d1667011fa10d2492428ee5d33.jpg;22800;38000;Hidrata en profundidad mientras refuerza la barrera cutánea.;N/A;CeramiLux
