@@ -125,7 +125,7 @@
     <footer class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm shadow-[0_-2px_10px_rgba(0,0,0,0.08)] transition-transform duration-300 transform translate-y-full">
         <div class="container mx-auto max-w-7xl flex items-center justify-between p-4">
             <div>
-                <span class="block text-sm text-gray-600 font-semibold">Costo Total (Emprendedor):</span>
+                <span class="block text-sm text-gray-600 font-semibold">Precio Total de Venta:</span>
                 <span id="total-price" class="text-2xl font-extrabold text-gray-800">$ 0</span>
             </div>
             <button id="send-btn-main" class="bg-gradient-to-r from-gray-800 to-black hover:from-black hover:to-gray-900 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300 flex items-center whitespace-nowrap">
@@ -173,6 +173,10 @@
                             <input type="tel" id="client-phone" class="block w-full rounded-xl border-gray-300 border bg-gray-50 p-3 focus:bg-white focus:ring-[#761920] focus:border-[#761920] transition-colors" placeholder="Ej. 300 123 4567">
                         </div>
                         <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha de Entrega *</label>
+                            <input type="date" id="client-delivery-date" class="block w-full rounded-xl border-gray-300 border bg-gray-50 p-3 focus:bg-white focus:ring-[#761920] focus:border-[#761920] transition-colors text-gray-700">
+                        </div>
+                        <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Tu Código Referido <span class="text-xs font-normal text-gray-400">(Registrado)</span></label>
                             <input type="text" id="client-referrer" class="block w-full rounded-xl border-gray-300 border bg-gray-50 p-3 focus:bg-white focus:ring-[#761920] focus:border-[#761920] transition-colors" placeholder="Ej. REF-2024">
                         </div>
@@ -197,7 +201,7 @@
             <!-- Footer Modal Checkout -->
             <div class="p-5 border-t bg-white rounded-t-3xl shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] sticky bottom-0 z-10">
                 <div class="flex justify-between items-center mb-1">
-                    <span class="text-gray-500 text-sm font-medium">Costo Total (Emprendedor):</span>
+                    <span class="text-gray-500 text-sm font-medium">Precio Total de Venta:</span>
                     <span id="checkout-total-cost" class="text-lg font-bold text-gray-800">$0</span>
                 </div>
                 <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
@@ -215,7 +219,7 @@
         </div>
     </div>
 
-    <!-- Notificaciones Generales - Clases Base Corregidas -->
+    <!-- Notificaciones Generales -->
     <div id="notification-modal" class="fixed bottom-24 left-1/2 -translate-x-1/2 text-white py-3 px-6 rounded-xl shadow-2xl transition-all duration-300 transform z-[60] w-[90%] max-w-md text-center opacity-0 translate-y-10">
         <p id="notification-message" class="font-medium"></p>
     </div>
@@ -262,8 +266,31 @@
             const clientNameInput = document.getElementById('client-name');
             const clientAddressInput = document.getElementById('client-address');
             const clientPhoneInput = document.getElementById('client-phone');
+            const clientDeliveryDateInput = document.getElementById('client-delivery-date');
             const clientReferrerInput = document.getElementById('client-referrer');
 
+            // --- CONFIGURACIÓN DE FECHA DE ENTREGA ---
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const yyyy = tomorrow.getFullYear();
+            const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const dd = String(tomorrow.getDate()).padStart(2, '0');
+            
+            // Configurar el mínimo elegible como el día de mañana
+            clientDeliveryDateInput.min = `${yyyy}-${mm}-${dd}`;
+            
+            // Validar que no elijan domingo
+            clientDeliveryDateInput.addEventListener('change', (e) => {
+                if (!e.target.value) return;
+                // Parseamos respetando la zona horaria local asumiendo media noche
+                const selectedDate = new Date(e.target.value + 'T00:00:00');
+                if (selectedDate.getDay() === 0) { // 0 corresponde a Domingo
+                    showNotification("No hacemos entregas los domingos. Por favor elige otra fecha.");
+                    e.target.value = ''; // Limpiar el input
+                }
+            });
 
             // --- FUNCIONES AUXILIARES ---
             const formatPrice = (price) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(price);
@@ -661,20 +688,22 @@
                 const clientName = clientNameInput.value.trim();
                 const clientAddress = clientAddressInput.value.trim();
                 const clientPhone = clientPhoneInput.value.trim();
+                const clientDeliveryDate = clientDeliveryDateInput.value;
                 const clientReferrer = clientReferrerInput.value.trim() || 'Ninguno';
 
-                if (!clientName || !clientAddress || !clientPhone) {
-                    showNotification("Por favor, completa Nombre, Dirección y Celular.");
+                if (!clientName || !clientAddress || !clientPhone || !clientDeliveryDate) {
+                    showNotification("Por favor, completa Nombre, Dirección, Celular y Fecha de Entrega.");
                     return;
                 }
 
                 // Generar mensaje estructurado para Agentes IA
-                let message = `¡Hola! 👋 Nuevo pedido de emprendedor:\n\n`;
+                let message = `¡Hola! 👋 Ya tengo un nuevo pedido emprendedor:\n\n`;
                 
                 message += `*DATOS DEL CLIENTE*\n`;
                 message += `Nombre: ${clientName}\n`;
                 message += `Dirección: ${clientAddress}\n`;
                 message += `Celular: ${clientPhone}\n`;
+                message += `Fecha de Entrega: ${clientDeliveryDate}\n`;
                 message += `Código Referido: ${clientReferrer}\n\n`;
 
                 message += `*PRODUCTOS*\n`;
@@ -693,18 +722,16 @@
                     totalCostoGlobal += costoTotalItem;
                     totalGananciaGlobal += (sellPrice - product.priceMayorista) * item.quantity;
 
-                    message += `${index + 1}. ${product.name}\n`;
-                    message += `- Variante: ${item.variant}\n`;
+                    // Ajustes de estructura y limpieza
+                    message += `🔸 ${product.name} - Variante: ${item.variant}\n`;
                     message += `- Cantidad: ${item.quantity}\n`;
-                    message += `- Precio Costo (c/u): $${product.priceMayorista}\n`;
-                    message += `- Precio Venta (c/u): $${sellPrice}\n`;
-                    message += `- Total Costo (Item): $${costoTotalItem}\n\n`;
+                    message += `- Precio Venta (c/u): $${sellPrice}\n\n`;
                 });
 
                 message += `*RESUMEN FINANCIERO*\n`;
-                message += `Costo Total (Emprendedor): $${totalCostoGlobal}\n`;
+                message += `Precio Total de Venta: $${totalCostoGlobal}\n`;
                 message += `Ganancia Estimada: $${totalGananciaGlobal}\n\n`;
-                message += `¡Quedo atento a las instrucciones para el pago y envío!`;
+                message += `¡Vamos a pasarlo al área de despacho para entregarlo a tiempo!`;
                 
                 const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, '_blank');
