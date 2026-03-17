@@ -315,7 +315,9 @@
             const getTotalCartValue = () => {
                 return cart.reduce((sum, item) => {
                     const product = products.find(p => p.id === item.productId);
-                    return sum + (item.quantity * product.priceMayorista);
+                    const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
+                    // Ahora suma el Precio de Venta Sugerido para mantener coherencia en la UI
+                    return sum + (item.quantity * defaultSellPrice);
                 }, 0);
             };
 
@@ -422,9 +424,10 @@
             });
 
             // --- LÓGICA DE MODAL PRODUCTO INDIVIDUAL ---
-            const updateModalTotal = (priceMayorista) => {
+            const updateModalTotal = (product) => {
                 const totalQty = Object.values(currentModalTempCart).reduce((acc, curr) => acc + curr, 0);
-                const totalValue = totalQty * priceMayorista;
+                const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
+                const totalValue = totalQty * defaultSellPrice;
                 const totalEl = document.getElementById('modal-temp-total');
                 if (totalEl) {
                     totalEl.textContent = formatPrice(totalValue);
@@ -503,7 +506,7 @@
                     </div>
                 `;
                 
-                updateModalTotal(product.priceMayorista);
+                updateModalTotal(product);
 
                 productModalContainer.dataset.productId = productId;
                 productModalContainer.classList.remove('hidden');
@@ -515,7 +518,7 @@
 
             // --- LÓGICA DEL NUEVO MODAL DE CHECKOUT (FORMULARIO Y CÁLCULOS) ---
             const updateCheckoutTotals = () => {
-                let totalCost = 0;
+                let totalSellPrice = 0;
                 let totalProfit = 0;
 
                 const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
@@ -531,11 +534,12 @@
                     // Asegurar que sea número, si está vacío asume 0 para el cálculo temporal
                     const sellPrice = parseInt(input.value) || 0; 
 
-                    totalCost += costMayorista * qty;
+                    // FIX: Ahora suma el Precio de Venta (x cantidad) al total de ventas
+                    totalSellPrice += sellPrice * qty;
                     totalProfit += (sellPrice - costMayorista) * qty;
                 });
 
-                checkoutTotalCost.textContent = formatPrice(totalCost);
+                checkoutTotalCost.textContent = formatPrice(totalSellPrice);
                 checkoutTotalProfit.textContent = formatPrice(totalProfit);
                 
                 // Color verde si hay ganancia, naranja/rojo si hay pérdida o 0 ganancia
@@ -640,7 +644,7 @@
                     const display = productModalContent.querySelector(`.qty-display[data-variant="${variant}"]`);
                     if (display) display.textContent = newQty;
 
-                    updateModalTotal(product.priceMayorista);
+                    updateModalTotal(product);
                     return;
                 }
 
@@ -664,13 +668,15 @@
 
             // 3. Botón Principal "Ir al Checkout"
             sendBtnMain.addEventListener('click', () => {
-                const currentTotal = getTotalCartValue();
+                const currentTotal = getTotalCartValue(); // Ahora es el valor sugerido de venta
 
                 if (cart.length === 0) {
                     showNotification("Añade al menos un producto para continuar.");
                     return;
                 }
-
+                
+                // NOTA: Dejé la validación mínima en $49.000 con el valor total de venta
+                // Si prefieres que valide contra el costo mayorista, habría que separarlo
                 if (currentTotal < 49000) {
                     showNotification(`El pedido mínimo es de $ 49.000 (Faltan ${formatPrice(49000 - currentTotal)})`);
                     return;
@@ -708,7 +714,7 @@
 
                 message += `*PRODUCTOS*\n`;
                 
-                let totalCostoGlobal = 0;
+                let totalVentaGlobal = 0;
                 let totalGananciaGlobal = 0;
 
                 const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
@@ -718,18 +724,19 @@
                     const sellPriceInput = Array.from(sellPriceInputs).find(input => parseInt(input.dataset.index) === index);
                     const sellPrice = sellPriceInput ? (parseInt(sellPriceInput.value) || 0) : product.priceMayorista;
                     
-                    const costoTotalItem = product.priceMayorista * item.quantity;
-                    totalCostoGlobal += costoTotalItem;
+                    const ventaTotalItem = sellPrice * item.quantity; // FIX: Sumar Venta, no Costo Mayorista
+                    totalVentaGlobal += ventaTotalItem;
                     totalGananciaGlobal += (sellPrice - product.priceMayorista) * item.quantity;
 
-                    // Ajustes de estructura y limpieza
-                    message += `🔸 ${product.name} - Variante: ${item.variant}\n`;
+                    // Ajustes de estructura y limpieza (solo muestra variante si aplica)
+                    let variantText = (item.variant && item.variant !== 'N/A') ? ` - ${item.variant}` : '';
+                    message += `🔸 ${product.name}${variantText}\n`;
                     message += `- Cantidad: ${item.quantity}\n`;
                     message += `- Precio Venta (c/u): $${sellPrice}\n\n`;
                 });
 
                 message += `*RESUMEN FINANCIERO*\n`;
-                message += `Precio Total de Venta: $${totalCostoGlobal}\n`;
+                message += `Precio Total de Venta: $${totalVentaGlobal}\n`;
                 message += `Ganancia Estimada: $${totalGananciaGlobal}\n\n`;
                 message += `¡Vamos a pasarlo al área de despacho para entregarlo a tiempo!`;
                 
