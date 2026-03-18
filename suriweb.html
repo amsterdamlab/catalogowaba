@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SURI - Web de Negocios y Servicios</title>
+    <!-- Tailwind CSS para el diseño rápido y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para los íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        suri: {
+                            light: '#ede9fe', // purple-100
+                            main: '#5b21b6', // purple-800
+                            dark: '#4c1d95', // purple-900
+                        },
+                        whatsapp: {
+                            main: '#25D366',
+                            hover: '#128C7E'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Ocultar barra de desplazamiento en los sliders horizontales */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Fondo general para simular un teléfono en escritorio */
+        body { background-color: #e5e7eb; }
+        
+        /* Contenedor principal estilo App */
+        #app-container { 
+            max-width: 480px; 
+            margin: 0 auto; 
+            background-color: #f8fafc; 
+            min-height: 100vh; 
+            position: relative; 
+            padding-bottom: 80px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+        }
+
+        /* Clase para el botón activo del menú (AHORA CON TEXTO BLANCO) */
+        .filter-btn.active {
+            background-color: #5b21b6; /* suri-main */
+            color: white;
+            border-color: #5b21b6;
+        }
+        .filter-btn.active i, .filter-btn.active span {
+            color: white;
+        }
+        
+        /* Nav inferior activo */
+        .nav-btn.active {
+            color: #5b21b6;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800 font-sans relative">
+
+    <!-- App Container -->
+    <div id="app-container">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center px-5 py-4">
+            <div class="flex items-center gap-2 text-suri-main font-black text-xl tracking-tight">
+                <i class="fa-solid fa-store"></i> SURI
+            </div>
+            <button onclick="trackEvent('Click', 'Compartir App')" class="bg-suri-light text-suri-main p-2 rounded-full h-10 w-10 flex items-center justify-center transition hover:bg-purple-200">
+                <i class="fa-solid fa-share-nodes"></i>
+            </button>
+        </header>
+
+        <!-- Saludo -->
+        <div class="px-5 mb-5">
+            <h1 class="text-2xl font-bold text-gray-900 leading-tight">⭐ Recomendados</h1>
+        </div>
+
+        <!-- Slider Destacados (Banners interactivos) -->
+        <div class="px-5 mb-8">
+            <div class="flex overflow-x-auto gap-4 hide-scrollbar snap-x pb-2">
+                
+                <!-- Banner 1: The Bread Basket -->
+                <div onclick="openModal('The Bread Basket', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400', '¡Promo especial! 20% de descuento en tu primer pedido de pan de masa madre. Válido solo para vecinos del conjunto.', 'Torre 1, Apto 205')" class="snap-center shrink-0 w-72 h-36 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400" alt="The Bread Basket" class="absolute inset-0 w-full h-full object-cover opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white w-full pr-4">
+                        <h2 class="text-xl font-bold leading-tight">The Bread Basket</h2>
+                    </div>
+                </div>
+
+                <!-- Banner 2: Profe en Casa -->
+                <div onclick="openModal('Profe en Casa', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400', 'Primera clase de evaluación completamente GRATIS. Ayuda con tareas, inglés y matemáticas para todos los niveles.', 'Torre 3, Apto 1102')" class="snap-center shrink-0 w-72 h-36 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400" alt="Profe en Casa" class="absolute inset-0 w-full h-full object-cover opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white w-full pr-4">
+                        <h2 class="text-xl font-bold leading-tight">Profe en Casa</h2>
+                    </div>
+                </div>
+
+                <!-- Banner 3: Spa Mascotas VIP -->
+                <div onclick="openModal('Spa Mascotas VIP', 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=400', '¡Lunes de peludos! Baño y corte con 15% de descuento. Incluye aromaterapia y limpieza de oídos. ¡Agenda hoy!', 'Torre 2, Apto 304')" class="snap-center shrink-0 w-72 h-36 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                    <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=400" alt="Spa Mascotas" class="absolute inset-0 w-full h-full object-cover opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white w-full pr-4">
+                        <h2 class="text-xl font-bold leading-tight">Spa Mascotas VIP</h2>
+                    </div>
+                </div>
+
+                <!-- Banner 4: Pizzería del Parque -->
+                <div onclick="openModal('Pizzería del Parque', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400', 'Arma tu pizza familiar y lleva una bebida de 1.5L GRATIS mencionando que nos viste en SURI.', 'Local Exterior 2')" class="snap-center shrink-0 w-72 h-36 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400" alt="Pizzería" class="absolute inset-0 w-full h-full object-cover opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white w-full pr-4">
+                        <h2 class="text-xl font-bold leading-tight">Pizzería del Parque</h2>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Categorías Deslizables -->
+        <div class="px-5 mb-8">
+            <div class="flex overflow-x-auto gap-3 hide-scrollbar pb-2">
+                <button onclick="applyFilter('category', 'recomendados', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-200 transition">
+                    <i class="fa-solid fa-star text-suri-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-700 transition">Recomendados</span>
+                </button>
+                <button onclick="applyFilter('category', 'hogar', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-200 transition">
+                    <i class="fa-solid fa-house text-suri-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-700 transition">Hogar</span>
+                </button>
+                <button onclick="applyFilter('category', 'comida', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-200 transition">
+                    <i class="fa-solid fa-utensils text-suri-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-700 transition">Comida</span>
+                </button>
+                <button onclick="applyFilter('category', 'salud', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-200 transition">
+                    <i class="fa-solid fa-heart-pulse text-suri-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-700 transition">Salud</span>
+                </button>
+                <button onclick="applyFilter('category', 'belleza', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-200 transition">
+                    <i class="fa-solid fa-scissors text-suri-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-700 transition">Belleza</span>
+                </button>
+                <button onclick="applyFilter('category', 'mascotas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-200 transition">
+                    <i class="fa-solid fa-paw text-suri-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-700 transition">Mascotas</span>
+                </button>
+                <button onclick="applyFilter('category', 'servicios', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-200 transition">
+                    <i class="fa-solid fa-screwdriver-wrench text-suri-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-700 transition">Servicios</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenedor Principal de Elementos Filtrables -->
+        <div class="px-5 mb-8">
+            <div class="flex justify-between items-end mb-4">
+                <h3 id="section-title" class="font-bold text-gray-900 text-lg">Encuentra todo muy cerca de ti</h3>
+            </div>
+
+            <div id="items-container" class="flex flex-col gap-5">
+                
+                <!-- The Bread Basket -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="recomendados,comida" data-type="negocio">
+                    <div class="h-36 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600" alt="Panadería" class="w-full h-full object-cover">
+                        <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-star"></i> Recomendado por SURI
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">The Bread Basket</h4>
+                            <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Abierto</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Pan de masa madre y pastelería artesanal a domicilio cada mañana.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Torre 1, Apto 205
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'The Bread Basket')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Contactar por WhatsApp
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Profe en Casa -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="recomendados,servicios" data-type="servicio">
+                    <div class="h-36 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600" alt="Tutoría escolar" class="w-full h-full object-cover">
+                        <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-star"></i> Recomendado por SURI
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">Profe en Casa</h4>
+                            <span class="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Solo Cita</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Clases particulares de matemáticas e inglés para niños y jóvenes.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Torre 3, Apto 1102
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="trackEvent('Conversión - WhatsApp', 'Profe en Casa')" class="flex-1 bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                                <i class="fa-brands fa-whatsapp text-xl"></i> WhatsApp
+                            </button>
+                            <button onclick="trackEvent('Conversión - Llamada', 'Profe en Casa')" class="w-14 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl flex items-center justify-center transition">
+                                <i class="fa-solid fa-phone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- NUEVO RECOMENDADO: Spa Mascotas VIP -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="recomendados,mascotas,servicios" data-type="servicio">
+                    <div class="h-36 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Spa Mascotas" class="w-full h-full object-cover">
+                        <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-star"></i> Recomendado por SURI
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">Spa Mascotas VIP</h4>
+                            <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Abierto</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Baño, corte y peluquería canina y felina a domicilio sin estrés.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Torre 2, Apto 304
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'Spa Mascotas VIP')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Agendar Cita
+                        </button>
+                    </div>
+                </article>
+
+                <!-- NUEVO RECOMENDADO: Pizzería del Parque -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="recomendados,comida" data-type="negocio">
+                    <div class="h-36 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=600" alt="Pizzería" class="w-full h-full object-cover">
+                        <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-star"></i> Recomendado por SURI
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">Pizzería del Parque</h4>
+                            <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Abierto</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Pizzas artesanales al horno de leña, pastas y postres italianos.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Local Exterior 2
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'Pizzería del Parque')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Pedir Domicilio
+                        </button>
+                    </div>
+                </article>
+
+                <!-- EcoShine Services -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="hogar,servicios" data-type="servicio">
+                    <div class="h-36 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=600" alt="Limpieza" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">EcoShine Services</h4>
+                            <span class="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Solo Cita</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Servicios de limpieza ecológica y organización por residentes.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Torre 4, Apto 804
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'EcoShine Services')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Contactar por WhatsApp
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Reparaciones y Plomería -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="hogar,servicios" data-type="servicio">
+                    <div class="h-36 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&q=80&w=600" alt="Plomería" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">Plomería Express</h4>
+                            <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Disponible</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Reparación de tuberías, destapes y urgencias en casa 24/7.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Local Comercial 12
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'Plomería Express')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Contactar por WhatsApp
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Estilo & Color -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="belleza" data-type="negocio">
+                    <div class="h-36 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600" alt="Peluquería" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">Estilo & Color</h4>
+                            <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Abierto</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Peluquería, barbería y manicure a domicilio o en la torre 3.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Torre 3, Salón Comunal B
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'Estilo y Color')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Contactar por WhatsApp
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Huellas Felices -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="mascotas,servicios" data-type="servicio">
+                    <div class="h-36 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?auto=format&fit=crop&q=80&w=600" alt="Paseador de perros" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">Huellas Felices</h4>
+                            <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Agenda Abierta</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Paseos diarios, guardería de día y cuidados para tu mascota.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Torre 2, Apto 101
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'Huellas Felices')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Contactar por WhatsApp
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Burger Neighbours -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="comida" data-type="negocio">
+                    <div class="h-36 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=600" alt="Hamburguesas" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">Burger Neighbours</h4>
+                            <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Abierto</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Las mejores hamburguesas artesanales, directo a tu puerta.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Local Comercial 5
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'Burger Neighbours')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Pedir Domicilio
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Fisio Vital -->
+                <article class="list-item bg-white rounded-[20px] overflow-hidden shadow-sm border border-gray-100" data-category="salud,servicios" data-type="servicio">
+                    <div class="h-36 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=600" alt="Fisioterapia" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-lg text-gray-900">Fisio Vital</h4>
+                            <span class="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Previa Cita</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-2 leading-relaxed">Terapia física, masajes relajantes y recuperación deportiva a domicilio.</p>
+                        <!-- Ubicación -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
+                            <i class="fa-solid fa-location-dot text-suri-main"></i> Torre 5, Apto 603
+                        </div>
+                        <button onclick="trackEvent('Conversión - WhatsApp', 'Fisio Vital')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Agendar Cita
+                        </button>
+                    </div>
+                </article>
+
+            </div>
+            
+            <!-- Mensaje cuando no hay resultados (oculto por defecto) -->
+            <div id="no-results" class="hidden text-center py-10">
+                <i class="fa-solid fa-box-open text-gray-300 text-4xl mb-3"></i>
+                <p class="text-gray-500 font-medium">Aún no hay opciones en esta categoría.</p>
+            </div>
+        </div>
+
+        <!-- Footer Call to Action -->
+        <div class="px-5 pb-8 text-center border-t border-gray-200 pt-8 mt-4">
+            <button onclick="trackEvent('Lead Gen', 'Quiero tener mi negocio')" class="text-suri-main text-sm font-bold hover:underline">
+                Quiero tener mi negocio en SURI
+            </button>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="fixed bottom-0 w-full max-w-[480px] bg-white border-t border-gray-200 px-6 py-2 flex justify-between items-center z-50 rounded-t-2xl shadow-[0_-5px_15px_rgba(0,0,0,0.02)]">
+            <button id="nav-inicio" onclick="applyFilter('all', 'all', this, true)" class="nav-btn active flex flex-col items-center p-2 text-gray-400 hover:text-gray-600 transition">
+                <i class="fa-solid fa-house text-lg mb-1"></i>
+                <span class="text-[10px] font-bold">Inicio</span>
+            </button>
+            <button id="nav-negocios" onclick="applyFilter('type', 'negocio', this, true)" class="nav-btn flex flex-col items-center p-2 text-gray-400 hover:text-gray-600 transition">
+                <i class="fa-solid fa-store text-lg mb-1"></i>
+                <span class="text-[10px] font-semibold">Negocios</span>
+            </button>
+            <button id="nav-servicios" onclick="applyFilter('type', 'servicio', this, true)" class="nav-btn flex flex-col items-center p-2 text-gray-400 hover:text-gray-600 transition">
+                <i class="fa-solid fa-screwdriver-wrench text-lg mb-1"></i>
+                <span class="text-[10px] font-semibold">Servicios</span>
+            </button>
+        </nav>
+
+        <!-- POP-UP (MODAL) PARA BANNERS PROMOCIONALES -->
+        <div id="promo-modal" class="fixed inset-0 bg-black/70 z-[100] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+            <div class="bg-white rounded-3xl overflow-hidden w-full max-w-[360px] transform scale-95 transition-transform duration-300 shadow-2xl" id="promo-modal-content">
+                <!-- Imagen y Botón de cierre -->
+                <div class="relative h-48">
+                    <img id="modal-img" src="" alt="Promo" class="w-full h-full object-cover">
+                    <button onclick="closeModal()" class="absolute top-3 right-3 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/80 transition backdrop-blur-sm">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <!-- Contenido -->
+                <div class="p-6">
+                    <h3 id="modal-title" class="text-2xl font-black text-gray-900 mb-3 leading-tight"></h3>
+                    <p id="modal-promo" class="text-sm text-gray-600 mb-5 leading-relaxed"></p>
+                    
+                    <div class="flex items-center gap-2 text-xs text-gray-500 mb-6 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                        <i class="fa-solid fa-location-dot text-suri-main text-lg"></i>
+                        <div>
+                            <span class="block font-bold text-gray-700">Encuéntralos en:</span>
+                            <span id="modal-location"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Botón WA dinámico -->
+                    <button id="modal-wa-btn" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-md shadow-green-200/50">
+                        <i class="fa-brands fa-whatsapp text-xl"></i> ¡Lo quiero! (WhatsApp)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script de Filtros, Métricas y Pop-ups -->
+    <script>
+        // Función de Análisis / Métricas
+        function trackEvent(actionType, label) {
+            const eventData = {
+                timestamp: new Date().toISOString(),
+                event_type: actionType,
+                item: label,
+                source: "Mini Site SURI"
+            };
+            console.log("📊 [MÉTRICA REGISTRADA]:", eventData);
+
+            if(actionType.includes('WhatsApp')) {
+                alert(`Redirigiendo al WhatsApp de: ${label}\n\n(Evento registrado en métricas)`);
+            }
+        }
+
+        window.onload = () => {
+            trackEvent('Tráfico', 'Visita Inicial al Mini Site');
+        };
+
+        // LÓGICA DE FILTRADO DINÁMICO
+        function applyFilter(filterType, filterValue, buttonElement, isBottomNav = false) {
+            trackEvent('Filtro', `Aplicado: ${filterValue}`);
+
+            if (isBottomNav) {
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'text-suri-main'));
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.add('text-gray-400'));
+                
+                buttonElement.classList.remove('text-gray-400');
+                buttonElement.classList.add('active', 'text-suri-main');
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            } else {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                buttonElement.classList.add('active');
+
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'text-suri-main'));
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.add('text-gray-400'));
+            }
+
+            const titleElement = document.getElementById('section-title');
+            if (filterValue === 'all') {
+                titleElement.innerText = 'Encuentra todo muy cerca de ti';
+            } else if (filterType === 'type' && filterValue === 'negocio') {
+                titleElement.innerText = 'Negocios cerca a ti';
+            } else if (filterType === 'type' && filterValue === 'servicio') {
+                titleElement.innerText = 'Servicios Disponibles';
+            } else {
+                titleElement.innerText = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
+            }
+
+            const items = document.querySelectorAll('.list-item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                let shouldShow = false;
+                
+                if (filterValue === 'all') {
+                    shouldShow = true;
+                } else if (filterType === 'category') {
+                    const categories = item.dataset.category.split(',');
+                    if (categories.includes(filterValue)) shouldShow = true;
+                } else if (filterType === 'type') {
+                    if (item.dataset.type === filterValue) shouldShow = true;
+                }
+
+                if (shouldShow) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const noResults = document.getElementById('no-results');
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+
+        // LÓGICA DEL POP-UP (MODAL)
+        function openModal(title, image, promo, location) {
+            trackEvent('Pop-up Banner', `Abierto: ${title}`);
+            
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-img').src = image;
+            document.getElementById('modal-promo').innerText = promo;
+            document.getElementById('modal-location').innerText = location;
+            
+            // Asignar el nombre del negocio al botón de WhatsApp del Pop-up
+            const waBtn = document.getElementById('modal-wa-btn');
+            waBtn.onclick = function() {
+                trackEvent('Conversión - WhatsApp (Banner Promo)', title);
+            };
+
+            const modal = document.getElementById('promo-modal');
+            const modalContent = document.getElementById('promo-modal-content');
+            
+            // Mostrar modal (quitar display hidden)
+            modal.classList.remove('hidden');
+            
+            // Retraso minúsculo para permitir que la transición de opacidad funcione
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('promo-modal');
+            const modalContent = document.getElementById('promo-modal-content');
+            
+            // Iniciar transición de salida
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            
+            // Ocultar completamente después de la animación
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
