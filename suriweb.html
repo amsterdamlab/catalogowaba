@@ -73,7 +73,7 @@
             <div class="flex items-center gap-2 text-suri-main font-black text-xl tracking-tight">
                 <i class="fa-solid fa-store"></i> SURI
             </div>
-            <button onclick="trackEvent('Click', 'Compartir App')" class="bg-suri-light text-suri-main p-2 rounded-full h-10 w-10 flex items-center justify-center transition hover:bg-purple-200">
+            <button onclick="shareApp()" class="bg-suri-light text-suri-main p-2 rounded-full h-10 w-10 flex items-center justify-center transition hover:bg-purple-200">
                 <i class="fa-solid fa-share-nodes"></i>
             </button>
         </header>
@@ -88,7 +88,7 @@
             <div class="flex overflow-x-auto gap-4 hide-scrollbar snap-x pb-2">
                 
                 <!-- Banner 1: The Bread Basket -->
-                <div onclick="openModal('The Bread Basket', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400', '¡Promo especial! 20% de descuento en tu primer pedido de pan de masa madre. Válido solo para vecinos del conjunto.', 'Torre 1, Apto 205')" class="snap-center shrink-0 w-72 h-36 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                <div onclick="openModal('The Bread Basket', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400', '¡Promo especial! 20% de descuento en tu primer pedido de pan de masa madre. Válido solo para vecinos del conjunto.', 'Torre 1, Apto 205')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
                     <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400" alt="The Bread Basket" class="absolute inset-0 w-full h-full object-cover opacity-70">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-4 left-4 text-white w-full pr-4">
@@ -97,7 +97,7 @@
                 </div>
 
                 <!-- Banner 2: Profe en Casa -->
-                <div onclick="openModal('Profe en Casa', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400', 'Primera clase de evaluación completamente GRATIS. Ayuda con tareas, inglés y matemáticas para todos los niveles.', 'Torre 3, Apto 1102')" class="snap-center shrink-0 w-72 h-36 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                <div onclick="openModal('Profe en Casa', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400', 'Primera clase de evaluación completamente GRATIS. Ayuda con tareas, inglés y matemáticas para todos los niveles.', 'Torre 3, Apto 1102')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
                     <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400" alt="Profe en Casa" class="absolute inset-0 w-full h-full object-cover opacity-70">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-4 left-4 text-white w-full pr-4">
@@ -106,7 +106,7 @@
                 </div>
 
                 <!-- Banner 3: Spa Mascotas VIP -->
-                <div onclick="openModal('Spa Mascotas VIP', 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=400', '¡Lunes de peludos! Baño y corte con 15% de descuento. Incluye aromaterapia y limpieza de oídos. ¡Agenda hoy!', 'Torre 2, Apto 304')" class="snap-center shrink-0 w-72 h-36 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                <div onclick="openModal('Spa Mascotas VIP', 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=400', '¡Lunes de peludos! Baño y corte con 15% de descuento. Incluye aromaterapia y limpieza de oídos. ¡Agenda hoy!', 'Torre 2, Apto 304')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
                     <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=400" alt="Spa Mascotas" class="absolute inset-0 w-full h-full object-cover opacity-70">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-4 left-4 text-white w-full pr-4">
@@ -115,7 +115,7 @@
                 </div>
 
                 <!-- Banner 4: Pizzería del Parque -->
-                <div onclick="openModal('Pizzería del Parque', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400', 'Arma tu pizza familiar y lleva una bebida de 1.5L GRATIS mencionando que nos viste en SURI.', 'Local Exterior 2')" class="snap-center shrink-0 w-72 h-36 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                <div onclick="openModal('Pizzería del Parque', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400', 'Arma tu pizza familiar y lleva una bebida de 1.5L GRATIS mencionando que nos viste en SURI.', 'Local Exterior 2')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
                     <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400" alt="Pizzería" class="absolute inset-0 w-full h-full object-cover opacity-70">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-4 left-4 text-white w-full pr-4">
@@ -173,7 +173,7 @@
                     <div class="h-36 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600" alt="Panadería" class="w-full h-full object-cover">
                         <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
-                            <i class="fa-solid fa-star"></i> Recomendado por SURI
+                            <i class="fa-solid fa-star"></i> Recomendado
                         </div>
                     </div>
                     <div class="p-4">
@@ -197,7 +197,7 @@
                     <div class="h-36 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600" alt="Tutoría escolar" class="w-full h-full object-cover">
                         <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
-                            <i class="fa-solid fa-star"></i> Recomendado por SURI
+                            <i class="fa-solid fa-star"></i> Recomendado
                         </div>
                     </div>
                     <div class="p-4">
@@ -226,7 +226,7 @@
                     <div class="h-36 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Spa Mascotas" class="w-full h-full object-cover">
                         <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
-                            <i class="fa-solid fa-star"></i> Recomendado por SURI
+                            <i class="fa-solid fa-star"></i> Recomendado
                         </div>
                     </div>
                     <div class="p-4">
@@ -250,7 +250,7 @@
                     <div class="h-36 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=600" alt="Pizzería" class="w-full h-full object-cover">
                         <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
-                            <i class="fa-solid fa-star"></i> Recomendado por SURI
+                            <i class="fa-solid fa-star"></i> Recomendado
                         </div>
                     </div>
                     <div class="p-4">
@@ -462,6 +462,42 @@
 
     <!-- Script de Filtros, Métricas y Pop-ups -->
     <script>
+        // Función para compartir la App nativamente en celulares
+        async function shareApp() {
+            trackEvent('Click', 'Compartir App');
+            
+            const shareData = {
+                title: 'SURI - Red de Vecinos',
+                text: '¡Descubre los mejores negocios, promociones y servicios dentro de nuestra comunidad! 🏪✨',
+                url: window.location.href // Toma la URL actual del mini site
+            };
+
+            // Detecta si el celular soporta el menú nativo de compartir
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    trackEvent('Compartir', 'Éxito Nativo');
+                } catch (err) {
+                    console.log('Interacción de compartir cancelada o fallida:', err);
+                }
+            } else {
+                // Fallback de seguridad (por si lo abren en un PC o navegador muy antiguo)
+                // Copia el enlace al portapapeles
+                const textArea = document.createElement("textarea");
+                textArea.value = window.location.href;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('¡Enlace copiado al portapapeles! Listo para pegarlo y compartirlo con tus vecinos.');
+                    trackEvent('Compartir', 'Copiado al Portapapeles');
+                } catch (err) {
+                    console.error('Error al copiar', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
         // Función de Análisis / Métricas
         function trackEvent(actionType, label) {
             const eventData = {
