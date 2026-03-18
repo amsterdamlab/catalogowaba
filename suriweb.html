@@ -84,45 +84,9 @@
         </div>
 
         <!-- Slider Destacados (Banners interactivos) -->
-        <div class="px-5 mb-8">
-            <div class="flex overflow-x-auto gap-4 hide-scrollbar snap-x pb-2">
-                
-                <!-- Banner 1: The Bread Basket -->
-                <div onclick="openModal('The Bread Basket', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400', '¡Promo especial! 20% de descuento en tu primer pedido de pan de masa madre. Válido solo para vecinos del conjunto.', 'Torre 1, Apto 205')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
-                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400" alt="The Bread Basket" class="absolute inset-0 w-full h-full object-cover opacity-70">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white w-full pr-4">
-                        <h2 class="text-xl font-bold leading-tight">The Bread Basket</h2>
-                    </div>
-                </div>
-
-                <!-- Banner 2: Profe en Casa -->
-                <div onclick="openModal('Profe en Casa', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400', 'Primera clase de evaluación completamente GRATIS. Ayuda con tareas, inglés y matemáticas para todos los niveles.', 'Torre 3, Apto 1102')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
-                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400" alt="Profe en Casa" class="absolute inset-0 w-full h-full object-cover opacity-70">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white w-full pr-4">
-                        <h2 class="text-xl font-bold leading-tight">Profe en Casa</h2>
-                    </div>
-                </div>
-
-                <!-- Banner 3: Spa Mascotas VIP -->
-                <div onclick="openModal('Spa Mascotas VIP', 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=400', '¡Lunes de peludos! Baño y corte con 15% de descuento. Incluye aromaterapia y limpieza de oídos. ¡Agenda hoy!', 'Torre 2, Apto 304')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
-                    <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=400" alt="Spa Mascotas" class="absolute inset-0 w-full h-full object-cover opacity-70">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white w-full pr-4">
-                        <h2 class="text-xl font-bold leading-tight">Spa Mascotas VIP</h2>
-                    </div>
-                </div>
-
-                <!-- Banner 4: Pizzería del Parque -->
-                <div onclick="openModal('Pizzería del Parque', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400', 'Arma tu pizza familiar y lleva una bebida de 1.5L GRATIS mencionando que nos viste en SURI.', 'Local Exterior 2')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
-                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400" alt="Pizzería" class="absolute inset-0 w-full h-full object-cover opacity-70">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white w-full pr-4">
-                        <h2 class="text-xl font-bold leading-tight">Pizzería del Parque</h2>
-                    </div>
-                </div>
-
+        <div id="banners-wrapper" class="px-5 mb-8">
+            <div id="banners-container" class="flex overflow-x-auto gap-4 hide-scrollbar snap-x pb-2">
+                <!-- Los banners se inyectan dinámicamente desde el CSV si tienen 1 en la columna ShowBanner -->
             </div>
         </div>
 
@@ -248,17 +212,17 @@
         const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT1NDMwSAodZjAI0kQdHAnLhFy-DrMYQeAWEf3v6V3SWvTlk0QXNEazGtdA3-bdSQk9-aYuxNqVkcGg/pub?output=csv'; 
         const WEBHOOK_URL = 'AQUI_PONES_EL_WEBHOOK_DE_TU_AUTOMATIZACION'; // Webhook de Make o n8n
 
-        const fallbackCSV = `Nombre,Categoria,Tipo,Imagen,Badge,Estado,Descripcion,Ubicacion,LabelWA
-"The Bread Basket","recomendados,comida","negocio","https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600","Recomendado","Abierto","Pan de masa madre y pastelería artesanal a domicilio cada mañana.","Torre 1, Apto 205","The Bread Basket"
-"Profe en Casa","recomendados,servicios","servicio","https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600","Recomendado","Solo Cita","Clases particulares de matemáticas e inglés para niños y jóvenes.","Torre 3, Apto 1102","Profe en Casa"
-"Spa Mascotas VIP","recomendados,mascotas,servicios","servicio","https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=600","Recomendado","Abierto","Baño, corte y peluquería canina y felina a domicilio sin estrés.","Torre 2, Apto 304","Spa Mascotas VIP"
-"Pizzería del Parque","recomendados,comida","negocio","https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600","Recomendado","Abierto","Pizzas artesanales al horno de leña, pastas y postres italianos.","Local Exterior 2","Pizzería del Parque"
-"EcoShine Services","hogar,servicios","servicio","https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600","","Solo Cita","Servicios de limpieza ecológica y organización por residentes.","Torre 4, Apto 804","EcoShine Services"
-"Plomería Express","hogar,servicios","servicio","https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=600","","Disponible","Reparación de tuberías, destapes y urgencias en casa 24/7.","Local Comercial 12","Plomería Express"
-"Estilo & Color","belleza","negocio","https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600","","Abierto","Peluquería, barbería y manicure a domicilio o en la torre 3.","Torre 3, Salón Comunal B","Estilo y Color"
-"Huellas Felices","mascotas,servicios","servicio","https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?w=600","","Agenda Abierta","Paseos diarios, guardería de día y cuidados para tu mascota.","Torre 2, Apto 101","Huellas Felices"
-"Burger Neighbours","comida","negocio","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","","Abierto","Las mejores hamburguesas artesanales, directo a tu puerta.","Local Comercial 5","Burger Neighbours"
-"Fisio Vital","salud,servicios","servicio","https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600","","Previa Cita","Terapia física, masajes relajantes y recuperación deportiva a domicilio.","Torre 5, Apto 603","Fisio Vital"`;
+        const fallbackCSV = `Nombre,Categoria,Tipo,Imagen,Badge,Estado,Descripcion,Ubicacion,LabelWA,WaLink,ShowBanner,PromoText
+"The Bread Basket","recomendados,comida","negocio","https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600","Recomendado","Abierto","Pan de masa madre y pastelería artesanal a domicilio cada mañana.","Torre 1, Apto 205","The Bread Basket","https://wa.link/ejemplo1","1","¡Promo especial! 20% de descuento en tu primer pedido de pan de masa madre. Válido solo para vecinos del conjunto."
+"Profe en Casa","recomendados,servicios","servicio","https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600","Recomendado","Solo Cita","Clases particulares de matemáticas e inglés para niños y jóvenes.","Torre 3, Apto 1102","Profe en Casa","https://wa.link/ejemplo2","1","Primera clase de evaluación completamente GRATIS. Ayuda con tareas, inglés y matemáticas para todos los niveles."
+"Spa Mascotas VIP","recomendados,mascotas,servicios","servicio","https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=600","Recomendado","Abierto","Baño, corte y peluquería canina y felina a domicilio sin estrés.","Torre 2, Apto 304","Spa Mascotas VIP","https://wa.link/ejemplo3","1","¡Lunes de peludos! Baño y corte con 15% de descuento. Incluye aromaterapia y limpieza de oídos. ¡Agenda hoy!"
+"Pizzería del Parque","recomendados,comida","negocio","https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600","Recomendado","Abierto","Pizzas artesanales al horno de leña, pastas y postres italianos.","Local Exterior 2","Pizzería del Parque","https://wa.link/ejemplo4","1","Arma tu pizza familiar y lleva una bebida de 1.5L GRATIS mencionando que nos viste en SURI."
+"EcoShine Services","hogar,servicios","servicio","https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600","","Solo Cita","Servicios de limpieza ecológica y organización por residentes.","Torre 4, Apto 804","EcoShine Services","https://wa.link/ejemplo5","0",""
+"Plomería Express","hogar,servicios","servicio","https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=600","","Disponible","Reparación de tuberías, destapes y urgencias en casa 24/7.","Local Comercial 12","Plomería Express","https://wa.link/ejemplo6","0",""
+"Estilo & Color","belleza","negocio","https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600","","Abierto","Peluquería, barbería y manicure a domicilio o en la torre 3.","Torre 3, Salón Comunal B","Estilo y Color","https://wa.link/ejemplo7","0",""
+"Huellas Felices","mascotas,servicios","servicio","https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?w=600","","Agenda Abierta","Paseos diarios, guardería de día y cuidados para tu mascota.","Torre 2, Apto 101","Huellas Felices","https://wa.link/ejemplo8","0",""
+"Burger Neighbours","comida","negocio","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","","Abierto","Las mejores hamburguesas artesanales, directo a tu puerta.","Local Comercial 5","Burger Neighbours","https://wa.link/ejemplo9","0",""
+"Fisio Vital","salud,servicios","servicio","https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600","","Previa Cita","Terapia física, masajes relajantes y recuperación deportiva a domicilio.","Torre 5, Apto 603","Fisio Vital","https://wa.link/ejemplo10","0",""`;
 
         // ==========================================
         // FUNCIONES ORIGINALES MODIFICADAS PARA WEBHOOK
@@ -294,7 +258,7 @@
             }
         }
 
-        function trackEvent(actionType, label) {
+        function trackEvent(actionType, label, customUrl = null) {
             const eventData = {
                 timestamp: new Date().toISOString(),
                 event_type: actionType,
@@ -314,11 +278,14 @@
             }
 
             if(actionType.includes('WhatsApp')) {
-                // Generamos el mensaje dinámico para que tu Agente de IA sepa a qué negocio buscan
-                const mensaje = encodeURIComponent(`Hola, vengo de SURI y me gustaría tener más información sobre ${label}.`);
+                // Si pasamos un walink dinámico, abrir ese. Si no (ej: el footer general), usar el central.
+                let urlToOpen = customUrl;
+                if (!urlToOpen) {
+                    const mensaje = encodeURIComponent(`Hola, vengo de SURI y me gustaría tener más información sobre ${label}.`);
+                    urlToOpen = `https://wa.me/573154870448?text=${mensaje}`;
+                }
                 
-                // Redirigimos al número centralizado abriendo WhatsApp
-                window.open(`https://wa.me/573154870448?text=${mensaje}`, '_blank');
+                window.open(urlToOpen, '_blank');
             }
         }
 
@@ -385,7 +352,13 @@
 
         function renderItems(rows) {
             const container = document.getElementById('items-container');
+            const bannersContainer = document.getElementById('banners-container');
+            const bannersWrapper = document.getElementById('banners-wrapper');
+            
             container.innerHTML = ''; 
+            bannersContainer.innerHTML = ''; 
+            
+            let bannersCount = 0; // Para saber si ocultamos toda la sección de destacados
             
             for (let i = 1; i < rows.length; i++) {
                 const cols = rows[i];
@@ -394,12 +367,21 @@
                 const nombre = cols[0];
                 const categoria = cols[1];
                 const tipo = cols[2];
-                const imagen = cols[3];
+                let imagen = cols[3];
                 const badge = cols[4];
                 const estado = cols[5];
                 const descripcion = cols[6];
                 const ubicacion = cols[7];
                 const labelWa = cols[8];
+                const walink = cols[9] ? cols[9].trim() : ''; // Columna 10: Enlace WA
+                const showBanner = cols[10] ? cols[10].trim() : '0'; // Columna 11: Mostrar banner (1 o 0)
+                const promoText = cols[11] ? cols[11].trim() : descripcion; // Columna 12: Texto del pop-up
+
+                // --- LIMPIEZA AUTOMÁTICA DE URL DE IMAGEN ---
+                // Si la URL se copió como una redirección de Google (pasa mucho en Sheets), la extraemos y limpiamos
+                if (imagen && imagen.includes('google.com/search?q=')) {
+                    imagen = decodeURIComponent(imagen.split('q=')[1].split('&')[0]);
+                }
 
                 // Lógica de colores de estado
                 let estadoClass = 'bg-gray-100 text-gray-600';
@@ -417,6 +399,26 @@
                     <div class="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
                         <i class="fa-solid fa-star"></i> ${badge}
                     </div>`;
+                }
+
+                // --- INYECCIÓN DE BANNER DESTACADO (Si ShowBanner es 1) ---
+                if (showBanner === '1') {
+                    bannersCount++;
+                    // Escapamos comillas simples para evitar errores en el evento JS
+                    const safeNombre = nombre.replace(/'/g, "\\'");
+                    const safePromo = promoText.replace(/'/g, "\\'");
+                    const safeUbicacion = ubicacion.replace(/'/g, "\\'");
+                    const safeLabelWa = labelWa.replace(/'/g, "\\'");
+                    
+                    const bannerHTML = `
+                    <div onclick="openModal('${safeNombre}', '${imagen}', '${safePromo}', '${safeUbicacion}', '${safeLabelWa}', '${walink}')" class="snap-center shrink-0 w-60 h-32 rounded-2xl relative overflow-hidden bg-gray-800 shadow-sm cursor-pointer transition hover:opacity-95">
+                        <img src="${imagen}" alt="${nombre}" class="absolute inset-0 w-full h-full object-cover opacity-70">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 text-white w-full pr-4">
+                            <h2 class="text-xl font-bold leading-tight">${nombre}</h2>
+                        </div>
+                    </div>`;
+                    bannersContainer.innerHTML += bannerHTML;
                 }
 
                 // Recreación idéntica a tu <article> original
@@ -439,12 +441,19 @@
                         <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
                             <i class="fa-solid fa-location-dot text-suri-main"></i> ${ubicacion}
                         </div>
-                        <button onclick="trackEvent('Conversión - WhatsApp', '${labelWa}')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
+                        <button onclick="trackEvent('Conversión - WhatsApp', '${labelWa.replace(/'/g, "\\'")}', '${walink}')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-sm shadow-green-200">
                             <i class="fa-brands fa-whatsapp text-xl"></i> Contactar por WhatsApp
                         </button>
                     </div>
                 `;
                 container.appendChild(article);
+            }
+            
+            // Si no hay ningún negocio marcado con 1, ocultamos el carrusel completo de la interfaz
+            if(bannersCount === 0) {
+                bannersWrapper.style.display = 'none';
+            } else {
+                bannersWrapper.style.display = 'block';
             }
         }
 
@@ -513,7 +522,7 @@
             }
         }
 
-        function openModal(title, image, promo, location) {
+        function openModal(title, image, promo, location, labelWa, walink) {
             trackEvent('Pop-up Banner', `Abierto: ${title}`);
             
             document.getElementById('modal-title').innerText = title;
@@ -523,7 +532,7 @@
             
             const waBtn = document.getElementById('modal-wa-btn');
             waBtn.onclick = function() {
-                trackEvent('Conversión - WhatsApp (Banner Promo)', title);
+                trackEvent('Conversión - WhatsApp (Banner Promo)', labelWa, walink);
             };
 
             const modal = document.getElementById('promo-modal');
