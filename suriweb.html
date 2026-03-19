@@ -367,21 +367,52 @@
                 const nombre = cols[0];
                 const categoria = cols[1];
                 const tipo = cols[2];
-                let imagen = cols[3];
+                let imagen = cols[3] ? cols[3].trim() : '';
                 const badge = cols[4];
                 const estado = cols[5];
                 const descripcion = cols[6];
                 const ubicacion = cols[7];
                 const labelWa = cols[8];
-                const walink = cols[9] ? cols[9].trim() : ''; // Columna 10: Enlace WA
+                let walink = cols[9] ? cols[9].trim() : ''; // Columna 10: Enlace WA
                 const showBanner = cols[10] ? cols[10].trim() : '0'; // Columna 11: Mostrar banner (1 o 0)
                 const promoText = cols[11] ? cols[11].trim() : descripcion; // Columna 12: Texto del pop-up
 
                 // --- LIMPIEZA AUTOMÁTICA DE URL DE IMAGEN ---
-                // Si la URL se copió como una redirección de Google (pasa mucho en Sheets), la extraemos y limpiamos
-                if (imagen && imagen.includes('google.com/search?q=')) {
+                // 1. Quitar comillas accidentales que Google Sheets pudiera haber dejado
+                imagen = imagen.replace(/^["']+|["']+$/g, '');
+                
+                // 2. Si la URL se copió como redirección de Google, extraer la original
+                if (imagen.includes('google.com/url?')) {
+                    const qs = imagen.split('?')[1];
+                    if(qs) {
+                        const params = new URLSearchParams(qs);
+                        if(params.has('q')) imagen = params.get('q');
+                        else if(params.has('url')) imagen = params.get('url');
+                    }
+                } else if (imagen.includes('google.com/search?q=')) {
                     imagen = decodeURIComponent(imagen.split('q=')[1].split('&')[0]);
                 }
+
+                // 3. ¡LA CLAVE AQUÍ! Decodificar caracteres como %3F (?) o %3D (=)
+                try { imagen = decodeURIComponent(imagen); } catch(e) {}
+                
+                // 4. Forzar HTTPS para evitar que el navegador las bloquee por seguridad (Mixed Content)
+                if (imagen.startsWith('http://')) {
+                    imagen = imagen.replace('http://', 'https://');
+                }
+
+                // --- LIMPIEZA AUTOMÁTICA DEL WALINK ---
+                // Si el enlace de WA vino sucio de Gmail o Google, lo limpiamos para tus agentes
+                walink = walink.replace(/^["']+|["']+$/g, '');
+                if (walink.includes('google.com/url?')) {
+                    const qs = walink.split('?')[1];
+                    if(qs) {
+                        const params = new URLSearchParams(qs);
+                        if(params.has('q')) walink = params.get('q');
+                        else if(params.has('url')) walink = params.get('url');
+                    }
+                }
+                try { walink = decodeURIComponent(walink); } catch(e) {}
 
                 // Lógica de colores de estado
                 let estadoClass = 'bg-gray-100 text-gray-600';
