@@ -69,9 +69,14 @@
     <!-- App Container -->
     <div id="app-container">
         
+        <!-- Botón Compartir Flotante (Esquina superior derecha) -->
+        <button onclick="shareApp()" class="absolute top-4 right-5 bg-neutral-900 text-manu-main rounded-full h-9 w-9 flex items-center justify-center transition hover:bg-neutral-800 border border-neutral-700 shadow-md z-10">
+            <i class="fa-solid fa-share-nodes text-sm"></i>
+        </button>
+
         <!-- Perfil Ampliado y Distribuido -->
         <div class="px-5 pt-8 mb-8">
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center mb-6 mt-2">
                 <!-- Foto y Nombre -->
                 <div class="flex items-center gap-4">
                     <div class="w-[96px] h-[96px] rounded-full p-[3px] bg-neutral-800 shrink-0 shadow-lg">
@@ -90,10 +95,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Botón Compartir Integrado -->
-                <button onclick="shareApp()" class="bg-neutral-900 text-manu-main p-3 rounded-full h-12 w-12 flex items-center justify-center transition hover:bg-neutral-800 border border-neutral-700 shadow-md">
-                    <i class="fa-solid fa-share-nodes text-lg"></i>
-                </button>
             </div>
             
             <!-- Estadísticas distribuidas a todo lo ancho -->
