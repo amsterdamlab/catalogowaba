@@ -69,45 +69,50 @@
     <!-- App Container -->
     <div id="app-container">
         
-        <!-- Header -->
-        <header class="flex justify-between items-center px-5 py-4 border-b border-neutral-900 mb-4">
-            <div class="flex items-center gap-2 text-white font-black text-xl tracking-tight">
-                <i class="fa-solid fa-burger text-manu-main"></i> OJO CON EL DATO!
-            </div>
-            <button onclick="shareApp()" class="bg-neutral-900 text-manu-main p-2 rounded-full h-10 w-10 flex items-center justify-center transition hover:bg-neutral-800 border border-neutral-800">
-                <i class="fa-solid fa-share-nodes"></i>
-            </button>
-        </header>
-
-        <!-- Perfil Instagram (Réplica) -->
-        <div class="px-5 mb-8 flex items-center gap-5">
-            <!-- Foto de perfil con borde amarillo simulando historias -->
-            <div class="w-[85px] h-[85px] rounded-full p-[3px] bg-neutral-800 shrink-0">
-                <img src="https://images.unsplash.com/photo-1577401239170-897942555fb3?w=200&h=200&fit=crop" alt="Soy El Manu" class="w-full h-full object-cover rounded-full border-2 border-[#0a0a0a]">
+        <!-- Perfil Ampliado y Distribuido -->
+        <div class="px-5 pt-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <!-- Foto y Nombre -->
+                <div class="flex items-center gap-4">
+                    <div class="w-[96px] h-[96px] rounded-full p-[3px] bg-neutral-800 shrink-0 shadow-lg">
+                        <img src="https://img.freepik.com/foto-gratis/fondo-textura-amarilla-abstracta_23-2148055552.jpg?semt=ais_hybrid&w=740&q=80" alt="Soy El Manu" class="w-full h-full object-cover rounded-full border-[3px] border-[#0a0a0a]">
+                    </div>
+                    <div>
+                        <p class="text-manu-main text-[11px] font-black uppercase tracking-widest mb-1">Ojo con el dato</p>
+                        <h2 class="text-[26px] font-black text-white leading-none tracking-tight mb-2.5">Soy El Manu</h2>
+                        <div class="flex items-center gap-2">
+                            <button onclick="window.open('https://wa.me/573154870448?text=Hola%20Manu,%20vengo%20del%20catálogo', '_blank'); trackEvent('Click Perfil', 'Escribime WhatsApp')" class="bg-whatsapp-main hover:bg-whatsapp-hover text-white text-[12px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 transition shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> Escribime
+                            </button>
+                            <button onclick="window.open('https://instagram.com/', '_blank'); trackEvent('Click Perfil', 'Seguime Instagram')" class="bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 hover:opacity-90 text-white text-[12px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 transition shadow-sm">
+                                <i class="fa-brands fa-instagram text-sm"></i> Seguime
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Botón Compartir Integrado -->
+                <button onclick="shareApp()" class="bg-neutral-900 text-manu-main p-3 rounded-full h-12 w-12 flex items-center justify-center transition hover:bg-neutral-800 border border-neutral-700 shadow-md">
+                    <i class="fa-solid fa-share-nodes text-lg"></i>
+                </button>
             </div>
             
-            <div class="flex-1">
-                <h2 class="text-[22px] font-semibold text-white mb-2 leading-none tracking-tight">Soy El Manu</h2>
-                <div class="flex justify-between items-center text-center pr-2">
-                    <div class="flex flex-col items-center">
-                        <span class="font-bold text-white text-[15px]">+1,315</span>
-                        <span class="text-[11px] text-gray-400">restaurantes</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <span class="font-bold text-white text-[15px]">+90.6 mil</span>
-                        <span class="text-[11px] text-gray-400">antojados</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <span class="font-bold text-white text-[15px]">+4,117</span>
-                        <span class="text-[11px] text-gray-400">comelones</span>
-                    </div>
+            <!-- Estadísticas distribuidas a todo lo ancho -->
+            <div class="flex justify-around items-center bg-neutral-900 rounded-[20px] py-4 border border-neutral-800 shadow-sm">
+                <div class="flex flex-col items-center w-1/2">
+                    <span class="font-black text-white text-xl">+1,315</span>
+                    <span class="text-[11px] text-neutral-400 uppercase tracking-widest font-semibold mt-1">restaurantes</span>
+                </div>
+                <div class="w-px h-10 bg-neutral-800"></div>
+                <div class="flex flex-col items-center w-1/2">
+                    <span class="font-black text-white text-xl">+90.6 mil</span>
+                    <span class="text-[11px] text-neutral-400 uppercase tracking-widest font-semibold mt-1">antojados</span>
                 </div>
             </div>
         </div>
 
         <!-- Slider Destacados (Banners interactivos) -->
         <div id="banners-wrapper" class="px-5 mb-8">
-            <h1 class="text-xl font-bold text-white leading-tight mb-4">🔥 Combos Estrella</h1>
+            <h1 class="text-xl font-bold text-white leading-tight mb-4">🔥 Promos Estrella</h1>
             <div id="banners-container" class="flex overflow-x-auto gap-4 hide-scrollbar snap-x pb-2">
                 <!-- Los banners se inyectan dinámicamente desde el CSV si tienen 1 en la columna ShowBanner -->
             </div>
@@ -120,17 +125,57 @@
                     <i class="fa-solid fa-star text-manu-main text-sm transition"></i>
                     <span class="text-[13px] font-semibold text-gray-300 transition">Populares</span>
                 </button>
-                <button onclick="applyFilter('category', 'hamburguesas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                <button onclick="applyFilter('category', 'burgers', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
                     <i class="fa-solid fa-burger text-manu-main text-sm transition"></i>
                     <span class="text-[13px] font-semibold text-gray-300 transition">Burgers</span>
                 </button>
-                <button onclick="applyFilter('category', 'entradas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
-                    <i class="fa-solid fa-fire text-manu-main text-sm transition"></i>
-                    <span class="text-[13px] font-semibold text-gray-300 transition">Entradas</span>
+                <button onclick="applyFilter('category', 'pizza', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-pizza-slice text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Pizza</span>
                 </button>
-                <button onclick="applyFilter('category', 'bebidas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
-                    <i class="fa-solid fa-bottle-droplet text-manu-main text-sm transition"></i>
-                    <span class="text-[13px] font-semibold text-gray-300 transition">Bebidas</span>
+                <button onclick="applyFilter('category', 'sushi', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-bowl-rice text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Sushi</span>
+                </button>
+                <button onclick="applyFilter('category', 'mexicana', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-pepper-hot text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Mexicana</span>
+                </button>
+                <button onclick="applyFilter('category', 'salchipapas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-hotdog text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Salchipapas</span>
+                </button>
+                <button onclick="applyFilter('category', 'pollo', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-drumstick-bite text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Pollo</span>
+                </button>
+                <button onclick="applyFilter('category', 'empanadas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-utensils text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Empanadas</span>
+                </button>
+                <button onclick="applyFilter('category', 'arepas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-plate-wheat text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Arepas</span>
+                </button>
+                <button onclick="applyFilter('category', 'almuerzos', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-bell-concierge text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Almuerzos</span>
+                </button>
+                <button onclick="applyFilter('category', 'saludable', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-leaf text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Saludable</span>
+                </button>
+                <button onclick="applyFilter('category', 'tipica', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-earth-americas text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Típica</span>
+                </button>
+                <button onclick="applyFilter('category', 'sandwich', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-bread-slice text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Sandwich</span>
+                </button>
+                <button onclick="applyFilter('category', 'parrilla', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-fire text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Parrilla</span>
                 </button>
             </div>
         </div>
@@ -224,17 +269,17 @@
         // ==========================================
         // CONFIGURACIÓN DE BASE DE DATOS Y WEBHOOK
         // ==========================================
-        const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT1NDMwSAodZjAI0kQdHAnLhFy-DrMYQeAWEf3v6V3SWvTlk0QXNEazGtdA3-bdSQk9-aYuxNqVkcGg/pub?output=csv'; 
+        const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrkgdIr8doylZtaGXtbcX8d9hoo61gn94Ykjoo9f444bI_ZerBCm-NfLZVmEx3uMcdU_GJPfmddDH6/pub?output=csv'; 
         const WEBHOOK_URL = 'AQUI_PONES_EL_WEBHOOK_DE_TU_AUTOMATIZACION'; // Webhook de Make o n8n
 
-        // Adapté los datos de Fallback para incluir una 13va columna (Video IG)
-        const fallbackCSV = `Nombre,Categoria,Tipo,Imagen,Badge,Estado,Descripcion,Ubicacion,LabelWA,WaLink,ShowBanner,PromoText,VideoIG
-"La Manu Clásica","recomendados,hamburguesas","menu","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","Más Vendida","Disponible","Doble carne smash de 100g, doble queso cheddar, tocineta crujiente y salsa secreta Manu.","Delivery y Pick-up","La Manu Clásica","https://wa.link/ejemplo1","1","¡Lleva papas gratis! Solo por hoy, con tu Manu Clásica te enviamos papas rústicas cortesía de la casa.","https://www.instagram.com/reel/C8-xV6rNXYa/"
-"Papas Animal Style","recomendados,entradas","menu","https://images.unsplash.com/photo-1576107232684-1279f390859f?w=600","Top","Disponible","Papas fritas bañadas en queso cheddar fundido, trozos de tocineta y cebolla caramelizada.","Delivery y Pick-up","Papas Animal Style","https://wa.link/ejemplo2","1","El acompañamiento perfecto para destruir el hambre. Pídelas en combo y ahorra un 15%.",""
-"Manu Trufada","hamburguesas","menu","https://images.unsplash.com/photo-1586816001966-79b736744398?w=600","Premium","Disponible","Blend de carnes maduradas, queso suizo, champiñones salteados y mayonesa de trufa negra.","Delivery y Pick-up","Manu Trufada","https://wa.link/ejemplo4","0","",""
-"Combo Pareja","recomendados,hamburguesas","menu","https://images.unsplash.com/photo-1594212691516-74724c96a788?w=600","Promo","Solo Jueves","2 Manu Clásicas + 2 Porciones de Papas + 2 Gaseosas a un precio increíble.","Delivery","Combo Pareja","https://wa.link/ejemplo5","1","Etiqueta a tu persona favorita. ¡El combo ideal para compartir está aquí a precio especial!",""
-"Camiseta 'Smash'","merch","merch","https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600","New","Disponible","Camiseta oversize negra con logo retro de Soy El Manu. Tallas S a XL.","Pick-up local","Camiseta Smash","https://wa.link/ejemplo6","0","",""
-"Gaseosas / Sodas","bebidas","menu","https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600","","Disponible","Coca-Cola, Sprite, Cuatro y sodas saborizadas de la casa.","Delivery y Pick-up","Gaseosas","https://wa.link/ejemplo7","0","",""`;
+        // Adapté los datos de Fallback para usar las nuevas categorías y mostrar variedad gastronómica + Columna PrecioDesde
+        const fallbackCSV = `Nombre,Categoria,Tipo,Imagen,Badge,Estado,Descripcion,Ubicacion,LabelWA,WaLink,ShowBanner,PromoText,VideoIG,PrecioDesde
+"Smash Doble Queso","recomendados,burgers","menu","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","Más Vendida","Disponible","Doble carne smash, queso cheddar americano, tocineta crujiente y salsa Manu.","Delivery y Pick-up","Smash Doble Queso","https://wa.link/ejemplo1","1","¡Lleva papas gratis! Solo por hoy, con tu Burger te enviamos papas cortesía de la casa.","https://www.instagram.com/reel/C8-xV6rNXYa/","25000"
+"Pizza Pepperoni Familiar","recomendados,pizza","menu","https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600","Promo","Disponible","Masa madre de fermentación lenta, pomodoro italiano y extra pepperoni.","Delivery","Pizza Pepperoni","https://wa.link/ejemplo2","1","Lleva tu pizza familiar y por solo un extra, te enviamos una bebida de 1.5L. ¡Perfecta para compartir!","","45000"
+"Combo Sushi Premium","recomendados,sushi","menu","https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600","Top","Disponible","30 piezas de los mejores rollos: Filadelfia, Ojo de Tigre y Dinamita.","Delivery y Pick-up","Combo Sushi","https://wa.link/ejemplo3","1","Disfruta un 15% off en tu primer pedido de sushi. ¡Palillos y salsas incluidos en tu orden!","","60000"
+"Tacos al Pastor (x3)","mexicana","menu","https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600","","Disponible","Auténticos tacos mexicanos en tortilla de maíz, piña, cilantro, cebolla y full limón.","Pick-up local","Tacos al Pastor","https://wa.link/ejemplo4","0","","","22000"
+"Salchipapa Salvaje","salchipapas","menu","https://images.unsplash.com/photo-1625938146369-adc83368bda7?w=600","","Disponible","Cama de papas crujientes, salchicha premium, queso costeño fundido y full salsas.","Delivery","Salchipapa Salvaje","https://wa.link/ejemplo5","0","","","28000"
+"Alitas BBQ (12pz)","pollo","menu","https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600","","Solo Jueves","Jugosas alitas bañadas en nuestra salsa BBQ artesanal. Incluye apio y salsa ranch.","Delivery y Pick-up","Alitas BBQ","https://wa.link/ejemplo6","0","","","35000"`;
 
         // ==========================================
         // FUNCIONES ORIGINALES MODIFICADAS PARA WEBHOOK
@@ -357,6 +402,61 @@
             if(btnRecomendados) {
                 applyFilter('category', 'recomendados', btnRecomendados);
             }
+
+            // Iniciar el auto-scroll de los banners después de renderizarlos
+            startAutoScroll();
+        }
+
+        // Variable para controlar el intervalo del slider
+        let autoScrollInterval;
+
+        function startAutoScroll() {
+            const container = document.getElementById('banners-container');
+            // Si no hay banners o solo hay 1, no hace falta slider
+            if (!container || container.children.length <= 1) return;
+
+            // Limpiamos cualquier intervalo previo por seguridad
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+
+            autoScrollInterval = setInterval(() => {
+                const banners = container.children;
+                
+                // 1. Detección absoluta del borde final:
+                // Sumamos el scroll actual + el ancho visible. Si es igual o mayor al ancho total del contenido (con 10px de margen de error), ¡llegamos al final!
+                const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 10;
+                
+                let nextIndex = 0; // Por defecto volvemos al inicio (índice 0)
+
+                // 2. Si NO estamos en el final absoluto, buscamos el siguiente banner normal
+                if (!isAtEnd) {
+                    const containerCenter = container.scrollLeft + (container.clientWidth / 2);
+                    
+                    for (let i = 0; i < banners.length; i++) {
+                        const bannerCenter = banners[i].offsetLeft + (banners[i].clientWidth / 2);
+                        
+                        if (bannerCenter > containerCenter + 20) {
+                            nextIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    // Medida de seguridad extra por si el cálculo de centros falla en el último ítem
+                    // forzando un reinicio si el "siguiente" que encontró es el mismo en el que ya estamos atascados
+                    if (nextIndex === banners.length - 1 && banners[nextIndex].offsetLeft - container.scrollLeft <= 50) {
+                        nextIndex = 0;
+                    }
+                }
+
+                // 3. Ejecutamos el movimiento
+                const targetBanner = banners[nextIndex];
+                const exactScrollPosition = targetBanner.offsetLeft - (container.clientWidth / 2) + (targetBanner.clientWidth / 2);
+
+                container.scrollTo({
+                    left: exactScrollPosition,
+                    behavior: 'smooth'
+                });
+
+            }, 7000); // 7000 milisegundos = 7 segundos
         }
 
         function renderItems(rows) {
@@ -386,6 +486,30 @@
                 const showBanner = cols[10] ? cols[10].trim() : '0'; 
                 const promoText = cols[11] ? cols[11].trim() : descripcion; 
                 const videoIg = cols[12] ? cols[12].trim() : ''; // NUEVA COLUMNA: URL de Instagram
+                let precioDesde = cols[13] ? cols[13].trim() : ''; // NUEVA COLUMNA: Precio
+
+                // --- FORMATEO DEL PRECIO EN PESOS COLOMBIANOS ---
+                let precioHTML = '';
+                if (precioDesde) {
+                    // Quitar cualquier caracter que no sea número por si el cliente pone '$' o puntos
+                    const precioNumerico = parseInt(precioDesde.replace(/\D/g, ''), 10);
+                    if (!isNaN(precioNumerico)) {
+                        // Formatear a moneda colombiana (ej. 25000 -> $25.000)
+                        const precioFormateado = new Intl.NumberFormat('es-CO', {
+                            style: 'currency',
+                            currency: 'COP',
+                            maximumFractionDigits: 0 // Sin decimales para COP
+                        }).format(precioNumerico);
+                        
+                        precioHTML = `
+                        <div class="flex items-center gap-1.5 text-xs text-green-400 mb-5 font-bold">
+                            <i class="fa-solid fa-money-bill-wave"></i> Platos desde ${precioFormateado}
+                        </div>`;
+                    }
+                } else {
+                     // Si no hay precio, dejamos el margen original inferior de la ubicación
+                     precioHTML = `<div class="mb-5"></div>`;
+                }
 
                 // --- LIMPIEZA AUTOMÁTICA DE URL DE IMAGEN ---
                 imagen = imagen.replace(/^["']+|["']+$/g, '');
@@ -463,6 +587,7 @@
                 article.dataset.category = categoria;
                 article.dataset.type = tipo;
 
+                // Modifiqué el HTML para incluir el precio debajo de la ubicación
                 article.innerHTML = `
                     <div class="h-44 overflow-hidden relative">
                         <img src="${imagen}" alt="${nombre}" class="w-full h-full object-cover">
@@ -474,9 +599,10 @@
                             <span class="${estadoClass} text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide whitespace-nowrap">${estado}</span>
                         </div>
                         <p class="text-sm text-neutral-400 mb-3 leading-relaxed">${descripcion}</p>
-                        <div class="flex items-center gap-1.5 text-xs text-neutral-500 mb-5 font-medium">
+                        <div class="flex items-center gap-1.5 text-xs text-neutral-500 font-medium ${precioDesde ? 'mb-1' : 'mb-5'}">
                             <i class="fa-solid fa-location-dot text-manu-dark"></i> ${ubicacion}
                         </div>
+                        ${precioHTML}
                         <button onclick="trackEvent('Conversión - WhatsApp', '${labelWa.replace(/'/g, "\\'")}', '${walink}')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-neutral-950 font-black py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-[0_0_10px_rgba(37,211,102,0.2)]">
                             <i class="fa-brands fa-whatsapp text-xl"></i> Pedir por WhatsApp
                         </button>
