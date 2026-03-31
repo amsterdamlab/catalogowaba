@@ -183,13 +183,13 @@
                     </div>
                 </div>
 
-                <!-- Lista de Productos y Precios Editables -->
+                <!-- Lista de Productos (Solo Lectura) -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
                     <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#761920]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                        Calculadora de Ganancias
+                        Resumen de Ganancias
                     </h4>
-                    <p class="text-xs text-gray-500 mb-4">Ajusta el precio de venta sugerido para calcular tu margen exacto. El cliente final no verá el precio emprendedor.</p>
+                    <p class="text-xs text-gray-500 mb-4">A continuación verás el resumen de tu pedido y tus ganancias estimadas. El cliente final no verá tu precio emprendedor.</p>
                     
                     <div id="checkout-items-list" class="space-y-4">
                         <!-- Items inyectados desde JS -->
@@ -311,10 +311,7 @@
                     const product = products.find(p => p.id === item.productId);
                     const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
                     
-                    // Si ya se editó previamente en el checkout, toma ese valor, sino el default
-                    const activeSellPrice = item.editedSellPrice !== undefined ? item.editedSellPrice : defaultSellPrice;
-                    
-                    return sum + (item.quantity * activeSellPrice);
+                    return sum + (item.quantity * defaultSellPrice);
                 }, 0);
             };
 
@@ -407,15 +404,64 @@
                 });
             };
             
-            document.querySelectorAll('.banner-item').forEach(banner => {
-                banner.addEventListener('click', () => {
-                    const comboId = banner.dataset.comboId;
-                    if (comboId) {
-                        setActiveCategory('Combos');
-                        setTimeout(() => openProductModal(comboId), 50); 
+            // --- EVENTOS DE BANNERS Y AUTO-DESLIZABLE ---
+            const bannerContainer = document.querySelector('.banner-snap');
+            if (bannerContainer) {
+                // Event Delegation para Banners (Funciona con los clones)
+                bannerContainer.addEventListener('click', (e) => {
+                    const banner = e.target.closest('.banner-item');
+                    if (banner) {
+                        const comboId = banner.dataset.comboId;
+                        if (comboId) {
+                            setActiveCategory('Combos');
+                            setTimeout(() => openProductModal(comboId), 50); 
+                        }
                     }
                 });
-            });
+
+                // Lógica de bucle infinito sin saltos
+                const initBannerAutoScroll = () => {
+                    // Clonar los banners originales una vez al final
+                    const originalItems = Array.from(bannerContainer.children);
+                    originalItems.forEach(item => {
+                        const clone = item.cloneNode(true);
+                        bannerContainer.appendChild(clone);
+                    });
+
+                    const totalOriginalItems = originalItems.length;
+                    let scrollInterval;
+
+                    const startScroll = () => {
+                        scrollInterval = setInterval(() => {
+                            if (bannerContainer.children.length === 0) return;
+                            
+                            const itemWidth = bannerContainer.firstElementChild.offsetWidth + 16; // Ancho + gap-4 (16px)
+                            let currentIndex = Math.round(bannerContainer.scrollLeft / itemWidth);
+                            
+                            currentIndex++;
+                            
+                            bannerContainer.scrollTo({ left: currentIndex * itemWidth, behavior: 'smooth' });
+
+                            // Si llegamos al final del set original (inicio visual de los clones), reiniciamos invisiblemente
+                            if (currentIndex >= totalOriginalItems) {
+                                setTimeout(() => {
+                                    bannerContainer.scrollTo({ left: 0, behavior: 'auto' });
+                                }, 800); // 800ms asegura que la animación smooth terminó antes del salto invisible
+                            }
+                        }, 5000);
+                    };
+
+                    startScroll();
+
+                    // Mejoras de usabilidad: Pausar si el usuario interactúa o está leyendo
+                    bannerContainer.addEventListener('touchstart', () => clearInterval(scrollInterval), { passive: true });
+                    bannerContainer.addEventListener('touchend', startScroll, { passive: true });
+                    bannerContainer.addEventListener('mouseenter', () => clearInterval(scrollInterval));
+                    bannerContainer.addEventListener('mouseleave', startScroll);
+                };
+                
+                initBannerAutoScroll();
+            }
 
             // --- LÓGICA DE MODAL PRODUCTO INDIVIDUAL ---
             const updateModalTotal = (product) => {
@@ -514,20 +560,11 @@
                 let totalSellPrice = 0;
                 let totalProfit = 0;
 
-                const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
-                
-                sellPriceInputs.forEach(input => {
-                    const index = parseInt(input.dataset.index);
-                    const item = cart[index];
+                cart.forEach((item) => {
                     const product = products.find(p => p.id === item.productId);
-                    
                     const qty = item.quantity;
                     const costMayorista = product.priceMayorista;
-                    
-                    const sellPrice = parseInt(input.value) || 0; 
-
-                    // IMPORTANTE: Guardamos el precio editado en el carrito global
-                    item.editedSellPrice = sellPrice;
+                    const sellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
 
                     totalSellPrice += sellPrice * qty;
                     totalProfit += (sellPrice - costMayorista) * qty;
@@ -559,9 +596,6 @@
                     const product = products.find(p => p.id === item.productId);
                     const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
                     
-                    // Al abrir, toma el precio editado si existe, o el sugerido si es nuevo
-                    const activeSellPrice = item.editedSellPrice !== undefined ? item.editedSellPrice : defaultSellPrice;
-                    
                     const itemHTML = `
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.04)] gap-3">
                             <div class="flex-grow">
@@ -569,24 +603,13 @@
                                 ${item.variant !== 'N/A' ? `<p class="text-xs text-gray-500 mt-0.5">Variante: <span class="font-medium">${item.variant}</span></p>` : ''}
                                 <p class="text-xs font-semibold text-gray-400 mt-1.5">Precio Costo: ${formatPrice(product.priceMayorista)} c/u</p>
                             </div>
-                            <div class="flex-shrink-0 w-full sm:w-36 bg-gray-50 p-2 rounded-lg border border-gray-100">
+                            <div class="flex-shrink-0 w-full sm:w-36 bg-gray-50 p-2 rounded-lg border border-gray-100 flex flex-col justify-center items-center">
                                 <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 text-center">Precio Venta (c/u)</label>
-                                <div class="relative">
-                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
-                                    <input type="number" 
-                                           class="editable-sell-price w-full pl-7 pr-2 py-1.5 text-center font-bold text-gray-800 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-[#761920] focus:border-transparent transition-shadow outline-none" 
-                                           data-index="${index}" 
-                                           value="${activeSellPrice}">
-                                </div>
+                                <span class="font-bold text-gray-800 text-lg">${formatPrice(defaultSellPrice)}</span>
                             </div>
                         </div>
                     `;
                     checkoutItemsList.insertAdjacentHTML('beforeend', itemHTML);
-                });
-
-                const sellPriceInputs = checkoutItemsList.querySelectorAll('.editable-sell-price');
-                sellPriceInputs.forEach(input => {
-                    input.addEventListener('input', updateCheckoutTotals);
                 });
 
                 updateCheckoutTotals();
@@ -704,10 +727,7 @@
 
                 cart.forEach((item) => {
                     const product = products.find(p => p.id === item.productId);
-                    const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
-                    
-                    // Toma el precio guardado durante el checkout
-                    const sellPrice = item.editedSellPrice !== undefined ? item.editedSellPrice : defaultSellPrice;
+                    const sellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
                     
                     const ventaTotalItem = sellPrice * item.quantity;
                     totalVentaGlobal += ventaTotalItem;
