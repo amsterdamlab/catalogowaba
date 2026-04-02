@@ -3,462 +3,821 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Ropa - Distribuidor</title>
+    <title>Soy El Manu - Catálogo</title>
+    <!-- Tailwind CSS para el diseño rápido y responsivo -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para los íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        manu: {
+                            light: '#fef08a', 
+                            main: '#facc15',  
+                            dark: '#ca8a04',  
+                        },
+                        whatsapp: {
+                            main: '#25D366',
+                            hover: '#128C7E'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        /* Ocultar barra de desplazamiento en los sliders horizontales */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Fondo general oscuro para simular un teléfono en escritorio */
+        body { background-color: #000000; }
+        
+        /* Contenedor principal estilo App Modo Oscuro */
+        #app-container { 
+            max-width: 480px; 
+            margin: 0 auto; 
+            background-color: #0a0a0a;
+            min-height: 100vh; 
+            position: relative; 
+            padding-bottom: 80px; 
+            box-shadow: 0 0 20px rgba(255,255,255,0.05); 
+            color: #f9fafb;
         }
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+
+        /* Clase para el botón activo del menú */
+        .filter-btn.active {
+            background-color: #facc15;
+            color: #000000;
+            border-color: #facc15;
         }
-        input[type=number] {
-            -moz-appearance: textfield;
+        .filter-btn.active i, .filter-btn.active span {
+            color: #000000;
         }
-        #notification-modal, #product-modal-container {
-            transition: opacity 0.3s ease-in-out;
-        }
-        .active-category {
-            background-color: #f763a1; 
-            color: white; 
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-        ::-webkit-scrollbar {
-            height: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #10B981;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #059669;
-        }
-        .no-scrollbar::-webkit-scrollbar, 
-        html::-webkit-scrollbar,
-        #product-modal-content::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar, 
-        html,
-        #product-modal-content {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        
+        /* Nav inferior activo */
+        .nav-btn.active {
+            color: #facc15;
         }
     </style>
 </head>
-<body class="bg-gray-100 antialiased">
+<body class="antialiased font-sans relative">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-7xl pb-40">
+    <!-- App Container -->
+    <div id="app-container">
         
-        <header class="text-center md:text-left mb-8 flex items-center justify-center md:justify-start gap-4">
-            <img src="https://content.pancake.vn/2-2510/s800x800/2025/10/20/79d72014e41051da9630530130bd4c6eb25bf388.jpg" alt="[Logo de la Tienda]" class="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover shadow-md">
-            <div>
-                <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800">Catálogo de Moda</h1>
-                <p class="text-gray-600 mt-1">Elige tus prendas, tallas y colores favoritos.</p>
-            </div>
-        </header>
+        <!-- Botón Compartir Flotante (Esquina superior derecha) -->
+        <button onclick="shareApp()" class="absolute top-4 right-5 bg-neutral-900 text-manu-main rounded-full h-9 w-9 flex items-center justify-center transition hover:bg-neutral-800 border border-neutral-700 shadow-md z-10">
+            <i class="fa-solid fa-share-nodes text-sm"></i>
+        </button>
 
-        <div class="sticky top-0 z-30 bg-gray-100/80 backdrop-blur-sm pt-4 pb-3 -mx-4 px-4">
-             <nav id="category-filters" class="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar">
-                </nav>
-        </div>
-
-        <main id="product-list" class="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
-            <!-- Los productos se cargan aquí -->
-        </main>
-
-    </div>
-
-    <footer class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm shadow-[0_-2px_10px_rgba(0,0,0,0.08)] transition-transform duration-300 transform translate-y-full">
-        <div class="container mx-auto max-w-7xl flex items-center justify-between p-4">
-            <div>
-                <span class="block text-sm text-gray-600 font-semibold">Total del Pedido</span>
-                <span id="total-price" class="text-2xl font-extrabold text-gray-800">$ 0</span>
-            </div>
-            <button id="send-whatsapp" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-5 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 flex items-center whitespace-nowrap">
-                <span>Enviar Pedido</span>
-            </button>
-        </div>
-    </footer>
-
-
-    <div id="product-modal-container" class="fixed inset-0 bg-white z-50 hidden opacity-0 transition-opacity duration-300">
-        <div id="product-modal-content" class="w-full h-full overflow-y-auto">
-            <!-- Contenido del modal dinámico -->
-        </div>
-    </div>
-
-    <div id="notification-modal" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-red-500 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10 z-50">
-        <p id="notification-message"></p>
-    </div>
-
-   <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- CONFIGURACIÓN DE NÚMERO DE WHATSAPP ---
-            const phoneNumber = "+573237647495";
-            
-            // --- DATOS DE PRODUCTOS ---
-            let products = [];
-            let cart = [];
-
-            // --- ELEMENTOS DEL DOM ---
-            const productList = document.getElementById('product-list');
-            const categoryFilters = document.getElementById('category-filters');
-            const sendButton = document.getElementById('send-whatsapp');
-            const notificationModal = document.getElementById('notification-modal');
-            const notificationMessage = document.getElementById('notification-message');
-            const modalContainer = document.getElementById('product-modal-container');
-            const modalContent = document.getElementById('product-modal-content');
-            const totalPriceEl = document.getElementById('total-price');
-            const footer = document.querySelector('footer');
-            let notificationTimeout;
-
-            // --- FUNCIONES AUXILIARES ---
-            const formatPrice = (price) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(price);
-            
-            const showNotification = (message) => {
-                clearTimeout(notificationTimeout);
-                notificationMessage.textContent = message;
-                notificationModal.classList.replace('opacity-0', 'opacity-100');
-                notificationModal.classList.replace('translate-y-10', 'translate-y-0');
-                notificationTimeout = setTimeout(() => {
-                    notificationModal.classList.replace('opacity-100', 'opacity-0');
-                    notificationModal.classList.replace('translate-y-0', 'translate-y-10');
-                }, 3000);
-            };
-            
-            // --- LÓGICA DE CARRITO Y TOTAL ---
-            const updateTotal = () => {
-                const total = cart.reduce((sum, item) => {
-                    const product = products.find(p => p.id === item.productId);
-                    return sum + (item.quantity * product.priceMayorista);
-                }, 0);
-                totalPriceEl.textContent = formatPrice(total);
-                footer.classList.toggle('translate-y-full', total === 0);
-            };
-            
-            const updateBadges = () => {
-                document.querySelectorAll('.quantity-badge').forEach(badge => {
-                    const productId = badge.dataset.productId;
-                    const totalQuantity = cart
-                        .filter(item => item.productId == productId)
-                        .reduce((sum, item) => sum + item.quantity, 0);
-                    
-                    if (totalQuantity > 0) {
-                        badge.textContent = totalQuantity;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
-                });
-            };
-
-            const updateCart = (productId, size, color, change) => {
-                let itemInCart = cart.find(item => 
-                    item.productId === productId && 
-                    item.size === size && 
-                    item.color === color
-                );
-                
-                if (itemInCart) {
-                    itemInCart.quantity += change;
-                    if (itemInCart.quantity <= 0) {
-                        cart = cart.filter(item => item !== itemInCart);
-                    }
-                } else if (change > 0) {
-                    cart.push({ productId, size, color, quantity: 1 });
-                }
-                updateTotal();
-                updateBadges();
-                if(!modalContainer.classList.contains('hidden')){
-                    renderVariantListInModal(productId);
-                }
-            };
-
-            // --- LÓGICA DE RENDERIZADO Y FILTROS ---
-            const renderProducts = (filter = 'Todo') => {
-                productList.innerHTML = '';
-                const filteredProducts = products.filter(p => filter === 'Todo' || p.category === filter);
-                
-                filteredProducts.forEach(product => {
-                    if (product.priceMayorista <= 0) return;
-                    
-                    const productCard = document.createElement('div');
-                    productCard.className = "product-card flex items-center p-4 gap-4 border-b last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors";
-                    productCard.dataset.productId = product.id;
-                    
-                    productCard.innerHTML = `
-                        <div class="relative flex-shrink-0">
-                            <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-24 h-24 object-cover rounded-md shadow-sm" onerror="this.src='https://via.placeholder.com/150?text=Ropa'">
-                            <div data-product-id="${product.id}" class="quantity-badge absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-md hidden">0</div>
-                        </div>
-                        <div class="flex-grow">
-                            <h3 class="text-base font-bold text-gray-800">${product.name}</h3>
-                            <div class="mt-1 flex items-start gap-4">
-                                <div>
-                                    <span class="block text-xs font-medium text-gray-500">Precio Distribuidor:</span>
-                                    <span class="text-lg font-extrabold text-emerald-600">${formatPrice(product.priceMayorista)}</span>
-                                </div>
-                                ${product.priceSugerido > 0 ? `<div>
-                                    <span class="block text-xs font-medium text-gray-500">Precio Sugerido:</span>
-                                    <span class="text-sm text-gray-600">${formatPrice(product.priceSugerido)}</span>
-                                </div>` : ''}
-                            </div>
-                        </div>
-                    `;
-                    productList.appendChild(productCard);
-                });
-                updateBadges();
-            };
-            
-            const setupCategories = () => {
-                const categories = ['Todo', ...new Set(products.filter(p => p.priceMayorista > 0).map(p => p.category))];
-                categoryFilters.innerHTML = categories.map(cat => `
-                    <button class="category-btn px-4 py-2 rounded-full font-semibold transition-colors duration-200 ${cat === 'Todo' ? 'active-category' : 'bg-white hover:bg-gray-200'}" data-category="${cat}">
-                        ${cat}
-                    </button>
-                `).join('');
-                document.querySelectorAll('.category-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const currentActive = document.querySelector('.active-category');
-                        if (currentActive) {
-                            currentActive.classList.remove('active-category');
-                            currentActive.classList.add('bg-white', 'hover:bg-gray-200');
-                        }
-                        btn.classList.remove('bg-white', 'hover:bg-gray-200');
-                        btn.classList.add('active-category');
-                        renderProducts(btn.dataset.category);
-                    });
-                });
-            };
-            
-            // --- LÓGICA DE MODAL ---
-            const renderVariantListInModal = (productId) => {
-                const variantListContainer = modalContent.querySelector('#variant-list');
-                if (!variantListContainer) return;
-
-                const variantsInCart = cart.filter(item => item.productId == productId);
-                variantListContainer.innerHTML = '';
-
-                if (variantsInCart.length > 0) {
-                    variantListContainer.innerHTML += `<h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2 border-b pb-2">Tu selección</h4>`;
-                    variantsInCart.forEach(item => {
-                        const variantItem = document.createElement('div');
-                        variantItem.className = 'flex justify-between items-center py-3 border-b';
-                        variantItem.innerHTML = `
-                            <div class="flex-grow">
-                                <p class="font-bold text-gray-800">${item.size} / ${item.color}</p>
-                            </div>
-                            <div class="flex items-center justify-center gap-1">
-                                <button class="quantity-btn decrease bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg hover:bg-gray-300" 
-                                    data-size="${item.size}" data-color="${item.color}">-</button>
-                                <input type="number" value="${item.quantity}" class="w-10 text-center rounded-md border-gray-300 py-1" readonly>
-                                <button class="quantity-btn increase bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg hover:bg-gray-300" 
-                                    data-size="${item.size}" data-color="${item.color}">+</button>
-                            </div>
-                        `;
-                        variantListContainer.appendChild(variantItem);
-                    });
-                }
-            };
-            
-            const openModal = (productId) => {
-                const product = products.find(p => p.id == productId);
-                if (!product) return;
-                
-                modalContent.innerHTML = `
-                    <div class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm p-4 border-b flex justify-between items-center">
-                        <button id="modal-back-btn" class="flex items-center gap-2 font-semibold text-gray-700 hover:text-black">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                            Volver
-                        </button>
-                        <h3 class="font-bold text-lg truncate px-4">${product.name}</h3>
-                        <div class="w-16 flex-shrink-0"></div>
+        <!-- Perfil Ampliado y Distribuido -->
+        <div class="px-5 pt-8 mb-8">
+            <div class="flex items-center mb-6 mt-2">
+                <!-- Foto y Nombre -->
+                <div class="flex items-center gap-4">
+                    <div class="w-[96px] h-[96px] rounded-full p-[3px] bg-neutral-800 shrink-0 shadow-lg">
+                        <img src="https://img.freepik.com/foto-gratis/fondo-textura-amarilla-abstracta_23-2148055552.jpg?semt=ais_hybrid&w=740&q=80" alt="Soy El Manu" class="w-full h-full object-cover rounded-full border-[3px] border-[#0a0a0a]">
                     </div>
-                    <img src="${product.imageUrl}" alt="[Imagen de ${product.name}]" class="w-full aspect-square object-cover" onerror="this.src='https://via.placeholder.com/600?text=Ropa'">
-                    <div class="p-5">
-                        <h2 class="text-3xl font-bold text-gray-800">${product.name}</h2>
-                        <p class="text-sm font-semibold text-gray-700 mt-1 uppercase tracking-wider">${product.category}</p>
-                        <div class="mt-4 flex items-end gap-6">
-                            <div>
-                                <span class="block text-sm font-semibold text-gray-500 uppercase">Precio Distribuidor:</span>
-                                <span class="text-3xl font-extrabold text-emerald-600">${formatPrice(product.priceMayorista)}</span>
-                            </div>
-                            ${product.priceSugerido > 0 ? `<div class="pb-1">
-                                <span class="block text-xs font-medium text-gray-400 uppercase">Precio Sugerido:</span>
-                                <span class="text-lg text-gray-500">${formatPrice(product.priceSugerido)}</span>
-                            </div>` : ''}
-                        </div>
-                        <p class="text-base text-gray-600 mt-6 leading-relaxed">${product.description || 'Descripción del producto no disponible.'}</p>
-                        
-                        <div class="mt-8 bg-gray-50 p-5 rounded-2xl border border-gray-100 shadow-sm">
-                            <h4 class="text-lg font-bold text-gray-800 mb-4">Selecciona Talla y Color</h4>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Talla:</label>
-                                    <select id="select-size" class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
-                                        ${product.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Color:</label>
-                                    <select id="select-color" class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
-                                        ${product.colors.map(c => `<option value="${c}">${c}</option>`).join('')}
-                                    </select>
-                                </div>
-                            </div>
-                            <button id="add-to-cart-btn" class="mt-6 w-full bg-emerald-600 text-white font-extrabold py-4 rounded-xl hover:bg-emerald-700 shadow-lg transition-all active:scale-95">
-                                Añadir al pedido
+                    <div>
+                        <p class="text-manu-main text-[11px] font-black uppercase tracking-widest mb-1">Catálogo Oficial</p>
+                        <h2 class="text-[26px] font-black text-white leading-none tracking-tight mb-2.5">Soy El Manu</h2>
+                        <div class="flex items-center gap-2">
+                            <button onclick="window.open('https://wa.me/573154870448?text=Hola%20Manu,%20vengo%20del%20catálogo', '_blank'); trackEvent('Click Perfil', 'Escribime WhatsApp')" class="bg-whatsapp-main hover:bg-whatsapp-hover text-white text-[12px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 transition shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> Escribime
+                            </button>
+                            <button onclick="window.open('https://instagram.com/soyelmanu', '_blank'); trackEvent('Click Perfil', 'Seguime Instagram')" class="bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 hover:opacity-90 text-white text-[12px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 transition shadow-sm">
+                                <i class="fa-brands fa-instagram text-sm"></i> Seguime
                             </button>
                         </div>
-                        <div id="variant-list" class="pb-12"></div>
                     </div>
-                `;
-                renderVariantListInModal(productId);
-                modalContainer.dataset.productId = productId;
-                modalContainer.classList.remove('hidden', 'opacity-0');
-                modalContent.scrollTop = 0; 
+                </div>
+            </div>
+            
+            <!-- Estadísticas distribuidas a todo lo ancho -->
+            <div class="flex justify-around items-center bg-neutral-900 rounded-[20px] py-4 border border-neutral-800 shadow-sm">
+                <div class="flex flex-col items-center w-1/2">
+                    <span class="font-black text-white text-xl">+1,315</span>
+                    <span class="text-[11px] text-neutral-400 uppercase tracking-widest font-semibold mt-1">restaurantes</span>
+                </div>
+                <div class="w-px h-10 bg-neutral-800"></div>
+                <div class="flex flex-col items-center w-1/2">
+                    <span class="font-black text-white text-xl">+90.6 mil</span>
+                    <span class="text-[11px] text-neutral-400 uppercase tracking-widest font-semibold mt-1">antojados</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slider Destacados (Banners interactivos) -->
+        <div id="banners-wrapper" class="px-5 mb-8">
+            <h1 class="text-xl font-bold text-white leading-tight mb-4">🔥 Promos Estrella</h1>
+            <div id="banners-container" class="flex overflow-x-auto gap-4 hide-scrollbar snap-x pb-2">
+                <!-- Los banners se inyectan dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Categorías Deslizables -->
+        <div class="px-5 mb-4">
+            <div class="flex overflow-x-auto gap-3 hide-scrollbar pb-2">
+                <button onclick="applyFilter('category', 'recomendados', this)" class="filter-btn active flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-star text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Populares</span>
+                </button>
+                <button onclick="applyFilter('category', 'burgers', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-burger text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Burgers</span>
+                </button>
+                <button onclick="applyFilter('category', 'pizza', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-pizza-slice text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Pizza</span>
+                </button>
+                <button onclick="applyFilter('category', 'sushi', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-bowl-rice text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Sushi</span>
+                </button>
+                <button onclick="applyFilter('category', 'mexicana', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-pepper-hot text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Mexicana</span>
+                </button>
+                <button onclick="applyFilter('category', 'salchipapas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-hotdog text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Salchipapas</span>
+                </button>
+                <button onclick="applyFilter('category', 'pollo', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-drumstick-bite text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Pollo</span>
+                </button>
+                <button onclick="applyFilter('category', 'empanadas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-utensils text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Empanadas</span>
+                </button>
+                <button onclick="applyFilter('category', 'arepas', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-plate-wheat text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Arepas</span>
+                </button>
+                <button onclick="applyFilter('category', 'almuerzos', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-bell-concierge text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Almuerzos</span>
+                </button>
+                <button onclick="applyFilter('category', 'saludable', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-leaf text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Saludable</span>
+                </button>
+                <button onclick="applyFilter('category', 'tipica', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-earth-americas text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Típica</span>
+                </button>
+                <button onclick="applyFilter('category', 'sandwich', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-bread-slice text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Sandwich</span>
+                </button>
+                <button onclick="applyFilter('category', 'parrilla', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-fire text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Parrilla</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filtros Secundarios (Zona y Precio) -->
+        <div class="px-5 mb-8 flex gap-3">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-map-location-dot text-manu-main text-xs"></i>
+                </div>
+                <select id="zone-filter" onchange="executeAllFilters()" class="w-full bg-neutral-900 border border-neutral-800 text-gray-300 text-xs font-semibold rounded-xl pl-8 pr-3 py-3 outline-none focus:border-manu-main transition appearance-none">
+                    <option value="all">Todas las Zonas</option>
+                    <option value="norte">Norte</option>
+                    <option value="sur">Sur</option>
+                    <option value="este">Este</option>
+                    <option value="oeste">Oeste</option>
+                </select>
+                <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-chevron-down text-neutral-500 text-xs"></i>
+                </div>
+            </div>
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-money-bill-wave text-green-500 text-xs"></i>
+                </div>
+                <select id="price-filter" onchange="executeAllFilters()" class="w-full bg-neutral-900 border border-neutral-800 text-gray-300 text-xs font-semibold rounded-xl pl-8 pr-3 py-3 outline-none focus:border-manu-main transition appearance-none">
+                    <option value="all">Cualquier Precio</option>
+                    <option value="low">Hasta $25.000</option>
+                    <option value="mid">$25.000 - $45.000</option>
+                    <option value="high">Más de $45.000</option>
+                </select>
+                <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-chevron-down text-neutral-500 text-xs"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenedor Principal de Elementos Filtrables -->
+        <div class="px-5 mb-8">
+            <div class="flex justify-between items-end mb-4">
+                <h3 id="section-title" class="font-bold text-white text-lg">El menú de la casa</h3>
+            </div>
+
+            <!-- Aquí se inyectan los datos del CSV dinámicamente -->
+            <div id="items-container" class="flex flex-col gap-5">
+                <div class="text-center py-10">
+                    <i class="fa-solid fa-spinner fa-spin text-manu-main text-3xl mb-3"></i>
+                    <p class="text-gray-500 font-medium text-sm">Cargando el sabor...</p>
+                </div>
+            </div>
+            
+            <!-- Mensaje cuando no hay resultados -->
+            <div id="no-results" class="hidden text-center py-10 bg-neutral-900 rounded-[20px] border border-neutral-800">
+                <i class="fa-solid fa-ghost text-neutral-600 text-4xl mb-3"></i>
+                <p class="text-gray-400 font-medium">No encontramos nada en esta categoría.</p>
+            </div>
+        </div>
+
+        <!-- Footer Call to Action -->
+        <div class="px-5 pb-8 text-center border-t border-neutral-900 pt-8 mt-4">
+            <a href="https://wa.me/573154870448?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank" onclick="trackEvent('Lead Gen', 'Quiero hacer un pedido')" class="inline-block text-manu-main text-sm font-bold hover:underline mb-4">
+                ¿Dudas con tu pedido? Escríbenos
+            </a>
+            <p class="text-[10px] text-neutral-500 leading-relaxed px-4">
+                Copyright © 2026 Soy El Manu.<br>Desarrollado con ♥ y automatizado.
+            </p>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[480px] bg-neutral-950 border-t border-neutral-900 px-6 py-2 flex justify-between items-center z-[90] rounded-t-2xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+            <button id="nav-inicio" onclick="applyFilter('all', 'all', this, true)" class="nav-btn active flex flex-col items-center p-2 text-neutral-400 hover:text-white transition">
+                <i class="fa-solid fa-house text-lg mb-1"></i>
+                <span class="text-[10px] font-bold">Inicio</span>
+            </button>
+            <button id="nav-negocios" onclick="applyFilter('type', 'menu', this, true)" class="nav-btn flex flex-col items-center p-2 text-neutral-400 hover:text-white transition">
+                <i class="fa-solid fa-burger text-lg mb-1"></i>
+                <span class="text-[10px] font-semibold">Menú</span>
+            </button>
+            <button id="nav-servicios" onclick="applyFilter('type', 'merch', this, true)" class="nav-btn flex flex-col items-center p-2 text-neutral-400 hover:text-white transition">
+                <i class="fa-solid fa-shirt text-lg mb-1"></i>
+                <span class="text-[10px] font-semibold">Merch</span>
+            </button>
+        </nav>
+
+        <!-- POP-UP (MODAL) PARA BANNERS PROMOCIONALES -->
+        <div id="promo-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+            <div class="bg-neutral-900 border border-neutral-800 rounded-3xl overflow-hidden w-full max-w-[360px] transform scale-95 transition-transform duration-300 shadow-2xl" id="promo-modal-content">
+                <!-- Imagen y Botón de cierre -->
+                <div class="relative h-72 bg-black">
+                    <img id="modal-img" src="" alt="Promo" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent pointer-events-none"></div>
+                    <button onclick="closeModal()" class="absolute top-3 right-3 bg-black/60 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black transition backdrop-blur-sm border border-neutral-700 z-10">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <!-- Contenido -->
+                <div class="p-6 relative -mt-6">
+                    <h3 id="modal-title" class="text-2xl font-black text-white mb-3 leading-tight"></h3>
+                    <p id="modal-promo" class="text-sm text-gray-300 mb-5 leading-relaxed"></p>
+                    
+                    <div class="flex items-center gap-2 text-xs text-gray-400 mb-6 bg-neutral-950 p-3 rounded-xl border border-neutral-800">
+                        <i class="fa-solid fa-location-dot text-manu-main text-lg"></i>
+                        <div>
+                            <span class="block font-bold text-white">Disponible para:</span>
+                            <span id="modal-location"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Botón WA dinámico -->
+                    <button id="modal-wa-btn" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-neutral-950 font-black py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                        <i class="fa-brands fa-whatsapp text-xl"></i> ¡Pedir ahora por WhatsApp!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script de Filtros, Métricas y Pop-ups + Lógica CSV -->
+    <script>
+        // ==========================================
+        // CONFIGURACIÓN DE BASE DE DATOS Y WEBHOOK
+        // ==========================================
+        const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrkgdIr8doylZtaGXtbcX8d9hoo61gn94Ykjoo9f444bI_ZerBCm-NfLZVmEx3uMcdU_GJPfmddDH6/pub?output=csv'; 
+        const WEBHOOK_URL = 'AQUI_PONES_EL_WEBHOOK_DE_TU_AUTOMATIZACION'; // Webhook de Make o n8n
+
+        // Adapté los datos de Fallback para incluir la nueva Columna P (Logo)
+        const fallbackCSV = `Nombre,Categoria,Tipo,Imagen,Badge,Zona,Descripcion,Ubicacion,LabelWA,WaLink,ShowBanner,PromoText,PrecioDesde,LinkIG,LinkMapa,Logo
+"Smash Doble Queso","recomendados,burgers","menu","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","Más Vendida","Norte","Doble carne smash, queso cheddar americano, tocineta crujiente y salsa Manu.","Delivery y Pick-up","Smash Doble Queso","https://wa.link/ejemplo1","1","¡Lleva papas gratis! Solo por hoy, con tu Burger te enviamos papas cortesía de la casa.","25000","https://instagram.com/soyelmanu","https://maps.google.com/?q=restaurante+norte","https://img.freepik.com/vector-gratis/diseno-logotipo-hamburguesas-dibujado-mano_23-2149321303.jpg?w=200"
+"Pizza Pepperoni Familiar","recomendados,pizza","menu","https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600","Promo","Sur","Masa madre de fermentación lenta, pomodoro italiano y extra pepperoni.","Delivery","Pizza Pepperoni","https://wa.link/ejemplo2","1","Lleva tu pizza familiar y por solo un extra, te enviamos una bebida de 1.5L. ¡Perfecta para compartir!","45000","https://instagram.com/soyelmanu","https://maps.google.com/?q=pizzeria+sur",""
+"Combo Sushi Premium","recomendados,sushi","menu","https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600","Top","Oeste","30 piezas de los mejores rollos: Filadelfia, Ojo de Tigre y Dinamita.","Delivery y Pick-up","Combo Sushi","https://wa.link/ejemplo3","1","Disfruta un 15% off en tu primer pedido de sushi. ¡Palillos y salsas incluidos en tu orden!","60000","","https://maps.google.com/?q=sushi+oeste",""
+"Tacos al Pastor (x3)","mexicana","menu","https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600","","Este","Auténticos tacos mexicanos en tortilla de maíz, piña, cilantro, cebolla y full limón.","Pick-up local","Tacos al Pastor","https://wa.link/ejemplo4","0","","22000","https://instagram.com/soyelmanu","https://maps.google.com/?q=tacos+este","https://img.freepik.com/vector-gratis/plantilla-logotipo-restaurante-retro_23-2148451519.jpg?w=200"
+"Salchipapa Salvaje","salchipapas","menu","https://images.unsplash.com/photo-1625938146369-adc83368bda7?w=600","","Sur","Cama de papas crujientes, salchicha premium, queso costeño fundido y full salsas.","Delivery","Salchipapa Salvaje","https://wa.link/ejemplo5","0","","28000","","https://maps.google.com/?q=salchipapa",""
+"Alitas BBQ (12pz)","pollo","menu","https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600","","Norte","Jugosas alitas bañadas en nuestra salsa BBQ artesanal. Incluye apio y salsa ranch.","Delivery y Pick-up","Alitas BBQ","https://wa.link/ejemplo6","0","","35000","https://instagram.com/soyelmanu","https://maps.google.com/?q=alitas",""`;
+
+        // ==========================================
+        // FUNCIONES DE MÉTRICAS Y COMPARTIR
+        // ==========================================
+        
+        async function shareApp() {
+            trackEvent('Click', 'Compartir App');
+            const shareData = {
+                title: 'Soy El Manu - Menú',
+                text: '¡Pide las mejores burgers de la ciudad directamente por aquí! 🍔🔥',
+                url: window.location.href
             };
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    trackEvent('Compartir', 'Éxito Nativo');
+                } catch (err) {
+                    console.log('Interacción de compartir cancelada o fallida:', err);
+                }
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = window.location.href;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('¡Enlace copiado al portapapeles! Listo para pegarlo.');
+                    trackEvent('Compartir', 'Copiado al Portapapeles');
+                } catch (err) {
+                    console.error('Error al copiar', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
 
-            // --- MANEJO DE EVENTOS ---
-            productList.addEventListener('click', (e) => {
-                const card = e.target.closest('.product-card');
-                if (card) openModal(card.dataset.productId);
-            });
+        function trackEvent(actionType, label, customUrl = null) {
+            const eventData = {
+                timestamp: new Date().toISOString(),
+                event_type: actionType,
+                item: label,
+                source: "App Soy El Manu"
+            };
             
-            modalContent.addEventListener('click', (e) => {
-                const productId = modalContainer.dataset.productId;
-                if (!productId) return;
+            console.log("📊 [MÉTRICA REGISTRADA]:", eventData);
 
-                if (e.target.closest('#modal-back-btn')) {
-                    modalContainer.classList.add('opacity-0');
-                    setTimeout(() => modalContainer.classList.add('hidden'), 300);
-                    return;
-                }
-
-                if (e.target.closest('#add-to-cart-btn')) {
-                    const size = modalContent.querySelector('#select-size').value;
-                    const color = modalContent.querySelector('#select-color').value;
-                    updateCart(parseInt(productId), size, color, 1);
-                    return;
-                }
-
-                const btn = e.target.closest('.quantity-btn');
-                if (btn) {
-                    const change = btn.classList.contains('increase') ? 1 : -1;
-                    const size = btn.dataset.size;
-                    const color = btn.dataset.color;
-                    updateCart(parseInt(productId), size, color, change);
-                }
-            });
-
-            sendButton.addEventListener('click', () => {
-                if (cart.length === 0) {
-                    showNotification("Por favor, añade al menos un artículo.");
-                    return;
-                }
-                
-                let message = "¡Hola! 👋 Quisiera hacer el siguiente pedido de ropa:\n\n";
-                let total = 0;
-
-                // Agrupamos por producto para que el mensaje sea más legible
-                const groupedByProduct = cart.reduce((acc, item) => {
-                    if (!acc[item.productId]) acc[item.productId] = [];
-                    acc[item.productId].push(item);
-                    return acc;
-                }, {});
-
-                for (const productId in groupedByProduct) {
-                    const product = products.find(p => p.id == productId);
-                    message += `👕 *${product.name}*\n`;
-                    groupedByProduct[productId].forEach(item => {
-                        message += `  - ${item.quantity}x (Talla: ${item.size}, Color: ${item.color})\n`;
-                        total += item.quantity * product.priceMayorista;
-                    });
-                    message += `\n`;
-                }
-                
-                message += `*Total Estimado: ${formatPrice(total)}*\n\n`;
-                message += "¡Quedo atento a la disponibilidad, gracias!";
-                
-                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-            });
-            
-            // --- FUNCIÓN PARA CONVERTIR CSV A ARRAY DE OBJETOS ---
-            function parseCSV(csvText) {
-                const lines = csvText.trim().split('\n');
-                const headers = lines.shift().split(';').map(h => h.trim());
-                const productsArray = [];
-
-                lines.forEach(row => {
-                    if (!row) return;
-                    const obj = {};
-                    const values = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-
-                    if (values.length !== headers.length) return;
-
-                    headers.forEach((header, i) => {
-                        let value = values[i].trim();
-                        if (value.startsWith('"') && value.endsWith('"')) {
-                            value = value.substring(1, value.length - 1).replace(/""/g, '"');
-                        }
-
-                        if (header === 'id' || header === 'priceMayorista' || header === 'priceSugerido') {
-                            obj[header] = parseInt(value) || 0;
-                        } else if (header === 'sizes' || header === 'colors') {
-                            // Split por tubería para las variantes
-                            obj[header] = value.split('|').map(v => v.trim()).filter(v => v !== "");
-                        } else {
-                            obj[header] = value;
-                        }
-                    });
-                    
-                    // Fallback si no hay tallas o colores definidos
-                    if (!obj.sizes || obj.sizes.length === 0) obj.sizes = ["Única"];
-                    if (!obj.colors || obj.colors.length === 0) obj.colors = ["Único"];
-                    
-                    productsArray.push(obj);
-                });
-                return productsArray;
+            // ENVÍO DE DATOS A TU AUTOMATIZACIÓN (Make/n8n)
+            if(WEBHOOK_URL !== 'AQUI_PONES_EL_WEBHOOK_DE_TU_AUTOMATIZACION') {
+                fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(eventData)
+                }).catch(err => console.error("Error enviando métrica al webhook:", err));
             }
 
-            // --- INICIALIZACIÓN ---
-            async function initializeApp() {
+            if(actionType.includes('WhatsApp')) {
+                let urlToOpen = customUrl;
+                if (!urlToOpen) {
+                    const mensaje = encodeURIComponent(`Hola Manu, vengo de la App y me gustaría pedir: ${label}.`);
+                    urlToOpen = `https://wa.me/573154870448?text=${mensaje}`;
+                }
+                window.open(urlToOpen, '_blank');
+            }
+        }
+
+        // ==========================================
+        // LÓGICA DE CARGA Y PARSEO DEL CSV
+        // ==========================================
+        function parseCSV(text) {
+            const rows = [];
+            let currentRow = [];
+            let currentCell = '';
+            let insideQuotes = false;
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (insideQuotes) {
+                    if (char === '"' && i + 1 < text.length && text[i + 1] === '"') {
+                        currentCell += '"'; i++;
+                    } else if (char === '"') {
+                        insideQuotes = false;
+                    } else {
+                        currentCell += char;
+                    }
+                } else {
+                    if (char === '"') insideQuotes = true;
+                    else if (char === ',') { currentRow.push(currentCell); currentCell = ''; }
+                    else if (char === '\n' || char === '\r') {
+                        if (char === '\r' && i + 1 < text.length && text[i + 1] === '\n') i++;
+                        currentRow.push(currentCell);
+                        if(currentRow.join('').trim() !== '') rows.push(currentRow);
+                        currentRow = []; currentCell = '';
+                    } else {
+                        currentCell += char;
+                    }
+                }
+            }
+            if (currentRow.length > 0 || currentCell !== '') {
+                currentRow.push(currentCell);
+                rows.push(currentRow);
+            }
+            return rows;
+        }
+
+        async function loadBusinesses() {
+            let csvText = fallbackCSV;
+            
+            if(sheetURL !== 'TU_ENLACE_A_GOOGLE_SHEETS_CSV') {
                 try {
-                    const response = await fetch('productos.csv', { cache: 'no-store' });
-                    if (!response.ok) throw new Error("Archivo no encontrado");
+                    const response = await fetch(sheetURL);
+                    if(response.ok) csvText = await response.text();
+                } catch(e) {
+                    console.warn("Usando base de datos local (Fallback)");
+                }
+            }
+            
+            const data = parseCSV(csvText);
+            renderItems(data);
+            
+            const btnRecomendados = document.querySelector('.filter-btn.active');
+            if(btnRecomendados) {
+                applyFilter('category', 'recomendados', btnRecomendados);
+            }
 
-                    const buffer = await response.arrayBuffer();
-                    const decoder = new TextDecoder('windows-1252'); 
-                    const csvData = decoder.decode(buffer); 
+            // Iniciar el auto-scroll de los banners
+            startAutoScroll();
+        }
+
+        // Variable para controlar el intervalo del slider
+        let autoScrollInterval;
+
+        function startAutoScroll() {
+            const container = document.getElementById('banners-container');
+            // Si no hay banners o solo hay 1, no hace falta slider
+            if (!container || container.children.length <= 1) return;
+
+            // Limpiamos cualquier intervalo previo por seguridad
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+
+            autoScrollInterval = setInterval(() => {
+                const banners = container.children;
+                
+                // Detección absoluta del borde final:
+                const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 10;
+                
+                let nextIndex = 0; // Por defecto volvemos al inicio
+
+                // Si NO estamos en el final absoluto, buscamos el siguiente banner normal
+                if (!isAtEnd) {
+                    const containerCenter = container.scrollLeft + (container.clientWidth / 2);
                     
-                    products = parseCSV(csvData);
-                    setupCategories();
-                    renderProducts();
-                    updateTotal();
+                    for (let i = 0; i < banners.length; i++) {
+                        const bannerCenter = banners[i].offsetLeft + (banners[i].clientWidth / 2);
+                        
+                        if (bannerCenter > containerCenter + 20) {
+                            nextIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    // Medida de seguridad extra
+                    if (nextIndex === banners.length - 1 && banners[nextIndex].offsetLeft - container.scrollLeft <= 50) {
+                        nextIndex = 0;
+                    }
+                }
 
-                } catch (error) {
-                    console.error("Error al inicializar la app:", error);
-                    productList.innerHTML = `<div class="p-10 text-center">
-                        <p class="text-red-600 font-bold text-lg">❌ Error al cargar productos</p>
-                        <p class="text-gray-500 mt-2">Verifica que 'productos.csv' esté presente.</p>
+                // Ejecutamos el movimiento
+                const targetBanner = banners[nextIndex];
+                const exactScrollPosition = targetBanner.offsetLeft - (container.clientWidth / 2) + (targetBanner.clientWidth / 2);
+
+                container.scrollTo({
+                    left: exactScrollPosition,
+                    behavior: 'smooth'
+                });
+
+            }, 7000); // 7 segundos
+        }
+
+        function renderItems(rows) {
+            const container = document.getElementById('items-container');
+            const bannersContainer = document.getElementById('banners-container');
+            const bannersWrapper = document.getElementById('banners-wrapper');
+            
+            container.innerHTML = ''; 
+            bannersContainer.innerHTML = ''; 
+            
+            let bannersCount = 0; 
+            
+            for (let i = 1; i < rows.length; i++) {
+                const cols = rows[i];
+                if (cols.length < 2) continue;
+
+                const nombre = cols[0];
+                const categoria = cols[1];
+                const tipo = cols[2];
+                let imagen = cols[3] ? cols[3].trim() : '';
+                const badge = cols[4];
+                const zona = cols[5] ? cols[5].trim() : ''; // Columna F (Antes Estado)
+                const descripcion = cols[6];
+                const ubicacion = cols[7] ? cols[7].trim() : '';
+                const labelWa = cols[8] ? cols[8].trim() : '';
+                let walink = cols[9] ? cols[9].trim() : ''; 
+                const showBanner = cols[10] ? cols[10].trim() : '0'; 
+                let promoText = cols[11] ? cols[11].trim() : descripcion; 
+                let precioDesde = cols[12] ? cols[12].trim() : ''; // Columna M
+                let linkIg = cols[13] ? cols[13].trim() : ''; // Columna N
+                let linkMapa = cols[14] ? cols[14].trim() : ''; // Columna O
+                let logo = cols[15] ? cols[15].trim() : ''; // NUEVA: Columna P (Logo)
+
+                // --- LIMPIEZA DE ENLACES EXTERNOS ---
+                linkIg = linkIg.replace(/^["']+|["']+$/g, '');
+                try { linkIg = decodeURIComponent(linkIg); } catch(e) {}
+                
+                linkMapa = linkMapa.replace(/^["']+|["']+$/g, '');
+                try { linkMapa = decodeURIComponent(linkMapa); } catch(e) {}
+
+                logo = logo.replace(/^["']+|["']+$/g, '');
+                try { logo = decodeURIComponent(logo); } catch(e) {}
+
+                // --- FORMATEO DEL PRECIO EN PESOS COLOMBIANOS ---
+                let precioHTML = '';
+                if (precioDesde) {
+                    // Quitar cualquier caracter que no sea número
+                    const precioNumerico = parseInt(precioDesde.replace(/\D/g, ''), 10);
+                    if (!isNaN(precioNumerico)) {
+                        // Formatear a moneda colombiana
+                        const precioFormateado = new Intl.NumberFormat('es-CO', {
+                            style: 'currency',
+                            currency: 'COP',
+                            maximumFractionDigits: 0
+                        }).format(precioNumerico);
+                        
+                        precioHTML = `
+                        <div class="flex items-center gap-1.5 text-xs text-green-400 mb-5 font-bold">
+                            <i class="fa-solid fa-money-bill-wave"></i> Platos desde ${precioFormateado}
+                        </div>`;
+                    }
+                } else {
+                     precioHTML = `<div class="mb-5"></div>`;
+                }
+
+                // --- LIMPIEZA AUTOMÁTICA DE URL DE IMAGEN ---
+                imagen = imagen.replace(/^["']+|["']+$/g, '');
+                if (imagen.includes('google.com/url?')) {
+                    const qs = imagen.split('?')[1];
+                    if(qs) {
+                        const params = new URLSearchParams(qs);
+                        if(params.has('q')) imagen = params.get('q');
+                        else if(params.has('url')) imagen = params.get('url');
+                    }
+                } else if (imagen.includes('google.com/search?q=')) {
+                    imagen = decodeURIComponent(imagen.split('q=')[1].split('&')[0]);
+                }
+                try { imagen = decodeURIComponent(imagen); } catch(e) {}
+                if (imagen.startsWith('http://')) {
+                    imagen = imagen.replace('http://', 'https://');
+                }
+
+                // --- LIMPIEZA AUTOMÁTICA DEL WALINK ---
+                walink = walink.replace(/^["']+|["']+$/g, '');
+                if (walink.includes('google.com/url?')) {
+                    const qs = walink.split('?')[1];
+                    if(qs) {
+                        const params = new URLSearchParams(qs);
+                        if(params.has('q')) walink = params.get('q');
+                        else if(params.has('url')) walink = params.get('url');
+                    }
+                }
+                try { walink = decodeURIComponent(walink); } catch(e) {}
+
+                // Lógica de Zona con enlace a Maps (Reemplaza al antiguo Estado)
+                let zonaHTML = '';
+                if(zona) {
+                    zonaHTML = `
+                    <a href="${linkMapa || '#'}" target="_blank" onclick="event.stopPropagation(); trackEvent('Click Mapa', '${nombre.replace(/'/g, "\\'")}');" class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wide whitespace-nowrap flex items-center gap-1.5 hover:bg-blue-500/20 transition">
+                        <i class="fa-solid fa-location-dot"></i> ${zona}
+                    </a>`;
+                }
+
+                // Lógica de Badge
+                let badgeHTML = '';
+                if(badge) {
+                    badgeHTML = `
+                    <div class="absolute top-3 left-3 bg-manu-main text-black text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg flex items-center gap-1 z-10">
+                        <i class="fa-solid fa-fire"></i> ${badge}
                     </div>`;
                 }
+
+                // Lógica de Logo
+                let logoHTML = '';
+                if(logo) {
+                    logoHTML = `
+                    <div class="absolute top-3 right-3 w-[42px] h-[42px] rounded-full border-[3px] border-manu-main shadow-lg bg-neutral-900 overflow-hidden z-10 flex items-center justify-center">
+                        <img src="${logo}" alt="Logo Negocio" class="w-full h-full object-cover">
+                    </div>`;
+                }
+
+                // --- INYECCIÓN DE BANNER DESTACADO ---
+                if (showBanner === '1') {
+                    bannersCount++;
+                    const safeNombre = nombre.replace(/'/g, "\\'");
+                    const safePromo = promoText.replace(/'/g, "\\'");
+                    const safeUbicacion = ubicacion.replace(/'/g, "\\'");
+                    const safeLabelWa = labelWa.replace(/'/g, "\\'");
+                    const safeImagen = imagen.replace(/'/g, "\\'"); 
+                    const safeWalink = walink.replace(/'/g, "\\'"); 
+                    
+                    const bannerHTML = `
+                    <div onclick="openModal('${safeNombre}', '${safeImagen}', '${safePromo}', '${safeUbicacion}', '${safeLabelWa}', '${safeWalink}')" class="snap-center shrink-0 w-64 h-36 rounded-2xl relative overflow-hidden bg-neutral-900 border border-neutral-800 shadow-lg cursor-pointer transition hover:opacity-90">
+                        <img src="${imagen}" alt="${nombre}" class="absolute inset-0 w-full h-full object-cover opacity-60">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                        ${logoHTML}
+                        <div class="absolute bottom-4 left-4 text-white w-full pr-4 z-10">
+                            <h2 class="text-xl font-bold leading-tight">${nombre}</h2>
+                            <p class="text-xs text-manu-main font-semibold mt-1">Ver promoción →</p>
+                        </div>
+                    </div>`;
+                    bannersContainer.innerHTML += bannerHTML;
+                }
+
+                // Recreación del <article> adaptada
+                const article = document.createElement('article');
+                article.className = 'list-item bg-neutral-900 rounded-[20px] overflow-hidden shadow-md border border-neutral-800';
+                article.dataset.category = categoria;
+                article.dataset.type = tipo;
+                article.dataset.zona = zona;
+                article.dataset.price = precioDesde || '0';
+
+                article.innerHTML = `
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="${imagen}" alt="${nombre}" class="w-full h-full object-cover transition hover:scale-105 duration-500">
+                        ${badgeHTML}
+                        ${logoHTML}
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg text-white">${nombre}</h4>
+                            ${zonaHTML}
+                        </div>
+                        <p class="text-sm text-neutral-400 mb-3 leading-relaxed">${descripcion}</p>
+                        <div class="flex items-center gap-1.5 text-xs text-neutral-500 font-medium ${precioDesde ? 'mb-1' : 'mb-5'}">
+                            <i class="fa-solid fa-location-dot text-manu-dark"></i> ${ubicacion}
+                        </div>
+                        ${precioHTML}
+                        <div class="flex items-center gap-2 w-full">
+                            <button onclick="trackEvent('Conversión - WhatsApp', '${labelWa.replace(/'/g, "\\'")}', '${walink}')" class="flex-1 bg-whatsapp-main hover:bg-whatsapp-hover text-neutral-950 font-black py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-[0_0_10px_rgba(37,211,102,0.2)]">
+                                <i class="fa-brands fa-whatsapp text-xl"></i> Pedir por WhatsApp
+                            </button>
+                            ${linkIg ? `
+                            <button onclick="window.open('${linkIg}', '_blank'); trackEvent('Redirección - Instagram', '${labelWa.replace(/'/g, "\\'")}', '${linkIg}')" class="w-12 h-[48px] shrink-0 bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 hover:opacity-90 text-white rounded-xl flex items-center justify-center transition shadow-md">
+                                <i class="fa-brands fa-instagram text-[24px]"></i>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(article);
+            }
+            
+            if(bannersCount === 0) {
+                bannersWrapper.style.display = 'none';
+            } else {
+                bannersWrapper.style.display = 'block';
+            }
+        }
+
+        // ==========================================
+        // LÓGICA DE FILTRADO COMBINADO Y MODALES
+        // ==========================================
+        
+        let globalCategory = 'recomendados';
+        let globalType = 'all';
+
+        function applyFilter(filterType, filterValue, buttonElement, isBottomNav = false) {
+            trackEvent('Filtro', `Aplicado: ${filterValue}`);
+
+            if (isBottomNav) {
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'text-white'));
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.add('text-neutral-400'));
+                
+                buttonElement.classList.remove('text-neutral-400');
+                buttonElement.classList.add('active', 'text-white');
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            } else {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                buttonElement.classList.add('active');
+
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'text-white'));
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.add('text-neutral-400'));
             }
 
-            initializeApp();
-        });
-    </script>
+            const titleElement = document.getElementById('section-title');
+            if (filterValue === 'all') {
+                titleElement.innerText = 'El menú de la casa';
+            } else if (filterType === 'type' && filterValue === 'menu') {
+                titleElement.innerText = 'Nuestro Menú';
+            } else if (filterType === 'type' && filterValue === 'merch') {
+                titleElement.innerText = 'Merch Oficial';
+            } else {
+                titleElement.innerText = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
+            }
 
+            // Actualizar variables globales de estado de navegación
+            if (filterType === 'category') {
+                globalCategory = filterValue;
+                globalType = 'all';
+            } else if (filterType === 'type') {
+                globalType = filterValue;
+                globalCategory = 'all';
+            } else if (filterType === 'all') {
+                globalCategory = 'all';
+                globalType = 'all';
+            }
+
+            // Llamar a la función que cruza todos los filtros
+            executeAllFilters();
+        }
+
+        function executeAllFilters() {
+            const zoneFilter = document.getElementById('zone-filter').value;
+            const priceFilter = document.getElementById('price-filter').value;
+            const items = document.querySelectorAll('.list-item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                let shouldShow = true;
+                
+                // 1. Filtro Principal (Categoría o Menú/Merch)
+                if (globalType !== 'all') {
+                    if (item.dataset.type !== globalType) shouldShow = false;
+                } else if (globalCategory !== 'all') {
+                    const categories = item.dataset.category.split(',');
+                    if (!categories.includes(globalCategory)) shouldShow = false;
+                }
+
+                // 2. Filtro de Zona
+                if (zoneFilter !== 'all' && item.dataset.zona.toLowerCase() !== zoneFilter) {
+                    shouldShow = false;
+                }
+
+                // 3. Filtro de Rango de Precio
+                if (priceFilter !== 'all') {
+                    const price = parseInt(item.dataset.price) || 0;
+                    if (priceFilter === 'low' && price > 25000) shouldShow = false;
+                    if (priceFilter === 'mid' && (price < 25000 || price > 45000)) shouldShow = false;
+                    if (priceFilter === 'high' && price <= 45000) shouldShow = false;
+                }
+
+                if (shouldShow) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const noResults = document.getElementById('no-results');
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+
+        function openModal(title, image, promo, location, labelWa, walink) {
+            trackEvent('Pop-up Banner', `Abierto: ${title}`);
+            
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-promo').innerText = promo;
+            document.getElementById('modal-location').innerText = location;
+            
+            const imgEl = document.getElementById('modal-img');
+            imgEl.src = image;
+            
+            const waBtn = document.getElementById('modal-wa-btn');
+            waBtn.onclick = function() {
+                trackEvent('Conversión - WhatsApp (Banner Promo)', labelWa, walink);
+            };
+
+            const modal = document.getElementById('promo-modal');
+            const modalContent = document.getElementById('promo-modal-content');
+            
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('promo-modal');
+            const modalContent = document.getElementById('promo-modal-content');
+            
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Inicialización
+        window.onload = () => {
+            trackEvent('Tráfico', 'Visita Inicial App Manu');
+            loadBusinesses();
+        };
+
+    </script>
 </body>
 </html>
