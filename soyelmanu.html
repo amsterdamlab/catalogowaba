@@ -15,9 +15,9 @@
                 extend: {
                     colors: {
                         manu: {
-                            light: '#fef08a', // yellow-200
-                            main: '#facc15',  // yellow-400 (Color principal del perfil)
-                            dark: '#ca8a04',  // yellow-600
+                            light: '#fef08a', 
+                            main: '#facc15',  
+                            dark: '#ca8a04',  
                         },
                         whatsapp: {
                             main: '#25D366',
@@ -40,7 +40,7 @@
         #app-container { 
             max-width: 480px; 
             margin: 0 auto; 
-            background-color: #0a0a0a; /* neutral-950 */
+            background-color: #0a0a0a;
             min-height: 100vh; 
             position: relative; 
             padding-bottom: 80px; 
@@ -50,7 +50,7 @@
 
         /* Clase para el botón activo del menú */
         .filter-btn.active {
-            background-color: #facc15; /* manu-main */
+            background-color: #facc15;
             color: #000000;
             border-color: #facc15;
         }
@@ -79,17 +79,17 @@
             <div class="flex items-center mb-6 mt-2">
                 <!-- Foto y Nombre -->
                 <div class="flex items-center gap-4">
-                    <div class="w-[96px] h-[96px] rounded-full p-[3px] bg-neutral-800 shrink-0 shadow-lg">
-                        <img src="https://img.freepik.com/foto-gratis/fondo-textura-amarilla-abstracta_23-2148055552.jpg?semt=ais_hybrid&w=740&q=80" alt="Soy El Manu" class="w-full h-full object-cover rounded-full border-[3px] border-[#0a0a0a]">
+                    <div class="w-[96px] h-[96px] rounded-full p-[4px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 shrink-0 shadow-lg">
+                        <img src="https://img.freepik.com/foto-gratis/fondo-textura-amarilla-abstracta_23-2148055552.jpg?semt=ais_hybrid&w=740&q=80" alt="Soy El Manu" class="w-full h-full object-cover rounded-full border-[4px] border-[#0a0a0a]">
                     </div>
                     <div>
-                        <p class="text-manu-main text-[11px] font-black uppercase tracking-widest mb-1">Ojo con el dato</p>
+                        <p class="text-manu-main text-[11px] font-black uppercase tracking-widest mb-1">Catálogo Oficial</p>
                         <h2 class="text-[26px] font-black text-white leading-none tracking-tight mb-2.5">Soy El Manu</h2>
                         <div class="flex items-center gap-2">
                             <button onclick="window.open('https://wa.me/573154870448?text=Hola%20Manu,%20vengo%20del%20catálogo', '_blank'); trackEvent('Click Perfil', 'Escribime WhatsApp')" class="bg-whatsapp-main hover:bg-whatsapp-hover text-white text-[12px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 transition shadow-sm">
                                 <i class="fa-brands fa-whatsapp text-sm"></i> Escribime
                             </button>
-                            <button onclick="window.open('https://instagram.com/', '_blank'); trackEvent('Click Perfil', 'Seguime Instagram')" class="bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 hover:opacity-90 text-white text-[12px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 transition shadow-sm">
+                            <button onclick="window.open('https://instagram.com/soyelmanu', '_blank'); trackEvent('Click Perfil', 'Seguime Instagram')" class="bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 hover:opacity-90 text-white text-[12px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 transition shadow-sm">
                                 <i class="fa-brands fa-instagram text-sm"></i> Seguime
                             </button>
                         </div>
@@ -115,16 +115,20 @@
         <div id="banners-wrapper" class="px-5 mb-8">
             <h1 class="text-xl font-bold text-white leading-tight mb-4">🔥 Promos Estrella</h1>
             <div id="banners-container" class="flex overflow-x-auto gap-4 hide-scrollbar snap-x pb-2">
-                <!-- Los banners se inyectan dinámicamente desde el CSV si tienen 1 en la columna ShowBanner -->
+                <!-- Los banners se inyectan dinámicamente -->
             </div>
         </div>
 
         <!-- Categorías Deslizables -->
-        <div class="px-5 mb-6">
+        <div class="px-5 mb-4">
             <div class="flex overflow-x-auto gap-3 hide-scrollbar pb-2">
                 <button onclick="applyFilter('category', 'recomendados', this)" class="filter-btn active flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
                     <i class="fa-solid fa-star text-manu-main text-sm transition"></i>
                     <span class="text-[13px] font-semibold text-gray-300 transition">Populares</span>
+                </button>
+                <button onclick="applyFilter('category', 'all', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
+                    <i class="fa-solid fa-border-all text-manu-main text-sm transition"></i>
+                    <span class="text-[13px] font-semibold text-gray-300 transition">Todo</span>
                 </button>
                 <button onclick="applyFilter('category', 'burgers', this)" class="filter-btn flex shrink-0 items-center gap-2 bg-neutral-900 px-4 py-2.5 rounded-full shadow-sm border border-neutral-800 transition">
                     <i class="fa-solid fa-burger text-manu-main text-sm transition"></i>
@@ -181,6 +185,39 @@
             </div>
         </div>
 
+        <!-- Filtros Secundarios (Zona y Precio) -->
+        <div class="px-5 mb-8 flex gap-3">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-map-location-dot text-manu-main text-xs"></i>
+                </div>
+                <select id="zone-filter" onchange="executeAllFilters()" class="w-full bg-neutral-900 border border-neutral-800 text-gray-300 text-xs font-semibold rounded-xl pl-8 pr-3 py-3 outline-none focus:border-manu-main transition appearance-none">
+                    <option value="all">Todas las Zonas</option>
+                    <option value="norte">Norte</option>
+                    <option value="sur">Sur</option>
+                    <option value="este">Este</option>
+                    <option value="oeste">Oeste</option>
+                </select>
+                <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-chevron-down text-neutral-500 text-xs"></i>
+                </div>
+            </div>
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-money-bill-wave text-green-500 text-xs"></i>
+                </div>
+                <select id="price-filter" onchange="executeAllFilters()" class="w-full bg-neutral-900 border border-neutral-800 text-gray-300 text-xs font-semibold rounded-xl pl-8 pr-3 py-3 outline-none focus:border-manu-main transition appearance-none">
+                    <option value="all">Cualquier Precio</option>
+                    <option value="low">Hasta $25.000</option>
+                    <option value="mid">$25.000 - $45.000</option>
+                    <option value="high">Más de $45.000</option>
+                </select>
+                <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-chevron-down text-neutral-500 text-xs"></i>
+                </div>
+            </div>
+        </div>
+
         <!-- Contenedor Principal de Elementos Filtrables -->
         <div class="px-5 mb-8">
             <div class="flex justify-between items-end mb-4">
@@ -195,7 +232,7 @@
                 </div>
             </div>
             
-            <!-- Mensaje cuando no hay resultados (oculto por defecto) -->
+            <!-- Mensaje cuando no hay resultados -->
             <div id="no-results" class="hidden text-center py-10 bg-neutral-900 rounded-[20px] border border-neutral-800">
                 <i class="fa-solid fa-ghost text-neutral-600 text-4xl mb-3"></i>
                 <p class="text-gray-400 font-medium">No encontramos nada en esta categoría.</p>
@@ -205,10 +242,10 @@
         <!-- Footer Call to Action -->
         <div class="px-5 pb-8 text-center border-t border-neutral-900 pt-8 mt-4">
             <a href="https://wa.me/573154870448?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank" onclick="trackEvent('Lead Gen', 'Quiero hacer un pedido')" class="inline-block text-manu-main text-sm font-bold hover:underline mb-4">
-                ¿Dudas con tu pedido? Escríbenos
+                ¿Quieres estar aquí con tu restaurante? Escríbenos
             </a>
             <p class="text-[10px] text-neutral-500 leading-relaxed px-4">
-                Copyright © 2026 Soy El Manu.<br>Desarrollado con ♥ y automatizado.
+                Copyright © 2026 Soy El Manu.<br>Desarrollado por BLU PARTNERS ♥ I 315 487 0448.
             </p>
         </div>
 
@@ -231,12 +268,9 @@
         <!-- POP-UP (MODAL) PARA BANNERS PROMOCIONALES -->
         <div id="promo-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
             <div class="bg-neutral-900 border border-neutral-800 rounded-3xl overflow-hidden w-full max-w-[360px] transform scale-95 transition-transform duration-300 shadow-2xl" id="promo-modal-content">
-                <!-- Imagen/Video y Botón de cierre -->
-                <div class="relative h-72 bg-black"> <!-- Aumentado a h-72 para mejor vista de Reels -->
+                <!-- Imagen y Botón de cierre -->
+                <div class="relative h-72 bg-black">
                     <img id="modal-img" src="" alt="Promo" class="w-full h-full object-cover">
-                    <!-- Iframe para Instagram -->
-                    <iframe id="modal-video" src="" class="hidden w-full h-full border-0 pointer-events-auto bg-black" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen allowtransparency="true" scrolling="no" frameborder="0"></iframe>
-                    
                     <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent pointer-events-none"></div>
                     <button onclick="closeModal()" class="absolute top-3 right-3 bg-black/60 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black transition backdrop-blur-sm border border-neutral-700 z-10">
                         <i class="fa-solid fa-xmark"></i>
@@ -273,17 +307,19 @@
         const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrkgdIr8doylZtaGXtbcX8d9hoo61gn94Ykjoo9f444bI_ZerBCm-NfLZVmEx3uMcdU_GJPfmddDH6/pub?output=csv'; 
         const WEBHOOK_URL = 'AQUI_PONES_EL_WEBHOOK_DE_TU_AUTOMATIZACION'; // Webhook de Make o n8n
 
-        // Adapté los datos de Fallback para usar las nuevas categorías y mostrar variedad gastronómica + Columna PrecioDesde
-        const fallbackCSV = `Nombre,Categoria,Tipo,Imagen,Badge,Estado,Descripcion,Ubicacion,LabelWA,WaLink,ShowBanner,PromoText,VideoIG,PrecioDesde
-"Smash Doble Queso","recomendados,burgers","menu","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","Más Vendida","Disponible","Doble carne smash, queso cheddar americano, tocineta crujiente y salsa Manu.","Delivery y Pick-up","Smash Doble Queso","https://wa.link/ejemplo1","1","¡Lleva papas gratis! Solo por hoy, con tu Burger te enviamos papas cortesía de la casa.","https://www.instagram.com/reel/C8-xV6rNXYa/","25000"
-"Pizza Pepperoni Familiar","recomendados,pizza","menu","https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600","Promo","Disponible","Masa madre de fermentación lenta, pomodoro italiano y extra pepperoni.","Delivery","Pizza Pepperoni","https://wa.link/ejemplo2","1","Lleva tu pizza familiar y por solo un extra, te enviamos una bebida de 1.5L. ¡Perfecta para compartir!","","45000"
-"Combo Sushi Premium","recomendados,sushi","menu","https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600","Top","Disponible","30 piezas de los mejores rollos: Filadelfia, Ojo de Tigre y Dinamita.","Delivery y Pick-up","Combo Sushi","https://wa.link/ejemplo3","1","Disfruta un 15% off en tu primer pedido de sushi. ¡Palillos y salsas incluidos en tu orden!","","60000"
-"Tacos al Pastor (x3)","mexicana","menu","https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600","","Disponible","Auténticos tacos mexicanos en tortilla de maíz, piña, cilantro, cebolla y full limón.","Pick-up local","Tacos al Pastor","https://wa.link/ejemplo4","0","","","22000"
-"Salchipapa Salvaje","salchipapas","menu","https://images.unsplash.com/photo-1625938146369-adc83368bda7?w=600","","Disponible","Cama de papas crujientes, salchicha premium, queso costeño fundido y full salsas.","Delivery","Salchipapa Salvaje","https://wa.link/ejemplo5","0","","","28000"
-"Alitas BBQ (12pz)","pollo","menu","https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600","","Solo Jueves","Jugosas alitas bañadas en nuestra salsa BBQ artesanal. Incluye apio y salsa ranch.","Delivery y Pick-up","Alitas BBQ","https://wa.link/ejemplo6","0","","","35000"`;
+        // Adapté los datos de Fallback para incluir la nueva Columna P (Logo) y las empanadas/arepas
+        const fallbackCSV = `Nombre,Categoria,Tipo,Imagen,Badge,Zona,Descripcion,Ubicacion,LabelWA,WaLink,ShowBanner,PromoText,PrecioDesde,LinkIG,LinkMapa,Logo
+"Smash Doble Queso","recomendados,burgers","menu","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","Más Vendida","Norte","Doble carne smash, queso cheddar americano, tocineta crujiente y salsa Manu.","Delivery y Pick-up","Smash Doble Queso","https://wa.link/ejemplo1","1","¡Lleva papas gratis! Solo por hoy, con tu Burger te enviamos papas cortesía de la casa.","25000","https://instagram.com/soyelmanu","https://maps.google.com/?q=restaurante+norte","https://img.freepik.com/vector-gratis/diseno-logotipo-hamburguesas-dibujado-mano_23-2149321303.jpg?w=200"
+"Pizza Pepperoni Familiar","recomendados,pizza","menu","https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600","Promo","Sur","Masa madre de fermentación lenta, pomodoro italiano y extra pepperoni.","Delivery","Pizza Pepperoni","https://wa.link/ejemplo2","1","Lleva tu pizza familiar y por solo un extra, te enviamos una bebida de 1.5L. ¡Perfecta para compartir!","45000","https://instagram.com/soyelmanu","https://maps.google.com/?q=pizzeria+sur",""
+"Combo Sushi Premium","recomendados,sushi","menu","https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600","Top","Oeste","30 piezas de los mejores rollos: Filadelfia, Ojo de Tigre y Dinamita.","Delivery y Pick-up","Combo Sushi","https://wa.link/ejemplo3","1","Disfruta un 15% off en tu primer pedido de sushi. ¡Palillos y salsas incluidos en tu orden!","60000","","https://maps.google.com/?q=sushi+oeste",""
+"Tacos al Pastor (x3)","mexicana","menu","https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600","","Este","Auténticos tacos mexicanos en tortilla de maíz, piña, cilantro, cebolla y full limón.","Pick-up local","Tacos al Pastor","https://wa.link/ejemplo4","0","","22000","https://instagram.com/soyelmanu","https://maps.google.com/?q=tacos+este","https://img.freepik.com/vector-gratis/plantilla-logotipo-restaurante-retro_23-2148451519.jpg?w=200"
+"Empanadas Vallunas (x10)","empanadas,tipica","menu","https://images.unsplash.com/photo-1541529086526-db283c563270?w=600","Caleñas","Sur","Crocantes empanadas de maíz con guiso de carne y papa. Acompañadas de ají pique.","Delivery","Empanadas Vallunas","https://wa.link/ejemplo7","0","","15000","https://instagram.com/soyelmanu","https://maps.google.com/?q=empanadas",""
+"Arepa Rellena Todo Terreno","arepas,tipica","menu","https://images.unsplash.com/photo-1615870216519-2f9fa575fa5c?w=600","Promo","Norte","Arepa de maíz asada al carbón, rellena de carne desmechada, chicharrón, pollo y queso.","Pick-up local","Arepa Todo Terreno","https://wa.link/ejemplo8","0","","18000","https://instagram.com/soyelmanu","https://maps.google.com/?q=arepas",""
+"Salchipapa Salvaje","salchipapas","menu","https://images.unsplash.com/photo-1625938146369-adc83368bda7?w=600","","Sur","Cama de papas crujientes, salchicha premium, queso costeño fundido y full salsas.","Delivery","Salchipapa Salvaje","https://wa.link/ejemplo5","0","","28000","","https://maps.google.com/?q=salchipapa",""
+"Alitas BBQ (12pz)","pollo","menu","https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600","","Norte","Jugosas alitas bañadas en nuestra salsa BBQ artesanal. Incluye apio y salsa ranch.","Delivery y Pick-up","Alitas BBQ","https://wa.link/ejemplo6","0","","35000","https://instagram.com/soyelmanu","https://maps.google.com/?q=alitas",""`;
 
         // ==========================================
-        // FUNCIONES ORIGINALES MODIFICADAS PARA WEBHOOK
+        // FUNCIONES DE MÉTRICAS Y COMPARTIR
         // ==========================================
         
         async function shareApp() {
@@ -404,7 +440,7 @@
                 applyFilter('category', 'recomendados', btnRecomendados);
             }
 
-            // Iniciar el auto-scroll de los banners después de renderizarlos
+            // Iniciar el auto-scroll de los banners
             startAutoScroll();
         }
 
@@ -422,13 +458,12 @@
             autoScrollInterval = setInterval(() => {
                 const banners = container.children;
                 
-                // 1. Detección absoluta del borde final:
-                // Sumamos el scroll actual + el ancho visible. Si es igual o mayor al ancho total del contenido (con 10px de margen de error), ¡llegamos al final!
+                // Detección absoluta del borde final:
                 const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 10;
                 
-                let nextIndex = 0; // Por defecto volvemos al inicio (índice 0)
+                let nextIndex = 0; // Por defecto volvemos al inicio
 
-                // 2. Si NO estamos en el final absoluto, buscamos el siguiente banner normal
+                // Si NO estamos en el final absoluto, buscamos el siguiente banner normal
                 if (!isAtEnd) {
                     const containerCenter = container.scrollLeft + (container.clientWidth / 2);
                     
@@ -441,14 +476,13 @@
                         }
                     }
                     
-                    // Medida de seguridad extra por si el cálculo de centros falla en el último ítem
-                    // forzando un reinicio si el "siguiente" que encontró es el mismo en el que ya estamos atascados
+                    // Medida de seguridad extra
                     if (nextIndex === banners.length - 1 && banners[nextIndex].offsetLeft - container.scrollLeft <= 50) {
                         nextIndex = 0;
                     }
                 }
 
-                // 3. Ejecutamos el movimiento
+                // Ejecutamos el movimiento
                 const targetBanner = banners[nextIndex];
                 const exactScrollPosition = targetBanner.offsetLeft - (container.clientWidth / 2) + (targetBanner.clientWidth / 2);
 
@@ -457,7 +491,7 @@
                     behavior: 'smooth'
                 });
 
-            }, 7000); // 7000 milisegundos = 7 segundos
+            }, 7000); // 7 segundos
         }
 
         function renderItems(rows) {
@@ -479,27 +513,39 @@
                 const tipo = cols[2];
                 let imagen = cols[3] ? cols[3].trim() : '';
                 const badge = cols[4];
-                const estado = cols[5];
+                const zona = cols[5] ? cols[5].trim() : ''; // Columna F (Antes Estado)
                 const descripcion = cols[6];
-                const ubicacion = cols[7];
-                const labelWa = cols[8];
+                const ubicacion = cols[7] ? cols[7].trim() : '';
+                const labelWa = cols[8] ? cols[8].trim() : '';
                 let walink = cols[9] ? cols[9].trim() : ''; 
                 const showBanner = cols[10] ? cols[10].trim() : '0'; 
-                const promoText = cols[11] ? cols[11].trim() : descripcion; 
-                const videoIg = cols[12] ? cols[12].trim() : ''; // NUEVA COLUMNA: URL de Instagram
-                let precioDesde = cols[13] ? cols[13].trim() : ''; // NUEVA COLUMNA: Precio
+                let promoText = cols[11] ? cols[11].trim() : descripcion; 
+                let precioDesde = cols[12] ? cols[12].trim() : ''; // Columna M
+                let linkIg = cols[13] ? cols[13].trim() : ''; // Columna N
+                let linkMapa = cols[14] ? cols[14].trim() : ''; // Columna O
+                let logo = cols[15] ? cols[15].trim() : ''; // NUEVA: Columna P (Logo)
+
+                // --- LIMPIEZA DE ENLACES EXTERNOS ---
+                linkIg = linkIg.replace(/^["']+|["']+$/g, '');
+                try { linkIg = decodeURIComponent(linkIg); } catch(e) {}
+                
+                linkMapa = linkMapa.replace(/^["']+|["']+$/g, '');
+                try { linkMapa = decodeURIComponent(linkMapa); } catch(e) {}
+
+                logo = logo.replace(/^["']+|["']+$/g, '');
+                try { logo = decodeURIComponent(logo); } catch(e) {}
 
                 // --- FORMATEO DEL PRECIO EN PESOS COLOMBIANOS ---
                 let precioHTML = '';
                 if (precioDesde) {
-                    // Quitar cualquier caracter que no sea número por si el cliente pone '$' o puntos
+                    // Quitar cualquier caracter que no sea número
                     const precioNumerico = parseInt(precioDesde.replace(/\D/g, ''), 10);
                     if (!isNaN(precioNumerico)) {
-                        // Formatear a moneda colombiana (ej. 25000 -> $25.000)
+                        // Formatear a moneda colombiana
                         const precioFormateado = new Intl.NumberFormat('es-CO', {
                             style: 'currency',
                             currency: 'COP',
-                            maximumFractionDigits: 0 // Sin decimales para COP
+                            maximumFractionDigits: 0
                         }).format(precioNumerico);
                         
                         precioHTML = `
@@ -508,7 +554,6 @@
                         </div>`;
                     }
                 } else {
-                     // Si no hay precio, dejamos el margen original inferior de la ubicación
                      precioHTML = `<div class="mb-5"></div>`;
                 }
 
@@ -541,21 +586,30 @@
                 }
                 try { walink = decodeURIComponent(walink); } catch(e) {}
 
-                // Lógica de colores de estado (ADAPTADA A MODO OSCURO)
-                let estadoClass = 'bg-neutral-800 text-neutral-400 border border-neutral-700';
-                const estLower = estado.toLowerCase();
-                if(estLower.includes('abierto') || estLower.includes('disponible')) {
-                    estadoClass = 'bg-green-500/10 text-green-400 border border-green-500/20';
-                } else if (estLower.includes('jueves') || estLower.includes('agenda')) {
-                    estadoClass = 'bg-manu-main/10 text-manu-main border border-manu-main/20';
+                // Lógica de Zona con enlace a Maps (Reemplaza al antiguo Estado)
+                let zonaHTML = '';
+                if(zona) {
+                    zonaHTML = `
+                    <a href="${linkMapa || '#'}" target="_blank" onclick="event.stopPropagation(); trackEvent('Click Mapa', '${nombre.replace(/'/g, "\\'")}');" class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wide whitespace-nowrap flex items-center gap-1.5 hover:bg-blue-500/20 transition">
+                        <i class="fa-solid fa-location-dot"></i> ${zona}
+                    </a>`;
                 }
 
                 // Lógica de Badge
                 let badgeHTML = '';
                 if(badge) {
                     badgeHTML = `
-                    <div class="absolute top-3 left-3 bg-manu-main text-black text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg flex items-center gap-1">
+                    <div class="absolute top-3 left-3 bg-manu-main text-black text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg flex items-center gap-1 z-10">
                         <i class="fa-solid fa-fire"></i> ${badge}
+                    </div>`;
+                }
+
+                // Lógica de Logo (Estilo Historia de Instagram)
+                let logoHTML = '';
+                if(logo) {
+                    logoHTML = `
+                    <div class="absolute top-3 right-3 w-[46px] h-[46px] rounded-full p-[2.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 shadow-lg z-10 shrink-0">
+                        <img src="${logo}" alt="Logo Negocio" class="w-full h-full object-cover rounded-full border-[2px] border-neutral-900 bg-neutral-900">
                     </div>`;
                 }
 
@@ -566,15 +620,15 @@
                     const safePromo = promoText.replace(/'/g, "\\'");
                     const safeUbicacion = ubicacion.replace(/'/g, "\\'");
                     const safeLabelWa = labelWa.replace(/'/g, "\\'");
-                    const safeVideoIg = videoIg.replace(/'/g, "\\'");
-                    const safeImagen = imagen.replace(/'/g, "\\'"); // Escapamos por seguridad
-                    const safeWalink = walink.replace(/'/g, "\\'"); // Escapamos por seguridad
+                    const safeImagen = imagen.replace(/'/g, "\\'"); 
+                    const safeWalink = walink.replace(/'/g, "\\'"); 
                     
                     const bannerHTML = `
-                    <div onclick="openModal('${safeNombre}', '${safeImagen}', '${safePromo}', '${safeUbicacion}', '${safeLabelWa}', '${safeWalink}', '${safeVideoIg}')" class="snap-center shrink-0 w-64 h-36 rounded-2xl relative overflow-hidden bg-neutral-900 border border-neutral-800 shadow-lg cursor-pointer transition hover:opacity-90">
+                    <div onclick="openModal('${safeNombre}', '${safeImagen}', '${safePromo}', '${safeUbicacion}', '${safeLabelWa}', '${safeWalink}')" class="snap-center shrink-0 w-64 h-36 rounded-2xl relative overflow-hidden bg-neutral-900 border border-neutral-800 shadow-lg cursor-pointer transition hover:opacity-90">
                         <img src="${imagen}" alt="${nombre}" class="absolute inset-0 w-full h-full object-cover opacity-60">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                        <div class="absolute bottom-4 left-4 text-white w-full pr-4">
+                        ${logoHTML}
+                        <div class="absolute bottom-4 left-4 text-white w-full pr-4 z-10">
                             <h2 class="text-xl font-bold leading-tight">${nombre}</h2>
                             <p class="text-xs text-manu-main font-semibold mt-1">Ver promoción →</p>
                         </div>
@@ -582,31 +636,40 @@
                     bannersContainer.innerHTML += bannerHTML;
                 }
 
-                // Recreación del <article> adaptada al modo oscuro
+                // Recreación del <article> adaptada
                 const article = document.createElement('article');
                 article.className = 'list-item bg-neutral-900 rounded-[20px] overflow-hidden shadow-md border border-neutral-800';
                 article.dataset.category = categoria;
                 article.dataset.type = tipo;
+                article.dataset.zona = zona;
+                article.dataset.price = precioDesde || '0';
 
-                // Modifiqué el HTML para incluir el precio debajo de la ubicación
                 article.innerHTML = `
                     <div class="h-44 overflow-hidden relative">
-                        <img src="${imagen}" alt="${nombre}" class="w-full h-full object-cover">
+                        <img src="${imagen}" alt="${nombre}" class="w-full h-full object-cover transition hover:scale-105 duration-500">
                         ${badgeHTML}
+                        ${logoHTML}
                     </div>
                     <div class="p-5">
                         <div class="flex justify-between items-start mb-2">
                             <h4 class="font-bold text-lg text-white">${nombre}</h4>
-                            <span class="${estadoClass} text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide whitespace-nowrap">${estado}</span>
+                            ${zonaHTML}
                         </div>
                         <p class="text-sm text-neutral-400 mb-3 leading-relaxed">${descripcion}</p>
                         <div class="flex items-center gap-1.5 text-xs text-neutral-500 font-medium ${precioDesde ? 'mb-1' : 'mb-5'}">
                             <i class="fa-solid fa-location-dot text-manu-dark"></i> ${ubicacion}
                         </div>
                         ${precioHTML}
-                        <button onclick="trackEvent('Conversión - WhatsApp', '${labelWa.replace(/'/g, "\\'")}', '${walink}')" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-neutral-950 font-black py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-[0_0_10px_rgba(37,211,102,0.2)]">
-                            <i class="fa-brands fa-whatsapp text-xl"></i> Pedir por WhatsApp
-                        </button>
+                        <div class="flex items-center gap-2 w-full">
+                            <button onclick="trackEvent('Conversión - WhatsApp', '${labelWa.replace(/'/g, "\\'")}', '${walink}')" class="flex-1 bg-whatsapp-main hover:bg-whatsapp-hover text-neutral-950 font-black py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-[0_0_10px_rgba(37,211,102,0.2)]">
+                                <i class="fa-brands fa-whatsapp text-xl"></i> Pedir por WhatsApp
+                            </button>
+                            ${linkIg ? `
+                            <button onclick="window.open('${linkIg}', '_blank'); trackEvent('Redirección - Instagram', '${labelWa.replace(/'/g, "\\'")}', '${linkIg}')" class="w-12 h-[48px] shrink-0 bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 hover:opacity-90 text-white rounded-xl flex items-center justify-center transition shadow-md">
+                                <i class="fa-brands fa-instagram text-[24px]"></i>
+                            </button>
+                            ` : ''}
+                        </div>
                     </div>
                 `;
                 container.appendChild(article);
@@ -620,9 +683,12 @@
         }
 
         // ==========================================
-        // LÓGICA DE FILTRADO Y MODALES ORIGINAL
+        // LÓGICA DE FILTRADO COMBINADO Y MODALES
         // ==========================================
         
+        let globalCategory = 'recomendados';
+        let globalType = 'all';
+
         function applyFilter(filterType, filterValue, buttonElement, isBottomNav = false) {
             trackEvent('Filtro', `Aplicado: ${filterValue}`);
 
@@ -652,23 +718,62 @@
                 titleElement.innerText = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
             }
 
+            // Actualizar variables globales de estado de navegación
+            if (filterType === 'category') {
+                globalCategory = filterValue;
+                globalType = 'all';
+            } else if (filterType === 'type') {
+                globalType = filterValue;
+                globalCategory = 'all';
+            } else if (filterType === 'all') {
+                globalCategory = 'all';
+                globalType = 'all';
+            }
+
+            // Llamar a la función que cruza todos los filtros
+            executeAllFilters();
+        }
+
+        function executeAllFilters() {
+            const zoneFilter = document.getElementById('zone-filter').value;
+            const priceFilter = document.getElementById('price-filter').value;
             const items = document.querySelectorAll('.list-item');
             let visibleCount = 0;
 
             items.forEach(item => {
-                let shouldShow = false;
+                let shouldShow = true;
                 
-                if (filterValue === 'all') {
-                    shouldShow = true;
-                } else if (filterType === 'category') {
+                // 1. Filtro Principal (Categoría o Menú/Merch)
+                if (globalType !== 'all') {
+                    if (item.dataset.type !== globalType) shouldShow = false;
+                } else if (globalCategory !== 'all') {
                     const categories = item.dataset.category.split(',');
-                    if (categories.includes(filterValue)) shouldShow = true;
-                } else if (filterType === 'type') {
-                    if (item.dataset.type === filterValue) shouldShow = true;
+                    if (!categories.includes(globalCategory)) shouldShow = false;
+                }
+
+                // 2. Filtro de Zona
+                if (zoneFilter !== 'all' && item.dataset.zona.toLowerCase() !== zoneFilter) {
+                    shouldShow = false;
+                }
+
+                // 3. Filtro de Rango de Precio
+                if (priceFilter !== 'all') {
+                    const price = parseInt(item.dataset.price) || 0;
+                    if (priceFilter === 'low' && price > 25000) shouldShow = false;
+                    if (priceFilter === 'mid' && (price < 25000 || price > 45000)) shouldShow = false;
+                    if (priceFilter === 'high' && price <= 45000) shouldShow = false;
                 }
 
                 if (shouldShow) {
                     item.style.display = 'block';
+                    
+                    // --- NUEVA LÓGICA DE ORDENAMIENTO (PRIORIZA POPULARES) ---
+                    if (item.dataset.category.includes('recomendados')) {
+                        item.style.order = '1'; // Los populares siempre suben
+                    } else {
+                        item.style.order = '2'; // El resto va después
+                    }
+                    
                     visibleCount++;
                 } else {
                     item.style.display = 'none';
@@ -683,7 +788,7 @@
             }
         }
 
-        function openModal(title, image, promo, location, labelWa, walink, videoIg = '') {
+        function openModal(title, image, promo, location, labelWa, walink) {
             trackEvent('Pop-up Banner', `Abierto: ${title}`);
             
             document.getElementById('modal-title').innerText = title;
@@ -691,24 +796,7 @@
             document.getElementById('modal-location').innerText = location;
             
             const imgEl = document.getElementById('modal-img');
-            const vidEl = document.getElementById('modal-video');
-
-            // Lógica para mostrar Video de Instagram o Imagen (Mejorada)
-            if (videoIg && (videoIg.includes('instagram.com') || videoIg.includes('instagr.am'))) {
-                // Forzar formato /embed limpio quitando parámetros (ej. ?igsh=...)
-                let embedUrl = videoIg.split('?')[0]; 
-                embedUrl = embedUrl.replace(/\/+$/, ''); // Quita diagonales extra al final
-                embedUrl += '/embed'; // Agrega /embed limpio requerido por el Iframe
-                
-                imgEl.classList.add('hidden');
-                vidEl.classList.remove('hidden');
-                vidEl.src = embedUrl;
-            } else {
-                vidEl.classList.add('hidden');
-                vidEl.src = '';
-                imgEl.classList.remove('hidden');
-                imgEl.src = image;
-            }
+            imgEl.src = image;
             
             const waBtn = document.getElementById('modal-wa-btn');
             waBtn.onclick = function() {
@@ -735,7 +823,6 @@
             
             setTimeout(() => {
                 modal.classList.add('hidden');
-                document.getElementById('modal-video').src = ''; // Detener video al cerrar
             }, 300);
         }
 
