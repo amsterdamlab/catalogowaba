@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo Emprendedores</title>
+    
     <!-- Favicon (Mismo que el logo) -->
     <link rel="icon" type="image/jpeg" href="https://content.pancake.vn/2-2603/s800x800/2026/3/31/23bed407bf19a68c279e00861c232910f203cd32.jpg">
 
@@ -276,7 +277,8 @@
             
             const getTotalCartValue = () => {
                 return cart.reduce((sum, item) => {
-                    const product = products.find(p => p.id === item.productId);
+                    const product = products.find(p => String(p.id) === String(item.productId));
+                    if (!product) return sum;
                     const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
                     return sum + (item.quantity * defaultSellPrice);
                 }, 0);
@@ -292,7 +294,7 @@
                 document.querySelectorAll('.quantity-badge').forEach(badge => {
                     const productId = badge.dataset.productId;
                     const totalQuantity = cart
-                        .filter(item => item.productId == productId)
+                        .filter(item => String(item.productId) === String(productId))
                         .reduce((sum, item) => sum + item.quantity, 0);
                     
                     if (totalQuantity > 0) {
@@ -353,7 +355,6 @@
             };
 
             const setupCategories = () => {
-                // Mantiene el orden exacto del Excel, omitiendo categorías vacías o nulas
                 const rawCats = [...new Set(products.map(p => p.category).filter(c => c && c.trim() !== ''))];
                 
                 const categories = ['Todo', ...rawCats];
@@ -389,39 +390,48 @@
             }
 
             const renderBanners = () => {
-                // Detecta automáticamente si hay una categoría que contenga 'combo', 'promo' u 'oferta'
                 const allCats = [...new Set(products.map(p => p.category).filter(c => c && c.trim() !== ''))];
-                let bannerCatName = allCats.find(c => c.toLowerCase().includes('combo') || c.toLowerCase().includes('promo') || c.toLowerCase().includes('oferta'));
+                let bannerCatName = allCats.find(c => c.toLowerCase().includes('combo') || c.toLowerCase().includes('promo') || c.toLowerCase().includes('oferta') || c.toLowerCase().includes('kit'));
                 
-                if (!bannerCatName) {
-                    bannersSection.classList.add('hidden');
-                    return;
-                }
-
-                // Guardamos la categoría detectada para cuando opriman clic
-                bannersSection.dataset.bannerCategory = bannerCatName;
-
-                const combos = products.filter(p => p.category === bannerCatName && p.priceMayorista > 0);
-                
-                if (combos.length === 0) {
-                    bannersSection.classList.add('hidden');
-                    return;
-                }
-
                 bannersSection.classList.remove('hidden');
                 bannerContainer.innerHTML = '';
+                
+                let combos = [];
+                if (bannerCatName) {
+                    bannersSection.dataset.bannerCategory = bannerCatName;
+                    combos = products.filter(p => p.category === bannerCatName && p.priceMayorista > 0);
+                }
 
-                combos.forEach(combo => {
-                    const bannerHTML = `
-                        <div class="banner-item shrink-0 w-[85vw] md:w-[400px] h-36 md:h-48 rounded-xl overflow-hidden shadow-sm relative cursor-pointer transform transition-transform hover:scale-[1.02]" data-combo-id="${combo.id}">
-                            <img src="${combo.imageUrl}" alt="[Imagen de ${combo.name}]" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/800?text=Sin+Imagen'">
+                if (combos.length > 0) {
+                    combos.forEach(combo => {
+                        const bannerHTML = `
+                            <div class="banner-item shrink-0 w-[85vw] md:w-[400px] h-36 md:h-48 rounded-xl overflow-hidden shadow-sm relative cursor-pointer transform transition-transform hover:scale-[1.02]" data-combo-id="${combo.id}">
+                                <img src="${combo.imageUrl}" alt="[Imagen de ${combo.name}]" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/800?text=Sin+Imagen'">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                                    <h3 class="text-white font-bold text-lg">${combo.name}</h3>
+                                </div>
+                            </div>
+                        `;
+                        bannerContainer.insertAdjacentHTML('beforeend', bannerHTML);
+                    });
+                } else {
+                    bannersSection.dataset.bannerCategory = 'Combos';
+                    const defaultBannersHTML = `
+                        <div class="banner-item shrink-0 w-[85vw] md:w-[400px] h-36 md:h-48 rounded-xl overflow-hidden shadow-sm relative cursor-pointer transform transition-transform hover:scale-[1.02]" data-combo-id="101">
+                            <img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=800" alt="[Banner Combo 1]" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                                <h3 class="text-white font-bold text-lg">${combo.name}</h3>
+                                <h3 class="text-white font-bold text-lg">Combos Skincare</h3>
+                            </div>
+                        </div>
+                        <div class="banner-item shrink-0 w-[85vw] md:w-[400px] h-36 md:h-48 rounded-xl overflow-hidden shadow-sm relative cursor-pointer transform transition-transform hover:scale-[1.02]" data-combo-id="102">
+                            <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80&w=800" alt="[Banner Combo 2]" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                                <h3 class="text-white font-bold text-lg">Kit Emprendedor Básico</h3>
                             </div>
                         </div>
                     `;
-                    bannerContainer.insertAdjacentHTML('beforeend', bannerHTML);
-                });
+                    bannerContainer.innerHTML = defaultBannersHTML;
+                }
 
                 initBannerAutoScroll();
             };
@@ -485,11 +495,11 @@
             };
 
             const openProductModal = (productId) => {
-                const product = products.find(p => p.id == productId);
+                const product = products.find(p => String(p.id) === String(productId));
                 if (!product) return;
                 
                 currentModalTempCart = {};
-                const existingItems = cart.filter(item => item.productId == productId);
+                const existingItems = cart.filter(item => String(item.productId) === String(productId));
                 existingItems.forEach(item => {
                     currentModalTempCart[item.variant] = item.quantity;
                 });
@@ -569,7 +579,9 @@
                 let totalProfit = 0;
 
                 cart.forEach((item) => {
-                    const product = products.find(p => p.id === item.productId);
+                    const product = products.find(p => String(p.id) === String(item.productId));
+                    if (!product) return;
+                    
                     const qty = item.quantity;
                     const costMayorista = product.priceMayorista;
                     const sellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
@@ -599,7 +611,9 @@
                 checkoutItemsList.innerHTML = '';
                 
                 cart.forEach((item, index) => {
-                    const product = products.find(p => p.id === item.productId);
+                    const product = products.find(p => String(p.id) === String(item.productId));
+                    if (!product) return;
+                    
                     const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
                     
                     const itemHTML = `
@@ -641,7 +655,7 @@
             productModalContent.addEventListener('click', (e) => {
                 const productId = productModalContainer.dataset.productId;
                 if (!productId) return;
-                const product = products.find(p => p.id == productId);
+                const product = products.find(p => String(p.id) === String(productId));
 
                 if (e.target.closest('#product-modal-back-btn')) {
                     productModalContainer.classList.add('opacity-0');
@@ -668,11 +682,13 @@
                 }
 
                 if (e.target.closest('#product-modal-confirm-btn')) {
-                    cart = cart.filter(item => item.productId != productId);
+                    cart = cart.filter(item => String(item.productId) !== String(productId));
                     
+                    let itemsAgregados = 0;
                     for (const [variant, quantity] of Object.entries(currentModalTempCart)) {
                         if (quantity > 0) {
-                            cart.push({ productId: parseInt(productId), variant, quantity });
+                            cart.push({ productId: String(productId), variant, quantity });
+                            itemsAgregados += quantity;
                         }
                     }
                     
@@ -680,7 +696,23 @@
                     updateBadges();
 
                     productModalContainer.classList.add('opacity-0');
-                    setTimeout(() => productModalContainer.classList.add('hidden'), 300);
+                    setTimeout(() => {
+                        productModalContainer.classList.add('hidden');
+                        
+                        // Sistema de Feedback Visual Inteligente
+                        if (itemsAgregados > 0) {
+                            showNotification("✅ ¡Añadido! Puedes ir al Checkout cuando estés listo.", false);
+                            
+                            const btnCheckout = document.getElementById('send-btn-main');
+                            btnCheckout.classList.add('animate-pulse', 'ring-4', 'ring-[#761920]/50');
+                            
+                            setTimeout(() => {
+                                btnCheckout.classList.remove('animate-pulse', 'ring-4', 'ring-[#761920]/50');
+                            }, 3000);
+                        } else {
+                            showNotification("🗑️ El producto ha sido retirado de tu pedido.", false);
+                        }
+                    }, 300);
                 }
             });
 
@@ -729,7 +761,9 @@
                 let totalGananciaGlobal = 0;
 
                 cart.forEach((item) => {
-                    const product = products.find(p => p.id === item.productId);
+                    const product = products.find(p => String(p.id) === String(item.productId));
+                    if (!product) return;
+                    
                     const sellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
                     
                     const ventaTotalItem = sellPrice * item.quantity;
@@ -754,7 +788,7 @@
                 closeCheckoutModal();
             });
 
-            // --- LECTOR DE EXCEL ULTRA-ROBUSTO ---
+            // --- LECTOR DE EXCEL (PARSER PROFESIONAL CELDA POR CELDA) ---
             const formatImageUrl = (url) => {
                 if (!url) return '';
                 const driveRegex = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
@@ -769,11 +803,11 @@
                 if (!h) return '';
                 let cleanH = h.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, ''); 
                 
-                if (cleanH === 'id' || cleanH === 'codigo') return 'id';
-                if (cleanH.includes('nombre') || cleanH.includes('name') || cleanH.includes('producto')) return 'name';
+                if (cleanH.includes('id') || cleanH.includes('codigo') || cleanH.includes('sku')) return 'id';
+                if (cleanH.includes('nombre') || cleanH.includes('name') || cleanH.includes('producto') || cleanH.includes('titulo')) return 'name';
                 if (cleanH.includes('imagen') || cleanH.includes('image') || cleanH.includes('foto')) return 'imageUrl';
-                if (cleanH.includes('emprendedor') || cleanH.includes('mayorista') || cleanH.includes('costo')) return 'priceMayorista';
-                if (cleanH.includes('sugerido') || cleanH.includes('venta') || cleanH.includes('publico')) return 'priceSugerido';
+                if (cleanH.includes('emprendedor') || cleanH.includes('mayorista') || cleanH.includes('costo') || cleanH.includes('precioemprendedor') || cleanH.includes('preciocosto')) return 'priceMayorista';
+                if (cleanH.includes('sugerido') || cleanH.includes('venta') || cleanH.includes('publico') || cleanH.includes('preciosugerido')) return 'priceSugerido';
                 if (cleanH.includes('descrip')) return 'description';
                 if (cleanH.includes('variant')) return 'variants';
                 if (cleanH.includes('categor')) return 'category';
@@ -781,63 +815,75 @@
             };
 
             function parseCSV(csvText) {
-                const arr = [];
-                let quote = false;
-                let row = 0, col = 0;
+                // 1. Detectar el separador (punto y coma vs coma) leyendo la primera línea
+                let firstLineEnd = csvText.indexOf('\n');
+                if (firstLineEnd === -1) firstLineEnd = csvText.length;
+                const firstLine = csvText.substring(0, firstLineEnd);
+                const delimiter = (firstLine.match(/;/g) || []).length > (firstLine.match(/,/g) || []).length ? ';' : ',';
                 
-                const firstLine = csvText.split('\n')[0] || '';
-                const countCommas = (firstLine.match(/,/g) || []).length;
-                const countSemicolons = (firstLine.match(/;/g) || []).length;
-                const separator = countSemicolons > countCommas ? ';' : ',';
+                const rows = [];
+                let currentCell = '';
+                let inQuotes = false;
+                let currentRow = [];
                 
-                for (let c = 0; c < csvText.length; c++) {
-                    let cc = csvText[c], nc = csvText[c+1];
-                    arr[row] = arr[row] || [];
-                    arr[row][col] = arr[row][col] || '';
+                // 2. Leer carácter por carácter. Esto previene que los saltos de línea (Enters) dentro de 
+                // una descripción en Excel nos partan el archivo por la mitad y borren los productos.
+                for (let i = 0; i < csvText.length; i++) {
+                    const char = csvText[i];
+                    const nextChar = csvText[i + 1];
                     
-                    if (cc === '"' && quote && nc === '"') { 
-                        arr[row][col] += cc; ++c; continue; 
+                    if (char === '"') {
+                        // Manejo de comillas dentro de comillas
+                        if (inQuotes && nextChar === '"') {
+                            currentCell += '"';
+                            i++; 
+                        } else {
+                            inQuotes = !inQuotes; 
+                        }
+                    } else if (char === delimiter && !inQuotes) {
+                        // Fin de celda
+                        currentRow.push(currentCell);
+                        currentCell = '';
+                    } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                        // Fin de fila real
+                        if (char === '\r' && nextChar === '\n') {
+                            i++; // Saltar el \n de Windows
+                        }
+                        currentRow.push(currentCell);
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentCell = '';
+                    } else {
+                        // Cualquier otro carácter es parte de la celda
+                        currentCell += char;
                     }
-                    if (cc === '"') { 
-                        quote = !quote; continue; 
-                    }
-                    if (cc === separator && !quote) { 
-                        ++col; continue; 
-                    }
-                    if (cc === '\r' && nc === '\n' && !quote) { 
-                        ++row; col = 0; ++c; continue; 
-                    }
-                    if (cc === '\n' && !quote) { 
-                        ++row; col = 0; continue; 
-                    }
-                    if (cc === '\r' && !quote) { 
-                        ++row; col = 0; continue; 
-                    }
-                    arr[row][col] += cc;
+                }
+                // Si el archivo terminó pero la celda tenía datos, la guardamos
+                if (currentCell || currentRow.length > 0) {
+                    currentRow.push(currentCell);
+                    rows.push(currentRow);
                 }
 
-                if (arr.length === 0) return [];
+                if (rows.length === 0) return { productsArray: [], headers: [], rawHeaders: [] };
 
-                const rawHeaders = arr.shift();
+                const rawHeaders = rows.shift();
                 const headers = rawHeaders.map(normalizeHeader);
                 const productsArray = [];
 
-                arr.forEach(values => {
+                // 3. Emparejar las celdas limpias con los nombres de las columnas
+                rows.forEach(values => {
+                    // Evitar filas totalmente en blanco
                     if (values.length === 0 || (values.length === 1 && values[0].trim() === '')) return;
                     
                     const obj = {};
                     headers.forEach((header, i) => {
                         let value = values[i] ? values[i].trim() : '';
                         
-                        if (value.startsWith('"') && value.endsWith('"')) {
-                            value = value.substring(1, value.length - 1).replace(/""/g, '"');
-                        }
-
                         if (header === 'id') {
-                            obj[header] = value; 
+                            obj[header] = value; // Como TEXTO, para evitar errores de IDs con letras
                         } else if (header === 'priceMayorista' || header === 'priceSugerido') {
                             if (typeof value === 'string') {
-                                value = value.replace(/[^0-9]/g, ''); 
+                                value = value.replace(/[^0-9]/g, ''); // Limpiar para que sea un número perfecto
                             }
                             obj[header] = parseInt(value) || 0;
                         } else if (header === 'variants') {
@@ -845,12 +891,12 @@
                             obj[header] = vars.length > 0 ? vars : ['N/A'];
                         } else if (header === 'imageUrl') {
                             obj[header] = formatImageUrl(value);
-                        } else {
+                        } else if (header) {
                             obj[header] = value;
                         }
                     });
                     
-                    // Solo guarda el producto si tiene un nombre y un precio válido asociado
+                    // Condición vital: Solo agrega el producto si tiene un nombre y un precio válido
                     if (obj.name && obj.priceMayorista > 0) {
                         productsArray.push(obj);
                     }
@@ -866,7 +912,6 @@
                         throw new Error("No hay URL configurada en el código.");
                     }
 
-                    // AÑADIDO: Forzador de caché estricto (Cache-Buster) para Google Sheets
                     const timestamp = new Date().getTime();
                     const fetchUrl = GOOGLE_SHEETS_URL + (GOOGLE_SHEETS_URL.includes('?') ? '&' : '?') + 'nocache=' + timestamp;
 
@@ -886,11 +931,7 @@
                     products = parsedData.productsArray;
                     
                     if(products.length === 0) {
-                        throw new Error(`
-                            No detectamos precios válidos en las columnas. <br><br>
-                            <strong>Cabeceras de Excel leídas:</strong> ${parsedData.rawHeaders.join(', ')}<br><br>
-                            <strong>El sistema las interpretó como:</strong> ${parsedData.headers.join(', ')}
-                        `);
+                        throw new Error(`No se detectaron productos válidos. Revisa que tu tabla no esté vacía.`);
                     }
 
                     renderBanners();
@@ -902,7 +943,6 @@
                     console.error("Error cargando base de datos:", error);
                     
                     productList.innerHTML = '';
-                    
                     const errorDiv = document.createElement('div');
                     errorDiv.className = "p-8 text-center bg-white rounded-2xl shadow-sm border border-red-100 col-span-full mx-4 my-8";
                     errorDiv.innerHTML = `
