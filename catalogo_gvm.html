@@ -163,7 +163,7 @@
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
                     <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#761920]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                        Resumen de Ganancias
+                        Calculadora de Ganancias
                     </h4>
                     <p class="text-xs text-gray-500 mb-4">A continuación verás el resumen de tu pedido y tus ganancias estimadas. El cliente final no verá tu precio emprendedor.</p>
                     
@@ -330,7 +330,7 @@
                                     <span class="text-lg font-extrabold text-[#761920]">${formatPrice(product.priceMayorista)}</span>
                                 </div>
                                 ${product.priceSugerido > 0 ? `<div>
-                                    <span class="inline-block text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">Venta Sugerido: ${formatPrice(product.priceSugerido)}</span>
+                                    <span class="inline-block text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">Precio Venta: ${formatPrice(product.priceSugerido)}</span>
                                 </div>` : ''}
                             </div>
                         </div>
@@ -803,7 +803,7 @@
                 if (!h) return '';
                 let cleanH = h.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, ''); 
                 
-                if (cleanH.includes('id') || cleanH.includes('codigo') || cleanH.includes('sku')) return 'id';
+                if (cleanH === 'id' || cleanH.includes('codigo') || cleanH.includes('sku')) return 'id';
                 if (cleanH.includes('nombre') || cleanH.includes('name') || cleanH.includes('producto') || cleanH.includes('titulo')) return 'name';
                 if (cleanH.includes('imagen') || cleanH.includes('image') || cleanH.includes('foto')) return 'imageUrl';
                 if (cleanH.includes('emprendedor') || cleanH.includes('mayorista') || cleanH.includes('costo') || cleanH.includes('precioemprendedor') || cleanH.includes('preciocosto')) return 'priceMayorista';
@@ -815,7 +815,6 @@
             };
 
             function parseCSV(csvText) {
-                // 1. Detectar el separador (punto y coma vs coma) leyendo la primera línea
                 let firstLineEnd = csvText.indexOf('\n');
                 if (firstLineEnd === -1) firstLineEnd = csvText.length;
                 const firstLine = csvText.substring(0, firstLineEnd);
@@ -826,14 +825,11 @@
                 let inQuotes = false;
                 let currentRow = [];
                 
-                // 2. Leer carácter por carácter. Esto previene que los saltos de línea (Enters) dentro de 
-                // una descripción en Excel nos partan el archivo por la mitad y borren los productos.
                 for (let i = 0; i < csvText.length; i++) {
                     const char = csvText[i];
                     const nextChar = csvText[i + 1];
                     
                     if (char === '"') {
-                        // Manejo de comillas dentro de comillas
                         if (inQuotes && nextChar === '"') {
                             currentCell += '"';
                             i++; 
@@ -841,24 +837,20 @@
                             inQuotes = !inQuotes; 
                         }
                     } else if (char === delimiter && !inQuotes) {
-                        // Fin de celda
                         currentRow.push(currentCell);
                         currentCell = '';
                     } else if ((char === '\n' || char === '\r') && !inQuotes) {
-                        // Fin de fila real
                         if (char === '\r' && nextChar === '\n') {
-                            i++; // Saltar el \n de Windows
+                            i++; 
                         }
                         currentRow.push(currentCell);
                         rows.push(currentRow);
                         currentRow = [];
                         currentCell = '';
                     } else {
-                        // Cualquier otro carácter es parte de la celda
                         currentCell += char;
                     }
                 }
-                // Si el archivo terminó pero la celda tenía datos, la guardamos
                 if (currentCell || currentRow.length > 0) {
                     currentRow.push(currentCell);
                     rows.push(currentRow);
@@ -870,9 +862,7 @@
                 const headers = rawHeaders.map(normalizeHeader);
                 const productsArray = [];
 
-                // 3. Emparejar las celdas limpias con los nombres de las columnas
                 rows.forEach(values => {
-                    // Evitar filas totalmente en blanco
                     if (values.length === 0 || (values.length === 1 && values[0].trim() === '')) return;
                     
                     const obj = {};
@@ -880,10 +870,10 @@
                         let value = values[i] ? values[i].trim() : '';
                         
                         if (header === 'id') {
-                            obj[header] = value; // Como TEXTO, para evitar errores de IDs con letras
+                            obj[header] = value; 
                         } else if (header === 'priceMayorista' || header === 'priceSugerido') {
                             if (typeof value === 'string') {
-                                value = value.replace(/[^0-9]/g, ''); // Limpiar para que sea un número perfecto
+                                value = value.replace(/[^0-9]/g, ''); 
                             }
                             obj[header] = parseInt(value) || 0;
                         } else if (header === 'variants') {
@@ -896,7 +886,6 @@
                         }
                     });
                     
-                    // Condición vital: Solo agrega el producto si tiene un nombre y un precio válido
                     if (obj.name && obj.priceMayorista > 0) {
                         productsArray.push(obj);
                     }
