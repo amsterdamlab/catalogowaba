@@ -617,19 +617,41 @@
                     const defaultSellPrice = product.priceSugerido > 0 ? product.priceSugerido : product.priceMayorista;
                     
                     const itemHTML = `
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.04)] gap-3">
+                        <div class="relative flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.04)] gap-3 pr-10">
+                            <button class="remove-cart-item-btn absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors p-1" data-index="${index}" title="Eliminar producto">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
                             <div class="flex-grow">
                                 <p class="font-bold text-sm text-gray-800 leading-tight">${product.name} <span class="text-[#761920] ml-1">x${item.quantity}</span></p>
                                 ${item.variant !== 'N/A' ? `<p class="text-xs text-gray-500 mt-0.5">Variante: <span class="font-medium">${item.variant}</span></p>` : ''}
                                 <p class="text-xs font-semibold text-gray-400 mt-1.5">Precio Costo: ${formatPrice(product.priceMayorista)} c/u</p>
                             </div>
-                            <div class="flex-shrink-0 w-full sm:w-36 bg-gray-50 p-2 rounded-lg border border-gray-100 flex flex-col justify-center items-center">
+                            <div class="flex-shrink-0 w-full sm:w-36 bg-gray-50 p-2 rounded-lg border border-gray-100 flex flex-col justify-center items-center mt-2 sm:mt-0">
                                 <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 text-center">Precio Venta (c/u)</label>
                                 <span class="font-bold text-gray-800 text-lg">${formatPrice(defaultSellPrice)}</span>
                             </div>
                         </div>
                     `;
                     checkoutItemsList.insertAdjacentHTML('beforeend', itemHTML);
+                });
+
+                // Lógica para eliminar productos desde el checkout
+                const removeBtns = checkoutItemsList.querySelectorAll('.remove-cart-item-btn');
+                removeBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const indexToRemove = parseInt(e.currentTarget.dataset.index);
+                        cart.splice(indexToRemove, 1); // Borra el elemento del arreglo global
+                        
+                        updateTotal();
+                        updateBadges();
+                        
+                        if (cart.length === 0) {
+                            closeCheckoutModal();
+                            showNotification("Tu pedido ha quedado vacío.", false);
+                        } else {
+                            openCheckoutModal(); // Refresca el modal para mostrar los cambios
+                        }
+                    });
                 });
 
                 updateCheckoutTotals();
