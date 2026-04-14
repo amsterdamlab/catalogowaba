@@ -243,7 +243,7 @@
         <!-- Footer Call to Action -->
         <div class="px-5 pb-8 text-center border-t border-neutral-900 pt-8 mt-4">
             <a href="https://wa.me/573154870448?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank" onclick="trackEvent('Lead Gen', 'Quiero hacer un pedido')" class="inline-block text-manu-main text-sm font-bold hover:underline mb-4">
-                ¿Querés estar aquí con tu restaurante? Escribime y hablamos.
+                ¿Querés estar aquí con tu restaurante? Escríbime y hablamos.
             </a>
             <p class="text-[10px] text-neutral-500 leading-relaxed px-4">
                 Copyright © 2026 Soy El Manu.<br>Desarrollado por BLU PARTNERS ♥ I 315 487 0448.
@@ -282,18 +282,27 @@
                     <h3 id="modal-title" class="text-2xl font-black text-white mb-3 leading-tight"></h3>
                     <p id="modal-promo" class="text-sm text-gray-300 mb-5 leading-relaxed"></p>
                     
-                    <div class="flex items-center gap-2 text-xs text-gray-400 mb-6 bg-neutral-950 p-3 rounded-xl border border-neutral-800">
-                        <i class="fa-solid fa-location-dot text-manu-main text-lg"></i>
-                        <div>
-                            <span class="block font-bold text-white">Disponible para:</span>
-                            <span id="modal-location"></span>
+                    <!-- Botón/Recuadro de Ubicación Resplandeciente -->
+                    <a id="modal-map-link" href="#" target="_blank" class="flex items-center gap-3 text-xs text-gray-400 mb-6 bg-neutral-950 p-3 rounded-xl border border-neutral-800 transition-all duration-300">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-location-dot text-blue-400 text-sm"></i>
                         </div>
-                    </div>
+                        <div>
+                            <span class="block font-bold text-white mb-0.5">Ubicación:</span>
+                            <span id="modal-location" class="line-clamp-1"></span>
+                        </div>
+                        <i id="modal-map-icon" class="fa-solid fa-arrow-up-right-from-square ml-auto text-blue-400 text-sm hidden"></i>
+                    </a>
                     
-                    <!-- Botón WA dinámico -->
-                    <button id="modal-wa-btn" class="w-full bg-whatsapp-main hover:bg-whatsapp-hover text-neutral-950 font-black py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-[0_0_15px_rgba(37,211,102,0.3)]">
-                        <i class="fa-brands fa-whatsapp text-xl"></i> ¡Pedir ahora por WhatsApp!
-                    </button>
+                    <!-- Botones de Acción (WhatsApp + IG) -->
+                    <div class="flex items-center gap-2 w-full">
+                        <button id="modal-wa-btn" class="flex-1 bg-whatsapp-main hover:bg-whatsapp-hover text-neutral-950 font-black py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> ¡Pedir por WhatsApp!
+                        </button>
+                        <button id="modal-ig-btn" class="hidden w-[52px] h-[52px] shrink-0 bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 hover:opacity-90 text-white rounded-xl flex items-center justify-center transition shadow-md">
+                            <i class="fa-brands fa-instagram text-[24px]"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -626,9 +635,11 @@
                     const safeLabelWa = labelWa.replace(/'/g, "\\'");
                     const safeImagen = imagen.replace(/'/g, "\\'"); 
                     const safeWalink = walink.replace(/'/g, "\\'"); 
+                    const safeLinkMapa = linkMapa.replace(/'/g, "\\'"); 
+                    const safeLinkIg = linkIg.replace(/'/g, "\\'"); 
                     
                     const bannerHTML = `
-                    <div onclick="openModal('${safeNombre}', '${safeImagen}', '${safePromo}', '${safeUbicacion}', '${safeLabelWa}', '${safeWalink}')" class="snap-center shrink-0 w-64 h-36 rounded-2xl relative overflow-hidden bg-neutral-900 border border-neutral-800 shadow-lg cursor-pointer transition hover:opacity-90">
+                    <div onclick="openModal('${safeNombre}', '${safeImagen}', '${safePromo}', '${safeUbicacion}', '${safeLabelWa}', '${safeWalink}', '${safeLinkMapa}', '${safeLinkIg}')" class="snap-center shrink-0 w-64 h-36 rounded-2xl relative overflow-hidden bg-neutral-900 border border-neutral-800 shadow-lg cursor-pointer transition hover:opacity-90">
                         <img src="${imagen}" alt="${nombre}" class="absolute inset-0 w-full h-full object-cover opacity-60">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
                         ${logoHTML}
@@ -792,20 +803,63 @@
             }
         }
 
-        function openModal(title, image, promo, location, labelWa, walink) {
+        function openModal(title, image, promo, location, labelWa, walink, linkMapa, linkIg) {
             trackEvent('Pop-up Banner', `Abierto: ${title}`);
             
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-promo').innerText = promo;
-            document.getElementById('modal-location').innerText = location;
+            
+            // Lógica del enlace de Google Maps (Recuadro Resplandeciente)
+            const mapLink = document.getElementById('modal-map-link');
+            const mapIcon = document.getElementById('modal-map-icon');
+            const locText = document.getElementById('modal-location');
+            
+            locText.innerText = location;
+
+            if (linkMapa) {
+                mapLink.href = linkMapa;
+                mapLink.style.pointerEvents = 'auto';
+                
+                // Efectos de Resplandor Neón y Hover
+                mapLink.className = 'flex items-center gap-3 text-xs text-blue-100 mb-6 bg-blue-900/20 p-3 rounded-xl border border-blue-500/40 shadow-[0_0_15px_rgba(59,130,246,0.25)] transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.45)] hover:bg-blue-900/30 hover:-translate-y-1 cursor-pointer';
+                if(mapIcon) mapIcon.classList.remove('hidden');
+                
+                // Trackeo para tu automatización
+                mapLink.onclick = function() {
+                    trackEvent('Redirección - Mapa (Banner Promo)', title, linkMapa);
+                };
+            } else {
+                mapLink.removeAttribute('href');
+                mapLink.style.pointerEvents = 'none';
+                
+                // Estilo apagado (sin link)
+                mapLink.className = 'flex items-center gap-3 text-xs text-gray-400 mb-6 bg-neutral-950 p-3 rounded-xl border border-neutral-800 transition-all duration-300';
+                if(mapIcon) mapIcon.classList.add('hidden');
+                mapLink.onclick = null;
+            }
             
             const imgEl = document.getElementById('modal-img');
             imgEl.src = image;
             
+            // Lógica del botón de WhatsApp
             const waBtn = document.getElementById('modal-wa-btn');
             waBtn.onclick = function() {
                 trackEvent('Conversión - WhatsApp (Banner Promo)', labelWa, walink);
             };
+
+            // Lógica del botón de Instagram dinámico
+            const igBtn = document.getElementById('modal-ig-btn');
+            if (linkIg) {
+                igBtn.classList.remove('hidden');
+                igBtn.classList.add('flex');
+                igBtn.onclick = function() {
+                    window.open(linkIg, '_blank');
+                    trackEvent('Redirección - Instagram (Banner Promo)', labelWa, linkIg);
+                };
+            } else {
+                igBtn.classList.add('hidden');
+                igBtn.classList.remove('flex');
+            }
 
             const modal = document.getElementById('promo-modal');
             const modalContent = document.getElementById('promo-modal-content');
