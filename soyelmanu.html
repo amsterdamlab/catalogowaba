@@ -197,6 +197,7 @@
                     <option value="sur">Sur</option>
                     <option value="este">Este</option>
                     <option value="oeste">Oeste</option>
+                    <option value="multiples">Múltiples Zonas</option>
                 </select>
                 <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                     <i class="fa-solid fa-chevron-down text-neutral-500 text-xs"></i>
@@ -255,13 +256,13 @@
                 <i class="fa-solid fa-house text-lg mb-1"></i>
                 <span class="text-[10px] font-bold">Inicio</span>
             </button>
-            <button id="nav-negocios" onclick="applyFilter('type', 'menu', this, true)" class="nav-btn flex flex-col items-center p-2 text-neutral-400 hover:text-white transition">
-                <i class="fa-solid fa-burger text-lg mb-1"></i>
-                <span class="text-[10px] font-semibold">Menú</span>
+            <button id="nav-negocios" onclick="applyFilter('type', 'restaurante', this, true)" class="nav-btn flex flex-col items-center p-2 text-neutral-400 hover:text-white transition">
+                <i class="fa-solid fa-store text-lg mb-1"></i>
+                <span class="text-[10px] font-semibold">Restaurantes</span>
             </button>
-            <button id="nav-servicios" onclick="applyFilter('type', 'merch', this, true)" class="nav-btn flex flex-col items-center p-2 text-neutral-400 hover:text-white transition">
-                <i class="fa-solid fa-shirt text-lg mb-1"></i>
-                <span class="text-[10px] font-semibold">Merch</span>
+            <button id="nav-servicios" onclick="applyFilter('type', 'evento', this, true)" class="nav-btn flex flex-col items-center p-2 text-neutral-400 hover:text-white transition">
+                <i class="fa-solid fa-calendar-days text-lg mb-1"></i>
+                <span class="text-[10px] font-semibold">Eventos</span>
             </button>
         </nav>
 
@@ -307,16 +308,19 @@
         const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTrkgdIr8doylZtaGXtbcX8d9hoo61gn94Ykjoo9f444bI_ZerBCm-NfLZVmEx3uMcdU_GJPfmddDH6/pub?output=csv'; 
         const WEBHOOK_URL = 'AQUI_PONES_EL_WEBHOOK_DE_TU_AUTOMATIZACION'; // Webhook de Make o n8n
 
-        // Adapté los datos de Fallback para incluir la nueva Columna P (Logo) y las empanadas/arepas
+        // Adapté los datos de Fallback para incluir la nueva Columna P (Logo), las empanadas/arepas actualizadas, y los nuevos Eventos (Burguer Master, etc.)
         const fallbackCSV = `Nombre,Categoria,Tipo,Imagen,Badge,Zona,Descripcion,Ubicacion,LabelWA,WaLink,ShowBanner,PromoText,PrecioDesde,LinkIG,LinkMapa,Logo
-"Smash Doble Queso","recomendados,burgers","menu","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","Más Vendida","Norte","Doble carne smash, queso cheddar americano, tocineta crujiente y salsa Manu.","Delivery y Pick-up","Smash Doble Queso","https://wa.link/ejemplo1","1","¡Lleva papas gratis! Solo por hoy, con tu Burger te enviamos papas cortesía de la casa.","25000","https://instagram.com/soyelmanu","https://maps.google.com/?q=restaurante+norte","https://img.freepik.com/vector-gratis/diseno-logotipo-hamburguesas-dibujado-mano_23-2149321303.jpg?w=200"
-"Pizza Pepperoni Familiar","recomendados,pizza","menu","https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600","Promo","Sur","Masa madre de fermentación lenta, pomodoro italiano y extra pepperoni.","Delivery","Pizza Pepperoni","https://wa.link/ejemplo2","1","Lleva tu pizza familiar y por solo un extra, te enviamos una bebida de 1.5L. ¡Perfecta para compartir!","45000","https://instagram.com/soyelmanu","https://maps.google.com/?q=pizzeria+sur",""
-"Combo Sushi Premium","recomendados,sushi","menu","https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600","Top","Oeste","30 piezas de los mejores rollos: Filadelfia, Ojo de Tigre y Dinamita.","Delivery y Pick-up","Combo Sushi","https://wa.link/ejemplo3","1","Disfruta un 15% off en tu primer pedido de sushi. ¡Palillos y salsas incluidos en tu orden!","60000","","https://maps.google.com/?q=sushi+oeste",""
-"Tacos al Pastor (x3)","mexicana","menu","https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600","","Este","Auténticos tacos mexicanos en tortilla de maíz, piña, cilantro, cebolla y full limón.","Pick-up local","Tacos al Pastor","https://wa.link/ejemplo4","0","","22000","https://instagram.com/soyelmanu","https://maps.google.com/?q=tacos+este","https://img.freepik.com/vector-gratis/plantilla-logotipo-restaurante-retro_23-2148451519.jpg?w=200"
-"Empanadas Vallunas (x10)","empanadas,tipica","menu","https://images.unsplash.com/photo-1541529086526-db283c563270?w=600","Caleñas","Sur","Crocantes empanadas de maíz con guiso de carne y papa. Acompañadas de ají pique.","Delivery","Empanadas Vallunas","https://wa.link/ejemplo7","0","","15000","https://instagram.com/soyelmanu","https://maps.google.com/?q=empanadas",""
-"Arepa Rellena Todo Terreno","arepas,tipica","menu","https://images.unsplash.com/photo-1615870216519-2f9fa575fa5c?w=600","Promo","Norte","Arepa de maíz asada al carbón, rellena de carne desmechada, chicharrón, pollo y queso.","Pick-up local","Arepa Todo Terreno","https://wa.link/ejemplo8","0","","18000","https://instagram.com/soyelmanu","https://maps.google.com/?q=arepas",""
-"Salchipapa Salvaje","salchipapas","menu","https://images.unsplash.com/photo-1625938146369-adc83368bda7?w=600","","Sur","Cama de papas crujientes, salchicha premium, queso costeño fundido y full salsas.","Delivery","Salchipapa Salvaje","https://wa.link/ejemplo5","0","","28000","","https://maps.google.com/?q=salchipapa",""
-"Alitas BBQ (12pz)","pollo","menu","https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600","","Norte","Jugosas alitas bañadas en nuestra salsa BBQ artesanal. Incluye apio y salsa ranch.","Delivery y Pick-up","Alitas BBQ","https://wa.link/ejemplo6","0","","35000","https://instagram.com/soyelmanu","https://maps.google.com/?q=alitas",""`;
+"Smash Doble Queso","recomendados,burgers","restaurante","https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600","Más Vendida","Norte","Doble carne smash, queso cheddar americano, tocineta crujiente y salsa Manu.","Delivery y Pick-up","Smash Doble Queso","https://wa.link/ejemplo1","1","¡Lleva papas gratis! Solo por hoy, con tu Burger te enviamos papas cortesía de la casa.","25000","https://instagram.com/soyelmanu","https://maps.google.com/?q=restaurante+norte","https://img.freepik.com/vector-gratis/diseno-logotipo-hamburguesas-dibujado-mano_23-2149321303.jpg?w=200"
+"Pizza Pepperoni Familiar","recomendados,pizza","restaurante","https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600","Promo","Sur","Masa madre de fermentación lenta, pomodoro italiano y extra pepperoni.","Delivery","Pizza Pepperoni","https://wa.link/ejemplo2","1","Lleva tu pizza familiar y por solo un extra, te enviamos una bebida de 1.5L. ¡Perfecta para compartir!","45000","https://instagram.com/soyelmanu","https://maps.google.com/?q=pizzeria+sur",""
+"Combo Sushi Premium","recomendados,sushi","restaurante","https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600","Top","Oeste","30 piezas de los mejores rollos: Filadelfia, Ojo de Tigre y Dinamita.","Delivery y Pick-up","Combo Sushi","https://wa.link/ejemplo3","1","Disfruta un 15% off en tu primer pedido de sushi. ¡Palillos y salsas incluidos en tu orden!","60000","","https://maps.google.com/?q=sushi+oeste",""
+"Tacos al Pastor (x3)","mexicana","restaurante","https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600","","Este","Auténticos tacos mexicanos en tortilla de maíz, piña, cilantro, cebolla y full limón.","Pick-up local","Tacos al Pastor","https://wa.link/ejemplo4","0","","22000","https://instagram.com/soyelmanu","https://maps.google.com/?q=tacos+este","https://img.freepik.com/vector-gratis/plantilla-logotipo-restaurante-retro_23-2148451519.jpg?w=200"
+"Empanadas Vallunas (x10)","empanadas,tipica","restaurante","https://images.unsplash.com/photo-1541529086526-db283c563270?w=600","Caleñas","Sur","Crocantes empanadas de maíz con guiso de carne y papa. Acompañadas de ají pique.","Delivery","Empanadas Vallunas","https://wa.link/ejemplo7","0","","15000","https://instagram.com/soyelmanu","https://maps.google.com/?q=empanadas",""
+"Arepa Rellena Todo Terreno","arepas,tipica","restaurante","https://images.unsplash.com/photo-1615870216519-2f9fa575fa5c?w=600","Promo","Norte","Arepa de maíz asada al carbón, rellena de carne desmechada, chicharrón, pollo y queso.","Pick-up local","Arepa Todo Terreno","https://wa.link/ejemplo8","0","","18000","https://instagram.com/soyelmanu","https://maps.google.com/?q=arepas",""
+"Salchipapa Salvaje","salchipapas","restaurante","https://images.unsplash.com/photo-1625938146369-adc83368bda7?w=600","","Sur","Cama de papas crujientes, salchicha premium, queso costeño fundido y full salsas.","Delivery","Salchipapa Salvaje","https://wa.link/ejemplo5","0","","28000","","https://maps.google.com/?q=salchipapa",""
+"Alitas BBQ (12pz)","pollo","restaurante","https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600","","Norte","Jugosas alitas bañadas en nuestra salsa BBQ artesanal. Incluye apio y salsa ranch.","Delivery y Pick-up","Alitas BBQ","https://wa.link/ejemplo6","0","","35000","https://instagram.com/soyelmanu","https://maps.google.com/?q=alitas",""
+"Burguer Master","eventos,recomendados","evento","https://images.unsplash.com/photo-1550547660-d9450f859349?w=600","Imperdible","Multiples","El evento de hamburguesas más grande de Cali. ¡Prueba las mejores creaciones a un precio único en la ciudad!","Múltiples locaciones","Info Burguer Master","https://wa.link/evento1","1","¡No te quedes por fuera! Participa y vota por tu favorita.","20000","https://instagram.com/burguermasterco","https://maps.google.com/?q=cali","https://img.freepik.com/vector-gratis/diseno-logotipo-hamburguesas-dibujado-mano_23-2149321303.jpg?w=200"
+"Festival del Perro","eventos","evento","https://images.unsplash.com/photo-1594212691516-b27e852934bd?w=600","Nuevo","Sur","Disfruta de los perros calientes más extravagantes y deliciosos en este festival especial de fin de semana.","Parque de los Perros","Info Festival Perro","https://wa.link/evento2","0","","18000","https://instagram.com/soyelmanu","https://maps.google.com/?q=parque+perros",""
+"Pizza Fest","eventos","evento","https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600","Top","Oeste","Pizzas artesanales a un precio especial. Descubre cuál es la mejor pizza de Cali y apoya a los locales.","Varias Pizzerías","Info Pizza Fest","https://wa.link/evento3","0","","22000","https://instagram.com/soyelmanu","https://maps.google.com/?q=oeste+cali",""`;
 
         // ==========================================
         // FUNCIONES DE MÉTRICAS Y COMPARTIR
@@ -550,7 +554,7 @@
                         
                         precioHTML = `
                         <div class="flex items-center gap-1.5 text-xs text-green-400 mb-5 font-bold">
-                            <i class="fa-solid fa-money-bill-wave"></i> Platos desde ${precioFormateado}
+                            <i class="fa-solid fa-money-bill-wave"></i> Entradas desde ${precioFormateado}
                         </div>`;
                     }
                 } else {
@@ -662,7 +666,7 @@
                         ${precioHTML}
                         <div class="flex items-center gap-2 w-full">
                             <button onclick="trackEvent('Conversión - WhatsApp', '${labelWa.replace(/'/g, "\\'")}', '${walink}')" class="flex-1 bg-whatsapp-main hover:bg-whatsapp-hover text-neutral-950 font-black py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-[0_0_10px_rgba(37,211,102,0.2)]">
-                                <i class="fa-brands fa-whatsapp text-xl"></i> Pedir por WhatsApp
+                                <i class="fa-brands fa-whatsapp text-xl"></i> Más Información
                             </button>
                             ${linkIg ? `
                             <button onclick="window.open('${linkIg}', '_blank'); trackEvent('Redirección - Instagram', '${labelWa.replace(/'/g, "\\'")}', '${linkIg}')" class="w-12 h-[48px] shrink-0 bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 hover:opacity-90 text-white rounded-xl flex items-center justify-center transition shadow-md">
@@ -710,10 +714,10 @@
             const titleElement = document.getElementById('section-title');
             if (filterValue === 'all') {
                 titleElement.innerText = 'El menú de la casa';
-            } else if (filterType === 'type' && filterValue === 'menu') {
-                titleElement.innerText = 'Nuestro Menú';
-            } else if (filterType === 'type' && filterValue === 'merch') {
-                titleElement.innerText = 'Merch Oficial';
+            } else if (filterType === 'type' && filterValue === 'restaurante') {
+                titleElement.innerText = 'Nuestros Restaurantes';
+            } else if (filterType === 'type' && filterValue === 'evento') {
+                titleElement.innerText = 'Próximos Eventos';
             } else {
                 titleElement.innerText = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
             }
@@ -743,7 +747,7 @@
             items.forEach(item => {
                 let shouldShow = true;
                 
-                // 1. Filtro Principal (Categoría o Menú/Merch)
+                // 1. Filtro Principal (Categoría o Menú/Eventos)
                 if (globalType !== 'all') {
                     if (item.dataset.type !== globalType) shouldShow = false;
                 } else if (globalCategory !== 'all') {
