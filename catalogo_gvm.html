@@ -809,8 +809,7 @@
                 message += `*RESUMEN FINANCIERO*\n`;
                 message += `Precio Total de Venta: $${totalVentaGlobal}\n`;
                 message += `Ganancia Estimada: $${totalGananciaGlobal}\n\n`;
-                message += `¡Vamos a pasarlo al área de despacho para entregarlo a tiempo!`;
-                
+                                
                 const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, '_blank');
                 
