@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polla Mundialista Pancake</title>
+  <!-- Tailwind CSS para el diseño -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons para los íconos -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-[#764ba2] to-[#667eea] text-slate-100 font-sans selection:bg-[#667eea] selection:text-white">
+
+  <!-- Header -->
+  <header class="bg-black/30 backdrop-blur-md sticky top-0 z-50 border-b border-white/10">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-gradient-to-tr from-yellow-400 to-yellow-600 p-2 rounded-full shadow-lg shadow-yellow-500/20">
+          <i data-lucide="trophy" class="w-6 h-6 text-yellow-950"></i>
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-200">
+            Polla Mundialista Pancake
+          </h1>
+          <p class="text-xs md:text-sm text-indigo-200 font-medium">Fase 1: Acierta la mayoria de equipos y gana.</p>
+        </div>
+      </div>
+      <div class="hidden md:flex text-sm text-indigo-200/80 items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-[#a5b4fc]"></i>
+        100% Gratuito
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 pb-32">
+    
+    <!-- Intro Card -->
+    <div class="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 mb-8 shadow-xl">
+      <h2 class="text-xl font-semibold text-white mb-2">¡Arma tu pronóstico mundialista! ⚽</h2>
+      <p class="text-indigo-100/90 text-sm md:text-base mb-6">
+        Selecciona qué equipos clasificarán en <strong>1º y 2º lugar de cada grupo</strong> (Del A al L). 
+        Al terminar, envía tus resultados para participar por increíbles premios. Cada equipo que aciertes será 1 punto. Con solo 12 puntos ganas tu premio mundialista.
+      </p>
+      
+      <div class="space-y-2">
+        <label class="text-sm font-medium text-indigo-300 ml-1">Tu Nombre Completo</label>
+        <div class="relative">
+          <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#667eea]"></i>
+          <input 
+            type="text" 
+            id="user-name"
+            placeholder="Ej. Juan Pérez"
+            oninput="updateName(this.value)"
+            class="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#667eea] transition-all"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Groups Grid -->
+    <div id="groups-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Los grupos se inyectarán aquí mediante JavaScript -->
+    </div>
+  </main>
+
+  <!-- Floating Action Bar -->
+  <div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/80 to-transparent z-50">
+    <div class="max-w-4xl mx-auto flex flex-col items-center">
+      
+      <!-- Contenedor de Errores -->
+      <div id="error-container" style="display: none;" class="mb-3 flex items-center gap-2 bg-red-500/20 text-red-200 px-4 py-2 rounded-full border border-red-500/30 text-sm backdrop-blur-md">
+        <i data-lucide="alert-circle" class="w-4 h-4"></i>
+        <span id="error-message"></span>
+      </div>
+
+      <button
+        id="send-btn"
+        class="w-full md:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-[#764ba2]/50 transition-all transform hover:scale-105 active:scale-95 bg-white/10 text-white/50 border border-white/10 cursor-not-allowed"
+      >
+        <i data-lucide="send" class="w-5 h-5"></i>
+        <span id="send-btn-text">Completa todos los grupos</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Datos simulados para los 12 grupos (A hasta L) del Mundial 2026
+    const WORLD_CUP_GROUPS = [
+      { id: 'A', teams: ['México', 'Sudáfrica', 'Corea del Sur', 'Chequia'] },
+      { id: 'B', teams: ['Canadá', 'Bosnia y Herzegovina', 'Qatar', 'Suiza'] },
+      { id: 'C', teams: ['Brasil', 'Marruecos', 'Haití', 'Escocia'] },
+      { id: 'D', teams: ['Estados Unidos', 'Paraguay', 'Australia', 'Turquía'] },
+      { id: 'E', teams: ['Alemania', 'Curazao', 'Costa de Marfil', 'Ecuador'] },
+      { id: 'F', teams: ['Países Bajos', 'Japón', 'Suecia', 'Túnez'] },
+      { id: 'G', teams: ['Bélgica', 'Egipto', 'Irán', 'Nueva Zelanda'] },
+      { id: 'H', teams: ['España', 'Cabo Verde', 'Arabia Saudita', 'Uruguay'] },
+      { id: 'I', teams: ['Francia', 'Senegal', 'Irak', 'Noruega'] },
+      { id: 'J', teams: ['Argentina', 'Argelia', 'Austria', 'Jordania'] },
+      { id: 'K', teams: ['Portugal', 'República Democrática del Congo', 'Uzbekistán', 'Colombia'] },
+      { id: 'L', teams: ['Inglaterra', 'Croacia', 'Ghana', 'Panamá'] },
+    ];
+
+    let userName = '';
+    let predictions = {};
+
+    // Inicializar el estado de predicciones
+    WORLD_CUP_GROUPS.forEach(g => {
+      predictions[g.id] = { first: '', second: '' };
+    });
+
+    // Función para renderizar los grupos en el HTML
+    function renderGroups() {
+      const container = document.getElementById('groups-container');
+      
+      const html = WORLD_CUP_GROUPS.map(group => `
+        <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors shadow-lg">
+          <div class="bg-black/20 px-4 py-3 border-b border-white/5 flex justify-between items-center">
+            <h3 class="font-bold text-lg text-indigo-300">Grupo ${group.id}</h3>
+            ${predictions[group.id].first && predictions[group.id].second 
+              ? '<i data-lucide="check-circle-2" class="w-5 h-5 text-[#a5b4fc]"></i>' 
+              : ''}
+          </div>
+          
+          <div class="p-4 space-y-4">
+            <!-- 1er Lugar -->
+            <div class="space-y-1">
+              <label class="text-xs font-medium text-indigo-200/70 uppercase tracking-wider">1er Lugar 🥇</label>
+              <div class="relative">
+                <select
+                  onchange="updatePrediction('${group.id}', 'first', this.value)"
+                  class="w-full appearance-none bg-black/30 border border-white/10 rounded-lg py-2.5 pl-3 pr-10 text-white focus:outline-none focus:ring-1 focus:ring-[#667eea] cursor-pointer text-sm"
+                >
+                  <option value="" disabled ${!predictions[group.id].first ? 'selected' : ''}>Seleccionar equipo...</option>
+                  ${group.teams.map(team => `
+                    <option 
+                      value="${team}"
+                      ${predictions[group.id].first === team ? 'selected' : ''}
+                      ${predictions[group.id].second === team ? 'disabled' : ''}
+                      class="bg-[#764ba2] text-white"
+                    >
+                      ${team}
+                    </option>
+                  `).join('')}
+                </select>
+                <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none"></i>
+              </div>
+            </div>
+
+            <!-- 2do Lugar -->
+            <div class="space-y-1">
+              <label class="text-xs font-medium text-indigo-200/70 uppercase tracking-wider">2do Lugar 🥈</label>
+              <div class="relative">
+                <select
+                  onchange="updatePrediction('${group.id}', 'second', this.value)"
+                  class="w-full appearance-none bg-black/30 border border-white/10 rounded-lg py-2.5 pl-3 pr-10 text-white focus:outline-none focus:ring-1 focus:ring-[#667eea] cursor-pointer text-sm"
+                >
+                  <option value="" disabled ${!predictions[group.id].second ? 'selected' : ''}>Seleccionar equipo...</option>
+                  ${group.teams.map(team => `
+                    <option 
+                      value="${team}"
+                      ${predictions[group.id].second === team ? 'selected' : ''}
+                      ${predictions[group.id].first === team ? 'disabled' : ''}
+                      class="bg-[#764ba2] text-white"
+                    >
+                      ${team}
+                    </option>
+                  `).join('')}
+                </select>
+                <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = html;
+      
+      // Reinicializar los íconos Lucide para los nuevos elementos en el DOM
+      lucide.createIcons();
+      checkCompletion();
+    }
+
+    // Actualizar nombre
+    function updateName(value) {
+      userName = value;
+      document.getElementById('error-container').style.display = 'none';
+      checkCompletion();
+    }
+
+    // Actualizar selección
+    function updatePrediction(groupId, position, teamName) {
+      predictions[groupId][position] = teamName;
+      document.getElementById('error-container').style.display = 'none';
+      renderGroups(); // Volver a renderizar para actualizar opciones bloqueadas y los checkmarks
+    }
+
+    // Comprobar si todo está completo
+    function checkCompletion() {
+      let complete = true;
+      for (const key in predictions) {
+        if (!predictions[key].first || !predictions[key].second) {
+          complete = false;
+          break;
+        }
+      }
+      
+      const isComplete = complete && userName.trim().length > 0;
+      const btn = document.getElementById('send-btn');
+      const btnText = document.getElementById('send-btn-text');
+
+      if (isComplete) {
+        // Estilo activado
+        btn.className = "w-full md:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-[#764ba2]/50 transition-all transform hover:scale-105 active:scale-95 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:opacity-90";
+        btnText.innerText = "Enviar Mis Pronósticos a WhatsApp";
+        btn.onclick = handleSendToWhatsApp;
+      } else {
+        // Estilo desactivado
+        btn.className = "w-full md:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-[#764ba2]/50 transition-all transform hover:scale-105 active:scale-95 bg-white/10 text-white/50 border border-white/10 cursor-not-allowed";
+        btnText.innerText = "Completa todos los grupos";
+        btn.onclick = function() {
+          showError(!userName.trim() ? "Por favor, ingresa tu nombre y apellido." : "Aún te faltan equipos por seleccionar en algunos grupos.");
+        };
+      }
+    }
+
+    function showError(message) {
+      document.getElementById('error-message').innerText = message;
+      document.getElementById('error-container').style.display = 'flex';
+    }
+
+    // Función para armar y abrir el link de WhatsApp
+    function handleSendToWhatsApp() {
+      let message = `🏆 *Polla Mundialista 2026 - Fase 1* 🏆\n\n`;
+      message += `👤 *Participante:* ${userName.trim()}\n\n`;
+      message += `*Mis clasificados a la siguiente ronda son:*\n\n`;
+
+      WORLD_CUP_GROUPS.forEach(g => {
+        const p = predictions[g.id];
+        message += `*Grupo ${g.id}:*\n🥇 1er: ${p.first}\n🥈 2do: ${p.second}\n\n`;
+      });
+
+      message += `_Enviado desde la Web App de Predicciones_ ⚽`;
+
+      // Número de teléfono
+      const phoneNumber = '573154870448';
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+      // Abrir WhatsApp
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // Inicializar la app cuando cargue el documento
+    document.addEventListener('DOMContentLoaded', () => {
+      // Iniciar iconos lucide del HTML estático
+      lucide.createIcons();
+      // Renderizar los grupos dinámicos
+      renderGroups();
+    });
+  </script>
+</body>
+</html>
