@@ -38,7 +38,7 @@
     <div class="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 mb-8 shadow-xl">
       <h2 class="text-xl font-semibold text-white mb-2">¡Arma tu pronóstico mundialista! ⚽</h2>
       <p class="text-indigo-100/90 text-sm md:text-base mb-6">
-        Selecciona qué equipos clasificarán en <strong>1º y 2º lugar de cada grupo</strong> (Del A al L). 
+        Selecciona qué equipos clasificarán en <strong>1º y 2º lugar de cada grupo</strong> (a la siguiente ronda). 
         Al terminar, envía tus resultados para participar por increíbles premios. Cada equipo que aciertes será 1 punto. Con solo 12 puntos ganas tu premio mundialista.
       </p>
       
@@ -211,7 +211,7 @@
       if (isComplete) {
         // Estilo activado
         btn.className = "w-full md:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-[#764ba2]/50 transition-all transform hover:scale-105 active:scale-95 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:opacity-90";
-        btnText.innerText = "Enviar Mis Pronósticos a WhatsApp";
+        btnText.innerText = "Enviar mis Pronósticos";
         btn.onclick = handleSendToWhatsApp;
       } else {
         // Estilo desactivado
@@ -230,7 +230,7 @@
 
     // Función para armar y abrir el link de WhatsApp
     function handleSendToWhatsApp() {
-      let message = `🏆 *Polla Mundialista 2026 - Fase 1* 🏆\n\n`;
+      let message = `🏆 *Polla Mundialista - Fase 1*\n\n`;
       message += `👤 *Participante:* ${userName.trim()}\n\n`;
       message += `*Mis clasificados a la siguiente ronda son:*\n\n`;
 
@@ -239,7 +239,7 @@
         message += `*Grupo ${g.id}:*\n🥇 1er: ${p.first}\n🥈 2do: ${p.second}\n\n`;
       });
 
-      message += `_Enviado desde la Web App de Predicciones_ ⚽`;
+      message += `_Somos Mundial 2026_ ⚽`;
 
       // Número de teléfono
       const phoneNumber = '573008520037';
